@@ -1,29 +1,14 @@
-from solana.rpc.api import Client
-from spl.token.client import Token
-from solders.pubkey import Pubkey
-from solders.keypair import Keypair
+import subprocess
 
-mint = Pubkey.from_string("Bc4itdH5eAJU2WN9h7uSZ8i9RZXSbNrVdUkaedFTHyDc")
-program_id = Pubkey.from_string("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
+spl_executable = r'C:\\Users\MEMEdev\.local\share\solana\install\active_release\bin\spl-token.exe'
 
-privkey = '4HjSgpCQML37Xw9Vo7jjnJGi7yKSRq88SuQUBVhAMfDxHZxmcpj5XYNCQb3TkU7vV7AxiHP5dEYJBLWBvmKZXZoN'
-key_pair = Keypair.from_base58_string(privkey)
+contract_address = 'Bc4itdH5eAJU2WN9h7uSZ8i9RZXSbNrVdUkaedFTHyDc'  # mini btc ca
 
-solana_client = Client("https://mainnet.helius-rpc.com/?api-key=f61ec600-eb2e-492c-b5ca-5c6393d1b7e1")
-spl_client = Token(conn=solana_client, pubkey=mint, program_id=program_id, payer=key_pair)
 
-source = Pubkey.from_string('G12Gw8DWHLL4ADUsumZTh2AsvVCpWJ6whpPmLYP1x8px')
-dest = Pubkey.from_string('65WPcFptr5ivMBVkvY2crqu9p2MAta9SwzQQDuYXWpFj')
+def fund_user(user, amount):
+    command = [spl_executable, 'transfer', contract_address, amount, user]
+    result = subprocess.run(command, capture_output=True, text=True, shell=True)
+    print(result)
 
-source_token_account = spl_client.create_associated_token_account(owner=source, skip_confirmation=False,
-                                                                  recent_blockhash=None)
 
-dest_token_account = spl_client.create_associated_token_account(owner=dest, skip_confirmation=False,
-                                                                recent_blockhash=None)
-
-amount = 500000000
-
-transaction = spl_client.transfer(source=source_token_account, dest=dest_token_account, owner=key_pair,
-                                  amount=int(float(amount)), multi_signers=None, opts=None,
-                                  recent_blockhash=None)
-print(transaction)
+#fund_user('G12Gw8DWHLL4ADUsumZTh2AsvVCpWJ6whpPmLYP1x8px', '50000')

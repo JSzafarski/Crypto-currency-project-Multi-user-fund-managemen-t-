@@ -5,6 +5,7 @@ from telebot.asyncio_storage import StateMemoryStorage
 from telebot.asyncio_handler_backends import State, StatesGroup
 import userfunds
 from solders.pubkey import Pubkey
+import payout
 
 my_token = '7082036186:AAFU9hgPpyUFfCtfM7N1nF070tzsHawDgnA'
 bot = AsyncTeleBot(my_token, state_storage=StateMemoryStorage())
@@ -68,8 +69,22 @@ async def start(message):
 
 @bot.message_handler(commands=['withdraw'])
 async def start(message):
-    # token will be 11 decimals so can directly m satoshi amounts
-    pass
+    chat_id = message.chat.id
+    username = "@" + message.from_user.username
+    if not funds_database.check_user_exist(username):
+        await bot.send_message(chat_id, "⚠️ You have not associated a wallet to this account!")
+        return
+    if not int(funds_database.check_user_balance(username)) > 0:
+        await bot.send_message(chat_id, "⚠️ Unable to withdraw a zero balance!")
+        return
+    wallet = funds_database.get_user_wallet(username)
+    markup = types.InlineKeyboardMarkup()
+    yes = types.InlineKeyboardButton("Yes", callback_data="yes_withdraw " + str(username) + " " + str(chat_id))
+    no = types.InlineKeyboardButton("No", callback_data="no_withdraw " + str(username) + " " + str(chat_id))
+    markup.row(yes, no)
+    await bot.send_message(chat_id,
+                           f"⚠️ You are withdrawing all the tips collected to the wallet : \n\n    *{wallet}*\n\nWould you like to proceed?",
+                           reply_markup=markup, parse_mode='MarkdownV2')
 
 
 @bot.message_handler(
@@ -129,6 +144,15 @@ async def help_func_callback(callback_query: types.CallbackQuery):
         return
     elif response == "no_new_wallet":
         await bot.send_message(chat_id, "User data unchanged")
+        return
+    elif response == "yes_withdraw":
+        # will only get to this point if the user balance is non-zero!
+        balance = funds_database.check_user_balance(username)
+        wallet = funds_database.get_user_wallet(username)
+        # payout.fund_user(wallet, balance)
+        # here if confirmed deduct balance.
+    elif response == "no_withdraw":
+        await bot.send_message(chat_id, "Ok I will not Withdraw funds")
         return
 
 
