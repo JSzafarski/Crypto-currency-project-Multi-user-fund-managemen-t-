@@ -149,7 +149,13 @@ async def help_func_callback(callback_query: types.CallbackQuery):
         # will only get to this point if the user balance is non-zero!
         balance = funds_database.check_user_balance(username)
         wallet = funds_database.get_user_wallet(username)
-        # payout.fund_user(wallet, balance)
+        tx_result = payout.fund_user(wallet, balance)
+        if "Signature:" in tx_result:
+            txn_hash = "https://solscan.io/tx/" + str(tx_result.spllit()[1])
+            await bot.send_message(chat_id, f"Transaction has been Confirmed : {txn_hash}")
+            funds_database.update_balance(username, 0)
+        else:
+            await bot.send_message(chat_id, "Transaction failed Please retry")
         # here if confirmed deduct balance.
     elif response == "no_withdraw":
         await bot.send_message(chat_id, "Ok I will not Withdraw funds")

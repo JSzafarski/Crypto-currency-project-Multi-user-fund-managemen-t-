@@ -4,11 +4,21 @@ from requests import request
 from time import strftime, localtime
 import telebot
 from random import randint
-
+from telebot import types
+import requests
+import cloudinary
+import cloudinary.uploader  # to upload the memes
+import os
+import json
+import threading
 halving_epoch = 1713808215
 my_token = '6948460970:AAH5pEPFnw13cXlZNPIcva1n9nbPSGdQNoQ'
 bot = telebot.TeleBot(my_token)
-
+cloudinary.config(
+    cloud_name="dzxvvy103",
+    api_key="694682428356438",
+    api_secret="JRotWDdIAAGSiUN5Td1_z-4Jbm0"
+)
 solscan_header = {
     'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MDY3NTM5ODAzOTQsImVtYWlsIjoic29sYmFieTMyNUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJpYXQiOjE3MDY3NTM5ODB9.Lp77APFLV-rOnNbDzc1ob43Vp-9-KpeMe_b-fiOQrr0',
     'accept': 'application/json',
@@ -35,22 +45,41 @@ meme_header = {
     'Content-Type': 'application/json'
 }
 
-payload = ("{\n  \"text\": \"Mini Bitcoin is a cryptocurrency Do NOT make any negative comments or memes on "
-           "Mini Bitcoin that would imply it will depreciate or is worthless\"\n}")
+payload = ("{\n  \"text\": \"Mini Bitcoin is a cryptocurrency.Hype,fun,pleasure,excitement,anticipation\"\n}")
 
 last_active_epoch = 0
 temp_array = []
 
 
 def generate_meme_batch():
+    print("fetching a new image batch")
     global temp_array
     meme_response = request('POST',
                             "https://app.supermeme.ai/api/v1/meme/image",
                             headers=meme_header, data=payload)
     print(meme_response)
     meme_json = meme_response.json()
-    for meme in meme_json["memes"]:
-        temp_array.append(meme)
+    for index, meme in enumerate(meme_json["memes"]):
+        img_data = requests.get(meme).content
+        with open(f'img_buffer\\img{index}.jpg', 'wb') as handler:
+            handler.write(img_data)
+    handler.close()
+    # then read each image and upload ti to piranta then grab all the link and place them into the array
+    directory_in_str = 'img_buffer\\'
+    directory = os.fsencode(directory_in_str)
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        cloudinary.uploader.upload(f'{directory_in_str}{filename}')
+        print("uploaded: " + str(filename))
+
+
+def fetch_cloud_img_links():
+    global temp_array
+    result = cloudinary.Search() \
+        .expression("resource_type:image").execute()
+    items = result.get("resources")
+    for item in items:
+        temp_array.append(item["url"])
 
 
 @bot.message_handler(commands=['meme'])  # use supreme meme api
@@ -58,13 +87,21 @@ def send_meme(message):
     global last_active_epoch
     if last_active_epoch == 0:
         last_active_epoch = time.time()
-        generate_meme_batch()
+        fetch_cloud_img_links()
     else:
         if time.time() > last_active_epoch + 2.5 * 60 * 60:
-            generate_meme_batch()
-    random_index = randint(0, len(temp_array) - 1)
-    result = str(temp_array[random_index])
-    bot.send_message("-1002130978267", f"[🔥]({result})", parse_mode='MarkdownV2')
+            th = threading.Thread(target=generate_meme_batch)
+            th.start()
+            last_active_epoch = time.time()
+            fetch_cloud_img_links()
+        random_index = randint(0, len(temp_array) - 1)
+        result = str(temp_array[random_index])
+        markup = types.InlineKeyboardMarkup()
+        share_string = f"https://twitter.com/intent/tweet?text=$mBTC%20{result}"  # needs slight change
+        share = types.InlineKeyboardButton("Share on Twitter 𝕏",
+                                           url=f'{share_string}')
+        markup.row(share)
+        bot.send_message("-1002130978267", f"[🔥]({result})", parse_mode='MarkdownV2', reply_markup=markup)
 
 
 def percent_reduction(supply_left):
