@@ -5,15 +5,12 @@ from telebot.asyncio_storage import StateMemoryStorage
 from telebot.asyncio_handler_backends import State, StatesGroup
 import userfunds
 from solders.pubkey import Pubkey
-import payout
+import payout2
 
 my_token = '7082036186:AAFU9hgPpyUFfCtfM7N1nF070tzsHawDgnA'
 bot = AsyncTeleBot(my_token, state_storage=StateMemoryStorage())
 
 funds_database = userfunds.FundsDatabase()
-
-token_twenty_two_addy = ""
-master_funds_wallet_priv_key = ""
 
 
 class MyStates(StatesGroup):
@@ -26,6 +23,10 @@ async def start(message):
     chat_id = message.chat.id  # need to figure out how to get user id as this will be the point of reference to tip
     # the user
     username = message.from_user.username
+    if username is None:
+        await bot.send_message(chat_id,
+                               f"You need an associated username to create an account")
+        return
     await bot.send_message(chat_id,
                            f"Welcome {username} to the mBTC tipping bot! \nCheck the commands below to get started, so you can "
                            "start receiving and sending tips to other users with mBTC. \n\n/setwallet - Assign a "
@@ -39,6 +40,10 @@ async def start(message):
 async def start(message):
     chat_id = message.chat.id
     username = message.from_user.username
+    if username is None:
+        await bot.send_message(chat_id,
+                               f"You need an associated username to create an account")
+        return
     if funds_database.check_user_exist("@" + username):
         wallet_addy = funds_database.get_user_wallet("@" + username)
         markup = types.InlineKeyboardMarkup()
@@ -58,6 +63,10 @@ async def start(message):
 async def start(message):
     chat_id = message.chat.id
     username = message.from_user.username
+    if username is None:
+        await bot.send_message(chat_id,
+                               f"You need an associated username to create an account")
+        return
     if funds_database.check_user_exist("@" + username):
         funds = funds_database.check_user_balance("@" + username)
         mbtc_balance = float(funds) / float(100000000000)
@@ -70,6 +79,10 @@ async def start(message):
 @bot.message_handler(commands=['withdraw'])
 async def start(message):
     chat_id = message.chat.id
+    if message.from_user.username is None:
+        await bot.send_message(chat_id,
+                               f"You need an associated username to create an account")
+        return
     username = "@" + message.from_user.username
     if not funds_database.check_user_exist(username):
         await bot.send_message(chat_id, "⚠️ You have not associated a wallet to this account!")
@@ -149,9 +162,9 @@ async def help_func_callback(callback_query: types.CallbackQuery):
         # will only get to this point if the user balance is non-zero!
         balance = funds_database.check_user_balance(username)
         wallet = funds_database.get_user_wallet(username)
-        tx_result = payout.fund_user(wallet, balance)
-        if "Signature:" in tx_result:
-            txn_hash = "https://solscan.io/tx/" + str(tx_result.spllit()[1])
+        tx_result = payout2.send_tokens(wallet, balance)
+        if "tx" in tx_result:
+            txn_hash = tx_result
             await bot.send_message(chat_id, f"Transaction has been Confirmed : {txn_hash}")
             funds_database.update_balance(username, 0)
         else:

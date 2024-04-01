@@ -2,6 +2,8 @@
 import random
 import sqlite3
 
+admins = ["@MINI_BTC_CHAD", "@LongIt345", "@CryptoSniper000"]
+
 
 class FundsDatabase:
     def __init__(self):
@@ -65,7 +67,7 @@ class FundsDatabase:
                 selected_user = rows[random.randint(0, range_of_users - 1)][0]
                 if str(selected_user) == tipper and len(temp_user_list) == range_of_users - 1:
                     break
-                if selected_user not in temp_user_list and selected_user != tipper:
+                if selected_user not in temp_user_list and selected_user not in admins:
                     temp_user_list.append(selected_user)
                     break
         return temp_user_list
