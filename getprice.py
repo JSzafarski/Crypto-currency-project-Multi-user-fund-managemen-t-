@@ -12,7 +12,7 @@ header = {
 
 
 def get_price():
-    token_address = "bewtdnb34l8lceya2ff1cgph3gjwfdgjcqyqza94uat1"  # change to mini btc later
+    token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
     token_result = request('GET',
                            f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
                            headers=header)
@@ -20,3 +20,4 @@ def get_price():
 
 
 
+print(get_price())

@@ -12,7 +12,7 @@ import openai
 import time
 from openai import OpenAI
 import re
-
+import filter_response
 # Enter your Assistant ID here.
 ASSISTANT_ID = "asst_OdboRIxKhLQrirwYRHZFhyZd"
 
@@ -84,12 +84,11 @@ def send_meme(message):
     global last_active_epoch
     if last_active_epoch == 0:
         last_active_epoch = time.time()
-        fetch_cloud_img_links()
     if time.time() > last_active_epoch + 2.5 * 60 * 60:
         th = threading.Thread(target=generate_meme_batch)
         th.start()
         last_active_epoch = time.time()
-        fetch_cloud_img_links()
+    fetch_cloud_img_links()
     random_index = randint(0, len(temp_array) - 1)
     result = str(temp_array[random_index])
     markup = types.InlineKeyboardMarkup()
@@ -97,7 +96,52 @@ def send_meme(message):
     share = types.InlineKeyboardButton("Share on Twitter 𝕏",
                                        url=f'{share_string}')
     markup.row(share)
-    bot.send_message("-1002130978267", f"[🔥]({result}) To share an image simply download and attach it to your post\\.", parse_mode='MarkdownV2', reply_markup=markup)
+    bot.send_message("-1002130978267", f"[🔥]({result}) To share an image simply download and attach it to your post\\.",
+                     parse_mode='MarkdownV2', reply_markup=markup)
+
+
+@bot.message_handler(commands=['shill'])  # using gaht gpt 4 to generate shill text that users can use for raids
+def mini_btc_assistant(question):
+    thread = client.beta.threads.create(
+        messages=[
+            {
+                "role": "user",
+                # Update this with the query you want to use.
+                "content": "create few sentences about Mini Bitcoin for a promotional purpose",
+
+            }
+        ]
+    )
+
+    # Submit the thread to the assistant (as a new run).
+    run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id="asst_c7GPtuXzVezfLVPpyDx8VE8D")
+    print(f" Run Created: {run.id}")
+
+    # Wait for run to complete.
+    while run.status != "completed":
+        run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
+        print(f" Run Status: {run.status}")
+        time.sleep(1)
+    else:
+        print(f" Run Completed!")
+
+    # Get the latest message from the thread.
+    message_response = client.beta.threads.messages.list(thread_id=thread.id)
+    messages = message_response.data
+
+    # Print the latest message.
+    latest_message = messages[0]
+    response = filter_response.filter_msg(latest_message.content[0].text.value)
+    a = " "
+    print(response)
+    filtered_response = re.sub('【[^>]+】', a, response)
+    markup = types.InlineKeyboardMarkup()
+    share_string = f"https://twitter.com/intent/tweet?text=$mBTC%20{filtered_response}"  # needs slight change
+    share = types.InlineKeyboardButton("Share on Twitter 𝕏",
+                                       url=f'{share_string}')
+    markup.row(share)
+    bot.send_message("-1002130978267",
+                     "\n" + f"{filtered_response}", reply_markup=markup)
 
 
 @bot.message_handler(commands=['askbot'])  # using gaht gpt 4 to generate shill text that users can use for raids
@@ -147,7 +191,7 @@ def mini_btc_assistant(question):
                                        url=f'{share_string}')
     markup.row(share)
     bot.send_message("-1002130978267",
-                     "\n"+f"{filtered_response}",reply_markup=markup)
+                     "\n" + f"{filtered_response}", reply_markup=markup)
 
 
 def time_till_halving():

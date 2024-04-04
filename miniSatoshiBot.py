@@ -19,11 +19,18 @@ admins = ["@MINI_BTC_CHAD", "@LongIt345", "@CryptoSniper000"]
 
 
 def get_price():
-    token_address = "mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"  # change to mini btc later
+    token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
     token_result = request('GET',
                            f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
                            headers=header)
     return float(token_result.json()["pairs"][0]["priceUsd"])
+
+
+@bot.message_handler(commands=['getprice'])
+def rain(message):
+    chat_id = message.chat.id
+    price = str(get_price())
+    bot.send_message(chat_id, f"Mini Bitcoin price : {price} $")
 
 
 @bot.message_handler(commands=['convert'])
@@ -41,7 +48,7 @@ def convert_to_usd(message):
                          parse_mode='MarkdownV2')
         return
     amount_in_dollars = str(round((float(int(msatoshi_amount)) / float(100000000000)) * price_per_mbtc, 2))
-    bot.send_message(chat_id, f"The converted amount is equal to {amount_in_dollars} dollars")
+    bot.send_message(chat_id, f"The converted amount is equal to {amount_in_dollars} $")
 
 
 # every admin will hev equal deduction of balance in order to preserve solvency
@@ -49,8 +56,13 @@ def convert_to_usd(message):
 @bot.message_handler(commands=['checkbalance'])
 def check_balance(message):
     chat_id = message.chat.id
+    if message.from_user.username is None:
+        bot.send_message(chat_id,
+                         f"User has no username\\!",
+                         parse_mode='MarkdownV2')
+        return
     tipper = "@" + message.from_user.username
-    if tipper == "@MINI_BTC_CHAD" or "@LongIt345" or "@CryptoSniper000":  # enforce same admin controls across multiple
+    if tipper == "@MINI_BTC_CHAD" or tipper == "@LongIt345" or tipper == "@CryptoSniper000":  # enforce same admin controls across multiple
         tipper = "@CryptoSniper000"
     if funds_database.check_user_exist(tipper):
         funds = funds_database.check_user_balance(tipper)
@@ -59,7 +71,7 @@ def check_balance(message):
         return
     else:
         bot.send_message(chat_id, f"{tipper} ,⚠️ You haven't setup a wallet yet.\nPlease use our simple setup bot "
-                                  f"'https://t.me/mBTCTipbot' and follow instructions"
+                                  f"'https://t.me/mBTCTipbot' and follow instructions "
                                   "to begin")
         return
 
@@ -68,7 +80,7 @@ def check_balance(message):
 def tipping(message):
     chat_id = message.chat.id
     tipper = "@" + message.from_user.username
-    if tipper == "@MINI_BTC_CHAD" or "@LongIt345" or "@CryptoSniper000":  # enforce same admin controls across multiple
+    if tipper == "@MINI_BTC_CHAD" or tipper == "@LongIt345" or tipper == "@CryptoSniper000":  # enforce same admin controls across multiple
         tipper = "@CryptoSniper000"
     if funds_database.check_user_exist(tipper):
         arguments = message.text.split()
@@ -80,8 +92,12 @@ def tipping(message):
                              parse_mode='MarkdownV2')
             return
         username_to_tip = arguments[1]
+        if username_to_tip == tipper:
+            bot.send_message(chat_id, f"*You cannot tip yourself*\\.",
+                             parse_mode='MarkdownV2')
+            return
         if username_to_tip in admins:
-            bot.send_message(chat_id, f"*Admins cannot tip themselves*\\.",
+            bot.send_message(chat_id, f"*Admins cannot be tipped*\\.",
                              parse_mode='MarkdownV2')
             return
         if funds_database.check_user_exist(username_to_tip):
@@ -104,7 +120,8 @@ def tipping(message):
                                      parse_mode='MarkdownV2')
                     return
         else:
-            bot.send_message(chat_id, "User has not setup their tipping wallet.")
+            bot.send_message(chat_id,
+                             "User has not setup their tipping wallet.\nUse the bot : https://t.me/mBTCTipbot ")
             return
     else:
         bot.send_message(chat_id, "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
@@ -117,7 +134,7 @@ def tipping(message):
 def rain(message):
     chat_id = message.chat.id
     tipper = "@" + message.from_user.username
-    if tipper == "@MINI_BTC_CHAD" or "@LongIt345" or "@CryptoSniper000":  # enforce same admin controls across multiple
+    if tipper == "@MINI_BTC_CHAD" or tipper == "@LongIt345" or tipper == "@CryptoSniper000":  # enforce same admin controls across multiple
         tipper = "@CryptoSniper000"
     if funds_database.check_user_exist(tipper):
         arguments = message.text.split()
@@ -137,7 +154,7 @@ def rain(message):
                     return
                 else:
                     if arguments[index] == tipper:
-                        bot.send_message(chat_id, f"{tipper} cannot tip themselves!")
+                        bot.send_message(chat_id, f"{tipper},You cannot tip yourself!")
                         return
             if not arguments[len(arguments) - 1].isnumeric():
                 bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
@@ -167,11 +184,21 @@ def rain(message):
 @bot.message_handler(commands=['rain'])
 def rain(message):
     chat_id = message.chat.id
+    if message.from_user.username is None:
+        bot.send_message(chat_id,
+                         f"User has no username\\!",
+                         parse_mode='MarkdownV2')
+        return
     tipper = "@" + message.from_user.username
-    if tipper == "@MINI_BTC_CHAD" or "@LongIt345" or "@CryptoSniper000":  # enforce same admin controls across multiple
-        tipper = "@CryptoSniper000" #sets to master
+    if tipper == "@MINI_BTC_CHAD" or tipper == "@LongIt345" or tipper == "@CryptoSniper000":  # enforce same admin controls across multiple
+        tipper = "@CryptoSniper000"  # sets to master
     arguments = message.text.split()
     random_list_of_users = funds_database.fetch_random_users(tipper)
+    if len(arguments) < 2:
+        bot.send_message(chat_id, f"*Requires a username and a Integer Input*\nPlease Provide a whole number in "
+                                  f"mSatoshis\\.",
+                         parse_mode='MarkdownV2')
+        return
     if not arguments[1].isnumeric():
         bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
                          parse_mode='MarkdownV2')
@@ -188,14 +215,17 @@ def rain(message):
     remainder = budget - modulo * len(random_list_of_users)
     string_builder = f"{tipper} has mass tipped :"
     for user in random_list_of_users:
-        if budget - modulo >= 0:
+        if budget - modulo > 0 and modulo != 0:
             username_to_tip_balance = int(funds_database.check_user_balance(user))
             new_username_to_tip_balance = username_to_tip_balance + modulo
             funds_database.update_balance(user, new_username_to_tip_balance)
+            budget -= modulo
         else:
             username_to_tip_balance = int(funds_database.check_user_balance(user))
             new_username_to_tip_balance = username_to_tip_balance + remainder
             funds_database.update_balance(user, new_username_to_tip_balance)
+            string_builder += f" {user} ,"
+            break
         string_builder += f" {user} ,"
     bot.send_message(chat_id, string_builder)
 

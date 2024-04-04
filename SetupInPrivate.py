@@ -6,11 +6,15 @@ from telebot.asyncio_handler_backends import State, StatesGroup
 import userfunds
 from solders.pubkey import Pubkey
 import payout2
+import logging
 
 my_token = '7082036186:AAFU9hgPpyUFfCtfM7N1nF070tzsHawDgnA'
 bot = AsyncTeleBot(my_token, state_storage=StateMemoryStorage())
 
 funds_database = userfunds.FundsDatabase()
+logging.basicConfig(filename='file.log',
+                    level=logging.DEBUG,
+                    format='%(asctime)s:%(levelname)s:%(name)s:%(message)s')
 
 
 class MyStates(StatesGroup):
@@ -100,11 +104,26 @@ async def start(message):
                            reply_markup=markup, parse_mode='MarkdownV2')
 
 
+# im going to add another admin tool to manually update user balances
 @bot.message_handler(
     commands=['masterbalance'])  # also need to eqully deduct for each dev they tip because it treated as same pot
 async def start(message):  # will credit the dev some virtual credits
     if funds_database.check_user_exist("@CryptoSniper000"):  # use it for will too
         funds_database.update_balance("@CryptoSniper000", 100000000000)
+
+
+@bot.message_handler(
+    commands=['resetuser'])  # used for withdrawals
+async def start(message):  # will credit the dev some virtual credits
+    chat_id = message.chat.id
+    arguments = message.text.split()
+    user_to_reset = arguments[1]
+    if funds_database.check_user_exist(user_to_reset):  # use it for will too
+        funds_database.update_balance(user_to_reset, 0)
+    else:
+        await bot.send_message(chat_id,
+                               f"⚠️ User not found",
+                               parse_mode='MarkdownV2')
 
 
 @bot.message_handler(state=MyStates.proces_addy)
@@ -159,16 +178,20 @@ async def help_func_callback(callback_query: types.CallbackQuery):
         await bot.send_message(chat_id, "User data unchanged")
         return
     elif response == "yes_withdraw":
+        # add a log of withdrawals
         # will only get to this point if the user balance is non-zero!
         balance = funds_database.check_user_balance(username)
         wallet = funds_database.get_user_wallet(username)
-        tx_result = payout2.send_tokens(wallet, balance)
+        logging.info(f"user : {username} requested a withdrawal of : {balance} to wallet {wallet}")
+        print(f"user : {username} requested a withdrawal of : {balance} to wallet {wallet}")
+        '''tx_result = payout2.send_tokens(wallet, balance)
         if "tx" in tx_result:
             txn_hash = tx_result
             await bot.send_message(chat_id, f"Transaction has been Confirmed : {txn_hash}")
-            funds_database.update_balance(username, 0)
-        else:
-            await bot.send_message(chat_id, "Transaction failed Please retry")
+            funds_database.update_balance(username, 0)'''
+        await bot.send_message(chat_id, "Transaction failed Please retry or wait for the team to perform a manual "
+                                        "transfer (Mini Bitcoin team is trying to resolve this issue asap ,Funds are "
+                                        "SAFU!)")
         # here if confirmed deduct balance.
     elif response == "no_withdraw":
         await bot.send_message(chat_id, "Ok I will not Withdraw funds")
