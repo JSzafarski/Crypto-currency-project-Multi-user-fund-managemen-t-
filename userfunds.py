@@ -60,6 +60,7 @@ class FundsDatabase:
         self.cursor.execute("SELECT * FROM userfunds")
         rows = self.cursor.fetchall()
         range_of_users = len(rows)
+        print(range_of_users)
         amount_of_members = random.randint(1, range_of_users)
         temp_user_list = []
         for x in range(1, amount_of_members + 1):

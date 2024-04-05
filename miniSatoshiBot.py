@@ -1,6 +1,7 @@
 import telebot
 import userfunds
 from requests import request
+import getlppoolinfo
 
 my_token = '7179501342:AAGFiuXaX_ainsSXJN8VfTKfgz36PyObdwA'
 bot = telebot.TeleBot(my_token)
@@ -26,6 +27,13 @@ def get_price():
     return float(token_result.json()["pairs"][0]["priceUsd"])
 
 
+@bot.message_handler(commands=['supplyleft'])
+def rain(message):
+    chat_id = message.chat.id
+    supply = getlppoolinfo.get_lp_info()
+    bot.send_message(chat_id, f"Supply left in the Liquidty pool : {supply}")
+
+
 @bot.message_handler(commands=['getprice'])
 def rain(message):
     chat_id = message.chat.id
@@ -38,6 +46,10 @@ def convert_to_usd(message):
     chat_id = message.chat.id
     price_per_mbtc = get_price()  # need to fetch this
     arguments = message.text.split()
+    if len(arguments) < 2:
+        bot.send_message(chat_id, f"*Requires an Integer Input*\nDo: /convert \\<amount in m Satoshis\\>\\.",
+                         parse_mode='MarkdownV2')
+        return
     if len(arguments) > 2:
         bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
                          parse_mode='MarkdownV2')

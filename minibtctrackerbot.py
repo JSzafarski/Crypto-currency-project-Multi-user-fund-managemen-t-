@@ -13,6 +13,8 @@ import time
 from openai import OpenAI
 import re
 import filter_response
+from requests import request
+
 # Enter your Assistant ID here.
 ASSISTANT_ID = "asst_OdboRIxKhLQrirwYRHZFhyZd"
 
@@ -199,10 +201,30 @@ def time_till_halving():
 
 
 def poll():
-    start_time = time.time()
+    start_time = time.time()  # use this for lp pool and other stats
     time_till_h = time_till_halving()
+    temp_txHash_array = []
     while True:
         print("polling...")
+        # whale
+        token_address = "mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
+        spl_transfers = request('GET',
+                                "https://pro-api.solscan.io/v1.0/token/transfer?tokenAddress=" + str(
+                                    token_address) + "&limit=10&offset=0",
+                                headers=solscan_header)
+        spl_transfers_json = spl_transfers.json()
+        for transfer in spl_transfers_json["items"]:
+            if transfer["txHash"] not in temp_txHash_array:
+                print("new tx")
+                temp_txHash_array.append(transfer["txHash"])
+                if float(transfer["amount"]) / 10 ** 11 > 10:
+                    transfer_amount = int(float(transfer["amount"]) / 10 ** 11)
+                    from_address = transfer["sourceOwnerAccount"]
+                    to_address = transfer["destOwnerAccount"]
+                    bot.send_message("-1002130978267",
+                                     f"🚨🚨🚨 Whale Alert \\! *{transfer_amount} mBTC* Transferred From *{from_address}* to *{to_address}*",
+                             parse_mode='MarkdownV2')
+
         if time.time() > start_time + (30 * 60):
             bot.send_message("-1002130978267",
                              f"*__🟣 mBTC Statistics:__*\n\n⌛️ Time until halving : *{time_till_h}*",
@@ -212,5 +234,7 @@ def poll():
 
 
 if __name__ == "__main__":
+    t1 = threading.Thread(target=poll)
+    t1.start()
     # generate_meme_batch()
     bot.infinity_polling(timeout=None)
