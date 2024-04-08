@@ -14,6 +14,7 @@ from openai import OpenAI
 import re
 import filter_response
 from requests import request
+import getlppoolinfo
 
 # Enter your Assistant ID here.
 ASSISTANT_ID = "asst_OdboRIxKhLQrirwYRHZFhyZd"
@@ -237,6 +238,15 @@ def send_raid_to_earn():
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
+def get_holders():
+    holder_list = request('GET',
+                          "https://pro-api.solscan.io/v1.0/token/holders?tokenAddress"
+                          "=mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ&limit=10&offset=0",
+                          headers=solscan_header)
+    holder_list_json = holder_list.json()
+    return int(holder_list_json["total"])
+
+
 def poll():
     start_time = time.time()  # use this for lp pool and other stats
     start_time2 = time.time()
@@ -268,15 +278,18 @@ def poll():
                                          f"{string_builder} Whale Buy \\! *{transfer_amount} mBTC* Transferred to *{to_address}*",
                                          parse_mode='MarkdownV2')
 
-        if time.time() > start_time + (30 * 60):
-            bot.send_message("-1002130978267",
-                             f"*__🟣 mBTC Statistics:__*\n\n⌛️ Time until halving : *{time_till_h}*",
+        if time.time() > start_time + (30 * 60): #30 * 60
+            supply = getlppoolinfo.get_lp_info()
+            holders = str(get_holders())
+            bot.send_message("-1002130978267",  # add holder count
+                             f"*__🟣 mBTC Statistics:__*\n\n⌛️ Time until halving : *{time_till_h}*\n💰 Supply left in "
+                             f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: 10500\n🤲 Holder count: *{holders}*",
                              parse_mode='MarkdownV2')
             start_time = time.time()
-        if time.time() > start_time2 + (63*60):
+        if time.time() > start_time2 + (63 * 60):
             send_test_rewards_info()
             start_time2 = time.time()
-        if time.time() > start_time3 + (42*60):
+        if time.time() > start_time3 + (42 * 60):
             send_raid_to_earn()
             start_time3 = time.time()
         time.sleep(5)
