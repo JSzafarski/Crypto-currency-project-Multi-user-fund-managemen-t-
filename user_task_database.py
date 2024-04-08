@@ -30,6 +30,38 @@ allowable_submissions = {
 }
 
 
+@bot.message_handler(commands=['info'])
+def rain(message):
+    chat_id = message.chat.id
+    if chat_id != -4174401511:  # not allow as make it only work for that group only
+        bot.send_message(chat_id,
+                         f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
+                         parse_mode='MarkdownV2')
+        return
+    bot.send_message(chat_id,
+                     f"*__🟣 Vote Mini Bitcoin \\- $mBTC__*\n\nGet mSatoshis for voting on any of the platforms "
+                     f"mentioned below\\.\n\nWhen you have done so, tag either @LongIt345 or @MINI\\_BTC\\_CHAD "
+                     f"with a "
+                     f"screenshot of your vote and you will be tipped\\.\n\nWe will have a dedicated channel "
+                     f"where the process for receiving tips will become automated soon\\!\n\n💸💸 *Click any of "
+                     f"the "
+                     f"links below to get started\\!* 💸💸\n\n[DexTools]("
+                     f"https://www.dextools.io/app/en/solana/pair-explorer"
+                     f"/DDnvC5rvvZeJLuNKBF6xsdqHA6GPKbLxYq8z1bzaotUC?t=1712460479955) hit the 👍🏻"
+                     f"*\\(5000000 mSatoshis\\)\n\n*[DexScreener]("
+                     f"https://dexscreener.com/solana/ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc) hit the 🚀 "
+                     f"*\\(2500000 mSatoshis\\)*\n\n[Birdeye]("
+                     f"https://birdeye.so/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ?chain=solana) hit"
+                     f" the 👍🏻 *\\(1000000 mSatoshis\\)*\n\n*Reach X "
+                     f"votes and get listed:*\n\n[GemsRadar](https://gemsradar.com/coins/mini-bitcoin) login and "
+                     f"vote 🗳 *\\(10000000 mSatoshis\\)*\n\n[CoinAlpha]("
+                     f"https://coinalpha.app/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ) login and vote 🗳 "
+                     f"*\\(1000000 mSatoshis\\)*\n\n[CoinCatapult](https://coincatapult.com/coin/mini-bitcoin-mbtc) "
+                     f"vote 🗳 *\\(1000000 mSatoshis\\)*\n\n[CoinMoonHunt]("
+                     f"https://coinmoonhunt.com/coin/Mini%20Bitcoin) vote 🗳 *\\(1000000 mSatoshis\\)*",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
 def convert_to_standard(input_string):
     lower_case_string = input_string.lower()
     lower_case_string = lower_case_string.strip()  # remove any spaces
@@ -40,6 +72,16 @@ def convert_to_standard(input_string):
                      content_types=['photo', 'text'])  # any message ( needs to check if user attaches a picture too)
 def check_submission(message):
     chat_id = message.chat.id
+    if chat_id != -4174401511:  # not allow as make it only work for that group only
+        bot.send_message(chat_id,
+                         f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
+                         parse_mode='MarkdownV2')
+        return
+    if message.from_user.username is None:
+        bot.send_message(chat_id,
+                         f"User has no username , Please create a username in your Telegram settings\\!",
+                         parse_mode='MarkdownV2')
+        return
     if message.photo is None:
         bot.send_message(chat_id,
                          f"*Please provide a screenshot\\!*\nPlease add a screenshot to prove the task was completed\\.",
@@ -53,7 +95,6 @@ def check_submission(message):
         return
     user_submission_type = message.caption
     standard_form = convert_to_standard(user_submission_type)
-    print(standard_form)
     user_name = "@" + message.from_user.username
     if standard_form in allowable_submissions:  # this means user has submitted a potentially allowable submission
         if user_funds.check_user_exist(user_name):  # if user is registered
@@ -76,20 +117,16 @@ def check_submission(message):
                 fund_user(user_name, standard_form, chat_id)
         else:
             bot.send_message(chat_id,
-                             f"*User not registered*\nPlease register an account using : https://t.me/mBTCTipbot\\.",
+                             f"*User not registered*\nPlease register an account using : https://t\\.me/mBTCTipbot\\.",
                              parse_mode='MarkdownV2')
             return
     else:
         bot.send_message(chat_id,
                          f"*Invalid submission*\nPlease provide a valid keyword to match your submission for example "
-                         f":'dextools' for a DexTools upvote submission\\.",
+                         f":'dextools' for a DexTools upvote submission\\.You can type : /info to get more information",
                          parse_mode='MarkdownV2')
         return
-        # error
-    # check if the user exists
-    # check if they already submitted the task
-    # if not then add it to database and credit them
-    # else give warnings
+
 
 
 def fund_user(username, task_completed, chat_id):
