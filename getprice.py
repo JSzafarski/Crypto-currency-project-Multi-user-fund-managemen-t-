@@ -17,7 +17,3 @@ def get_price():
                            f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
                            headers=header)
     return token_result.json()["pairs"][0]["priceUsd"]
-
-
-
-print(get_price())

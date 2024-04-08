@@ -2,6 +2,7 @@ import telebot
 import userfunds
 from requests import request
 import getlppoolinfo
+import get_trending_coins
 
 my_token = '7179501342:AAGFiuXaX_ainsSXJN8VfTKfgz36PyObdwA'
 bot = telebot.TeleBot(my_token)
@@ -27,18 +28,49 @@ def get_price():
     return float(token_result.json()["pairs"][0]["priceUsd"])
 
 
+def get_marketcap():
+    token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
+    token_result = request('GET',
+                           f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
+                           headers=header)
+    return float(token_result.json()["pairs"][0]["fdv"])
+
+
+def get_trending_tokens():
+    token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
+    token_result = request('GET',
+                           f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
+                           headers=header)
+
+
 @bot.message_handler(commands=['supplyleft'])
 def rain(message):
     chat_id = message.chat.id
     supply = getlppoolinfo.get_lp_info()
-    bot.send_message(chat_id, f"Supply left in the Liquidty pool : {supply}")
+    bot.send_message(chat_id, f"Supply left in the Liquidity pool : *{supply}*",
+                     parse_mode='MarkdownV2')
 
 
 @bot.message_handler(commands=['getprice'])
 def rain(message):
     chat_id = message.chat.id
-    price = str(get_price())
-    bot.send_message(chat_id, f"Mini Bitcoin price : {price} $")
+    price = str(get_price()).replace(".", ",")
+    bot.send_message(chat_id, f"Mini Bitcoin price : *{price}$*",
+                     parse_mode='MarkdownV2')
+
+
+@bot.message_handler(commands=['compare'])  # compare it to trending coins on sol
+def rain(message):
+    chat_id = message.chat.id
+    arguments = message.text.split()
+    if len(arguments) < 2:
+        bot.send_message(chat_id, f"Please Provide the token you wish to compare",
+                         parse_mode='MarkdownV2')
+        return
+    result = get_trending_coins.compare(arguments[1])
+    if result is not False:
+        bot.send_message(chat_id, result,
+                         parse_mode='MarkdownV2')
 
 
 @bot.message_handler(commands=['convert'])
@@ -46,11 +78,24 @@ def convert_to_usd(message):
     chat_id = message.chat.id
     price_per_mbtc = get_price()  # need to fetch this
     arguments = message.text.split()
-    if len(arguments) < 2:
-        bot.send_message(chat_id, f"*Requires an Integer Input*\nDo: /convert \\<amount in m Satoshis\\>\\.",
-                         parse_mode='MarkdownV2')
-        return
-    if len(arguments) > 2:
+    if message.from_user.username is None:  # no username
+        if len(arguments) < 2:
+            bot.send_message(chat_id, f"*Requires an Integer Input*\nDo: /convert \\<amount in m Satoshis\\>\\.",
+                             parse_mode='MarkdownV2')
+            return
+    else:  # check if they are registered:
+        user = "@" + message.from_user.username
+        if funds_database.check_user_exist(user):
+            if len(arguments) < 2:  # clearly they ant to check for themselves
+                funds = funds_database.check_user_balance(user)
+                sats_balance = float(funds)
+                amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * price_per_mbtc)
+                substring = f"{amount_in_dollars:.5f}".replace(".", ",")
+                bot.send_message(chat_id, f"Dear {user}, Your converted Balance is equal to *${substring}*",
+                                 parse_mode='MarkdownV2')
+                return
+
+    if len(arguments) > 2 or len(arguments) < 2:
         bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
                          parse_mode='MarkdownV2')
         return
@@ -60,7 +105,8 @@ def convert_to_usd(message):
                          parse_mode='MarkdownV2')
         return
     amount_in_dollars = ((float(int(msatoshi_amount)) / float(100000000000)) * price_per_mbtc)
-    bot.send_message(chat_id, f"The converted amount is equal to {amount_in_dollars:.5f} $")
+    substring = f"{amount_in_dollars:.5f}".replace(".", ",")
+    bot.send_message(chat_id, f"The converted amount is equal to *${substring}*", parse_mode='MarkdownV2')
 
 
 # every admin will hev equal deduction of balance in order to preserve solvency

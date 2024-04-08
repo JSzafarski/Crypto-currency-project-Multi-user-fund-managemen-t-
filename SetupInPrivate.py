@@ -113,6 +113,21 @@ async def start(message):  # will credit the dev some virtual credits
 
 
 @bot.message_handler(
+    commands=['test333'])
+async def send_test_rewards_info(message):
+    chat_id = message.chat.id
+    await bot.send_message(chat_id, "🟣 *__Raid to earn__*\n\n⚔️ Shill $mBTC on X to a big Crypto Twitter"
+                                       " influencer ⚔️\n\nIf your post is raided, you will be tipped *10000000 "
+                                       "mSatoshis*\\.\n\n_How to increase the chances of your post getting raided_?\n\n1\\) "
+                                       "Reply to a big Crypto Twitter influencer's post that is <2 hours old\n2\\) "
+                                       "Include the $mBTC ticker in your reply and tag @mbtc\\_sol\n3\\) Not AI generated "
+                                       "and generic\n4\\) Account must not be shadow banned\\. Check "
+                                       "here:\n[Shadowban](https://shadowban.yuzurisa.com/)\n\nYou will be tipped upon completion "
+                                       "of the raid\\.",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(
     commands=['resetuser'])  # used for withdrawals
 async def start(message):  # will credit the dev some virtual credits
     chat_id = message.chat.id

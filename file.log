@@ -220,3 +220,79 @@
 2024-04-05 08:35:03,844:ERROR:TeleBot:Request timeout. Request: method=get url=sendMessage params=<aiohttp.formdata.FormData object at 0x00000299C801F200> files=None request_timeout=300
 2024-04-05 08:51:39,938:INFO:root:user : @purpleairr requested a withdrawal of : 1633495376 to wallet BVEa82WSEFBhSxjhGw7NJJtSj2HAbZ4mWLufgmGk7GDF
 2024-04-05 09:00:21,675:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-05 09:00:52,709:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-05 09:14:05,874:INFO:root:user : @fernandoMRafael requested a withdrawal of : 1621962880 to wallet HPU93YMmVdow1uE3b2bk63iWAnzYo2KKDzdGhHXzJcuC
+2024-04-05 09:14:09,639:INFO:root:user : @fernandoMRafael requested a withdrawal of : 1621962880 to wallet HPU93YMmVdow1uE3b2bk63iWAnzYo2KKDzdGhHXzJcuC
+2024-04-05 09:14:12,152:INFO:root:user : @fernandoMRafael requested a withdrawal of : 1621962880 to wallet HPU93YMmVdow1uE3b2bk63iWAnzYo2KKDzdGhHXzJcuC
+2024-04-05 09:14:15,123:INFO:root:user : @fernandoMRafael requested a withdrawal of : 1621962880 to wallet HPU93YMmVdow1uE3b2bk63iWAnzYo2KKDzdGhHXzJcuC
+2024-04-05 14:48:52,368:INFO:root:user : @LilMaku requested a withdrawal of : 71677165 to wallet CvAeKtY6vw4NgSh9i3jgV8VKkc5fCy7JXoin9sdqGcQ3
+2024-04-05 16:30:05,360:INFO:root:user : @Hbkflaco requested a withdrawal of : 11997002 to wallet AaxKXbM1LiLCkyPqMP622ajXYLzLJbk9pxZnyvMkLnrr
+2024-04-05 18:18:26,910:INFO:root:user : @trinityX147 requested a withdrawal of : 1578499341 to wallet 97t56MCU1QhnUtAAGtFMaGTPYq2N9VtH9gpGThJ1EGy
+2024-04-05 19:38:38,203:INFO:root:user : @Ck24231 requested a withdrawal of : 81010572 to wallet YskcXfsEyyFhVERT5YbtGaihMUfy9mH8KdMFJnfok29
+2024-04-05 21:01:02,525:INFO:root:user : @baiouyangtw requested a withdrawal of : 12582741 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-05 21:01:38,269:INFO:root:user : @baiouyangtw requested a withdrawal of : 12582741 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-05 21:07:32,080:INFO:root:user : @baiouyangtw requested a withdrawal of : 12582741 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-05 21:08:29,992:INFO:root:user : @baiouyangtw requested a withdrawal of : 12582741 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-05 21:10:20,864:INFO:root:user : @baiouyangtw requested a withdrawal of : 12582741 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-05 21:24:06,629:INFO:root:user : @baiouyangtw requested a withdrawal of : 12582741 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-05 23:42:58,352:INFO:root:user : @baiouyangtw requested a withdrawal of : 12587762 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-06 00:48:41,733:INFO:root:user : @Ck24231 requested a withdrawal of : 81960127 to wallet YskcXfsEyyFhVERT5YbtGaihMUfy9mH8KdMFJnfok29
+2024-04-06 01:40:40,880:INFO:root:user : @fernandoMRafael requested a withdrawal of : 1622030625 to wallet HPU93YMmVdow1uE3b2bk63iWAnzYo2KKDzdGhHXzJcuC
+2024-04-06 02:07:06,795:INFO:root:user : @Hbkflaco requested a withdrawal of : 13454824 to wallet AaxKXbM1LiLCkyPqMP622ajXYLzLJbk9pxZnyvMkLnrr
+2024-04-06 03:42:41,727:INFO:root:user : @Danktastic_21 requested a withdrawal of : 1630036720 to wallet 2xBtZGchsmw3uwnNfQ8uY1LBpcVFCZXGeVtCGNdAXqWq
+2024-04-06 04:05:48,056:INFO:root:user : @purpleairr requested a withdrawal of : 1635408177 to wallet BVEa82WSEFBhSxjhGw7NJJtSj2HAbZ4mWLufgmGk7GDF
+2024-04-06 11:57:23,034:INFO:root:user : @Jjflyboom requested a withdrawal of : 89749439 to wallet 8PSSnLusMd5X39pPWrSv1nm6dsmXvVkXhtTny45VbjWP
+2024-04-06 14:13:02,463:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message can't be deleted for everyone
+2024-04-06 17:04:45,922:INFO:root:user : @baiouyangtw requested a withdrawal of : 163244461 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-06 22:54:25,638:INFO:root:user : @baiouyangtw requested a withdrawal of : 163265979 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-07 01:36:14,848:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:36:18,391:ERROR:TeleBot:object NoneType can't be used in 'await' expression
+2024-04-07 01:36:42,918:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:36:44,503:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '-' is reserved and must be escaped with the preceding '\'
+2024-04-07 01:37:13,729:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:37:15,050:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '-' is reserved and must be escaped with the preceding '\'
+2024-04-07 01:37:36,938:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:37:37,205:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '-' is reserved and must be escaped with the preceding '\'
+2024-04-07 01:37:56,668:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:37:56,876:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '!' is reserved and must be escaped with the preceding '\'
+2024-04-07 01:38:15,641:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:38:15,967:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '(' is reserved and must be escaped with the preceding '\'
+2024-04-07 01:39:04,596:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:44:20,253:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:44:37,646:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:46:40,432:INFO:root:user : @andresherbina requested a withdrawal of : 58630411 to wallet 5453wSmKrHNoyWAAfexSSxBLvaU7tp8vbScEqg6dirTy
+2024-04-07 01:47:58,346:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:52:00,792:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:52:33,666:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:55:44,437:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 01:56:35,803:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:05:05,445:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:05:57,167:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:06:22,414:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:06:36,685:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:14:39,526:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:14:47,522:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character ')' is reserved and must be escaped with the preceding '\'
+2024-04-07 02:15:07,546:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:15:07,832:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '-' is reserved and must be escaped with the preceding '\'
+2024-04-07 02:15:40,631:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:15:41,887:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '.' is reserved and must be escaped with the preceding '\'
+2024-04-07 02:16:04,010:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:16:04,224:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Character '.' is reserved and must be escaped with the preceding '\'
+2024-04-07 02:16:48,531:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:16:48,745:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of Italic entity at byte offset 332
+2024-04-07 02:18:16,015:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:18:17,065:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of Italic entity at byte offset 334
+2024-04-07 02:19:19,167:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:21:35,689:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:21:38,084:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of Italic entity at byte offset 334
+2024-04-07 02:21:59,404:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:21:59,629:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of Italic entity at byte offset 334
+2024-04-07 02:22:51,937:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:22:52,484:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of Italic entity at byte offset 332
+2024-04-07 02:23:50,392:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:24:11,172:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 02:26:45,019:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-07 05:31:00,284:INFO:root:user : @Danktastic_21 requested a withdrawal of : 1639710521 to wallet 2xBtZGchsmw3uwnNfQ8uY1LBpcVFCZXGeVtCGNdAXqWq
+2024-04-07 05:59:10,170:INFO:root:user : @purpleairr requested a withdrawal of : 1644745784 to wallet BVEa82WSEFBhSxjhGw7NJJtSj2HAbZ4mWLufgmGk7GDF
+2024-04-07 14:19:54,299:INFO:root:user : @baiouyangtw requested a withdrawal of : 163278972 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-07 16:25:22,645:INFO:root:user : @Ck24231 requested a withdrawal of : 91777725 to wallet YskcXfsEyyFhVERT5YbtGaihMUfy9mH8KdMFJnfok29
