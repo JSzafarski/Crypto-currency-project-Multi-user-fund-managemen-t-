@@ -85,6 +85,8 @@ def convert_to_usd(message):
             return
     else:  # check if they are registered:
         user = "@" + message.from_user.username
+        if user == "@MINI_BTC_CHAD" or user == "@LongIt345" or user == "@CryptoSniper000":  # enforce same admin controls across multiple
+            user = "@CryptoSniper000"
         if funds_database.check_user_exist(user):
             if len(arguments) < 2:  # clearly they ant to check for themselves
                 funds = funds_database.check_user_balance(user)
@@ -94,7 +96,6 @@ def convert_to_usd(message):
                 bot.send_message(chat_id, f"Dear {user}, Your converted Balance is equal to *${substring}*",
                                  parse_mode='MarkdownV2')
                 return
-
     if len(arguments) > 2 or len(arguments) < 2:
         bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
                          parse_mode='MarkdownV2')
@@ -131,6 +132,55 @@ def check_balance(message):
         bot.send_message(chat_id, f"{tipper} ,⚠️ You haven't setup a wallet yet.\nPlease use our simple setup bot "
                                   f"'https://t.me/mBTCTipbot' and follow instructions "
                                   "to begin")
+        return
+
+
+@bot.message_handler(commands=['burnsats'])  # for burning mini satoshis ( sending it to burn account)
+def burn(message):
+    # only argument is the mount to be burned
+    burn_wallet = "@MiniBtcBurn"
+    chat_id = message.chat.id
+    tipper = "@" + message.from_user.username
+    if tipper == "@MINI_BTC_CHAD" or tipper == "@LongIt345" or tipper == "@CryptoSniper000":  # enforce same admin controls across multiple
+        tipper = "@CryptoSniper000"
+    if funds_database.check_user_exist(tipper):
+        arguments = message.text.split()
+        argument_length = len(arguments)
+        if argument_length < 2 or argument_length > 2:
+            bot.send_message(chat_id, f"*Invalid Input*\nPlease us the following syntax:\n/burnsats "
+                                      f"\\<\\amount in"
+                                      f" mSatoshis\\>\\ \\.",
+                             parse_mode='MarkdownV2')
+            return
+        username_to_tip = burn_wallet
+        if funds_database.check_user_exist(username_to_tip):
+            amount_to_tip = arguments[1]
+            if not amount_to_tip.isnumeric():
+                bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
+                                 parse_mode='MarkdownV2')
+                return
+            else:
+                if int(funds_database.check_user_balance(tipper)) >= int(amount_to_tip):
+                    new_tipper_balance = int(funds_database.check_user_balance(tipper)) - int(amount_to_tip)
+                    username_to_tip_balance = int(funds_database.check_user_balance(username_to_tip))
+                    new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
+                    funds_database.update_balance(tipper, new_tipper_balance)
+                    funds_database.update_balance(username_to_tip, new_username_to_tip_balance)
+                    bot.send_message(chat_id, f"{tipper} has Burned *{amount_to_tip}* mSatoshis",
+                                     parse_mode='MarkdownV2')
+                else:  # not enough funds
+                    bot.send_message(chat_id,
+                                     f"*Insufficient funds*\nThe amount burned is greater than your balance\\.",
+                                     parse_mode='MarkdownV2')
+                    return
+        else:
+            bot.send_message(chat_id,
+                             "User has not setup their tipping wallet.\nUse the bot : https://t.me/mBTCTipbot ")
+            return
+    else:
+        bot.send_message(chat_id, "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
+                                  "need to be tipped by a team member before you can send mBTC to other users in the "
+                                  "group")
         return
 
 
@@ -239,7 +289,7 @@ def rain(message):
         return
 
 
-@bot.message_handler(commands=['rain'])
+@bot.message_handler(commands=['rain'])  # check why it leaves a comma at the end
 def rain(message):
     chat_id = message.chat.id
     if message.from_user.username is None:
@@ -271,7 +321,8 @@ def rain(message):
     new_tipper_balance = int(funds_database.check_user_balance(tipper)) - int(budget)  # update tipper balance
     funds_database.update_balance(tipper, new_tipper_balance)
     remainder = budget - modulo * len(random_list_of_users)
-    string_builder = f"{tipper} has mass tipped :"
+    print(modulo)
+    string_builder = f"{tipper} has mass tipped: "
     for user in random_list_of_users:
         if budget - modulo > 0 and modulo != 0:
             username_to_tip_balance = int(funds_database.check_user_balance(user))

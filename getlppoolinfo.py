@@ -20,4 +20,4 @@ def get_lp_info():
     for holder in holder_list["data"]:
         if holder["owner"] == "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1":
             converted = ((float(holder["amount"]) / 10 ** 11 / supply) * 100)
-            return f"{converted:.3f}".replace(".", ",") + " \\%"
+            return f"{converted:.3f}".replace(".", "\\.") + " \\%"
