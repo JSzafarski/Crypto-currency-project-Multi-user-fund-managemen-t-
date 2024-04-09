@@ -140,6 +140,10 @@ def burn(message):
     # only argument is the mount to be burned
     burn_wallet = "@MiniBtcBurn"
     chat_id = message.chat.id
+    if message.from_user.username is None:  # no username
+        bot.send_message(chat_id, f"*Please Set a username!*.",
+                         parse_mode='MarkdownV2')
+        return
     tipper = "@" + message.from_user.username
     if tipper == "@MINI_BTC_CHAD" or tipper == "@LongIt345" or tipper == "@CryptoSniper000":  # enforce same admin controls across multiple
         tipper = "@CryptoSniper000"
