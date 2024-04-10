@@ -69,7 +69,7 @@ choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coin
            "CNToken.io", "Coinvote", "x"]
 
 
-@bot.message_handler(commands=['vote-x'])
+@bot.message_handler(commands=['vote_x'])
 def rain(message):
     chat_id = message.chat.id
     if chat_id != -4174401511:  # not allow as make it only work for that group only
@@ -90,7 +90,7 @@ def rain(message):
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
-@bot.message_handler(commands=['vote-info'])
+@bot.message_handler(commands=['vote_info'])
 def rain(message):
     chat_id = message.chat.id
     if chat_id != -4174401511:  # not allow as make it only work for that group only
@@ -140,8 +140,6 @@ def convert_to_standard(input_string):
     return lower_case_string
 
 
-# each entry will be (keyword epoch keyword epoch ....so forth
-
 @bot.message_handler(func=lambda message: True,
                      content_types=['photo', 'text'])  # any message ( needs to check if user attaches a picture too)
 def check_submission(message):
@@ -161,27 +159,30 @@ def check_submission(message):
         return
     if message.photo is None:
         bot.send_message(chat_id,
-                         f"*Please provide a screenshot\\!*\nPlease add a screenshot to prove the task was "
-                         f"completed\\.\n\nFor more information, consult the pinned message\\.\\.\\.\nYou can type : "
-                         f"/info to get more"
-                         f"information\\.\n\nFor more information, consult the pinned message\\.\\.\\.",
+                         f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
+                         f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
+                         f"screenshot\\.\n\nFor more"
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get more "
+                         f"information\\.",
                          parse_mode='MarkdownV2')
         return
     if message.caption is None:
         bot.send_message(chat_id,
-                         f"*Please provide a keyword of the submission type\\!*\nFor example if you are providing a "
-                         f"proof you have upvoted on Dexscreener please type 'dexscreener'\\.\n\nFor more "
-                         f"information, consult the pinned message\\.\\.\\.\nYou can type : /info to get more "
-                         f"information\\.\n\nFor more information, consult the pinned message\\.\\.\\.",
+                         f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
+                         f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
+                         f"screenshot\\.\n\nFor more"
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get more "
+                         f"information\\.",
                          parse_mode='MarkdownV2')
         return
     user_submission_type = message.caption
     if len(message.caption.split()) > 1:
         bot.send_message(chat_id,
-                         f"*Please provide a keyword of the submission type\\!*\nFor example if you are providing a "
-                         f"proof you have upvoted on Dexscreener please type 'dexscreener'\\.\n\nFor more "
-                         f"information, consult the pinned message\\.\\.\\.\nYou can type : /info to get more "
-                         f"information\\.\n\nFor more information, consult the pinned message\\.\\.\\.",
+                         f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
+                         f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
+                         f"screenshot\\.\n\nFor more"
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get more "
+                         f"information\\.",
                          parse_mode='MarkdownV2')
         return
     standard_form = convert_to_standard(user_submission_type)
@@ -246,10 +247,10 @@ def check_submission(message):
         best_choice = process.extractOne(standard_form, choices)[0].replace(".", "\\.")
         # here try to give suggestion to what they actually might of meant usign the library fuzzy wuzy
         bot.send_message(chat_id,
-                         f"*Invalid submission*\nDid you mean: *{best_choice}*?\n\nPlease provide a valid keyword "
-                         f"to match your submission for example"
-                         f":'dextools' for a DexTools upvote submission\\.You can type : /info to get more "
-                         f"information\\.\n\nFor more information, consult the pinned message\\.\\.\\.",
+                         f"🟣 *Invalid submission*\nDid you mean: *{best_choice}*?\n\nFor example, if you are providing "
+                         f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
+                         f"screenshot\\.\n\nOtherwise type: /info to get more "
+                         f"information\\.",
                          parse_mode='MarkdownV2')
         return
 

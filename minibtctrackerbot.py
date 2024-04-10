@@ -259,7 +259,7 @@ def send_twitter_raid_info():
                      f"must abide"
                      f"by the following requirements with your X post:\n🟣 You must reply to a crypto influencer with more than "
                      f"*50k followers* on a post *less* than *4hrs old*\n🟣 Use the following hashtags in your reply:\\$mBTC "
-                     f"_#Bitcoin #BitcoinOnSolana #sol #meme #utility_\n🟣 X account must not be shadow banned. Check "
+                     f"_\\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme \\#utility_\n🟣 X account must not be shadow banned. Check "
                      f"here:"
                      f"[Shadowban](https://shadowban.yuzurisa.com/)\n🟣 And most importantly, please attach the recently made "
                      f"comparison chart in your shill post\\!\n\nComparison chart download link: [link]("
@@ -313,8 +313,7 @@ def poll():
                                          f"{string_builder} Whale Buy \\! *{transfer_amount} mBTC* Transferred to ["
                                          f"Address]({solsca_link})",
                                          parse_mode='MarkdownV2', disable_web_page_preview=True)
-
-        if time.time() > start_time + (30 * 60):  # 30 * 60
+        if time.time() > start_time + (30 * 60):
             supply = getlppoolinfo.get_lp_info()
             holders = str(get_holders())
             bot.send_message("-1002130978267",  # add holder count
@@ -325,9 +324,6 @@ def poll():
         if time.time() > start_time2 + (63 * 60):
             send_test_rewards_info()
             start_time2 = time.time()
-        #if time.time() > start_time3 + (42 * 60):
-        #    send_raid_to_earn()
-        #    start_time3 = time.time()
         if time.time() > start_time4 + (25 * 60):
             send_twitter_raid_info()
             start_time4 = time.time()

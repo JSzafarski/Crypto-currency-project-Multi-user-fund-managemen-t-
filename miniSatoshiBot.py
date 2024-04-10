@@ -92,8 +92,8 @@ def convert_to_usd(message):
                 funds = funds_database.check_user_balance(user)
                 sats_balance = float(funds)
                 amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * price_per_mbtc)
-                substring = f"{amount_in_dollars:.5f}".replace(".", ",")
-                bot.send_message(chat_id, f"Dear {user}, Your converted Balance is equal to *${substring}*",
+                substring = f"{amount_in_dollars:.5f}".replace(".", "\\.")
+                bot.send_message(chat_id, f"Dear {user}, your converted balance is equal to *${substring}*",
                                  parse_mode='MarkdownV2')
                 return
     if len(arguments) > 2 or len(arguments) < 2:
@@ -106,7 +106,7 @@ def convert_to_usd(message):
                          parse_mode='MarkdownV2')
         return
     amount_in_dollars = ((float(int(msatoshi_amount)) / float(100000000000)) * price_per_mbtc)
-    substring = f"{amount_in_dollars:.5f}".replace(".", ",")
+    substring = f"{amount_in_dollars:.5f}".replace(".", "\\.")
     bot.send_message(chat_id, f"The converted amount is equal to *${substring}*", parse_mode='MarkdownV2')
 
 
@@ -325,7 +325,6 @@ def rain(message):
     new_tipper_balance = int(funds_database.check_user_balance(tipper)) - int(budget)  # update tipper balance
     funds_database.update_balance(tipper, new_tipper_balance)
     remainder = budget - modulo * len(random_list_of_users)
-    print(modulo)
     string_builder = f"{tipper} has mass tipped: "
     for user in random_list_of_users:
         if budget - modulo > 0 and modulo != 0:
