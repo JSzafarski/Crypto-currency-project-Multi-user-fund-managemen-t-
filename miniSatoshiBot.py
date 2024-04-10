@@ -135,6 +135,18 @@ def check_balance(message):
         return
 
 
+@bot.message_handler(commands=['totalburn'])
+def check_balance(message):
+    chat_id = message.chat.id
+    burn_wallet = "@MiniBtcBurn"
+    funds = funds_database.check_user_balance(burn_wallet)
+    mbtc_balance = float(funds) / float(100000000000)
+    prestring = f"{mbtc_balance:.11f}".replace(".", "\\.")
+    bot.send_message(chat_id, f"Total amount burned by all users: *{prestring}* mBTC \\(*{funds}* mSatoshis\\)",
+                     parse_mode='MarkdownV2')
+    return
+
+
 @bot.message_handler(commands=['burnsats'])  # for burning mini satoshis ( sending it to burn account)
 def burn(message):
     # only argument is the mount to be burned

@@ -162,7 +162,7 @@ def check_submission(message):
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -172,7 +172,7 @@ def check_submission(message):
             if index > 0:
                 bot.send_message(chat_id,
                                  f"*🟣 Please provide only one image per submission\\!*\n\n\nFor more"
-                                 f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get "
+                                 f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get "
                                  f"more"
                                  f"information\\.",
                                  parse_mode='MarkdownV2')
@@ -182,7 +182,7 @@ def check_submission(message):
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -192,7 +192,7 @@ def check_submission(message):
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return

@@ -160,6 +160,8 @@ async def process_address(message):
                 return
             else:
                 funds_database.add_user("@" + username, wallet)
+                print(f"user @{username} has registered!")
+                logging.info(f"user : @{username} registered")
                 await bot.send_message(chat_id, "You have been successfully added to the database!")
                 await bot.delete_state(chat_id, chat_id)
                 return

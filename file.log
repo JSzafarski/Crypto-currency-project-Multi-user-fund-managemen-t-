@@ -317,3 +317,4 @@
 2024-04-10 11:41:07,661:DEBUG:asyncio:Using proactor: IocpProactor
 2024-04-10 15:56:00,652:ERROR:TeleBot:Unknown error: TimeoutError
 2024-04-10 15:56:00,678:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000026045BBF110> files=None request_timeout=300
+2024-04-10 16:21:51,306:DEBUG:asyncio:Using proactor: IocpProactor
