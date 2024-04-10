@@ -31,7 +31,8 @@ allowable_submissions = {
     "coinmooner": 30000,
     "coinhunt": 200000,
     "cntoken.io": 150000,
-    "coinvote": 30000
+    "coinvote": 30000,
+    "x": 100000000
 }
 
 infinity = 999999999999999999999999
@@ -39,6 +40,7 @@ twenty_four_hours = 60 * 60 * 24
 six_hours = 60 * 60 * 6
 one_hour = 60 * 60
 thirty_minutes = 60 * 30
+twenty_minutes = 20 * 60
 time_outs = {  # ( in epoch time)
     "dextools": infinity,
     "dexscreener": one_hour,
@@ -58,12 +60,34 @@ time_outs = {  # ( in epoch time)
     "coinmooner": twenty_four_hours,
     "coinhunt": twenty_four_hours,
     "cntoken.io": thirty_minutes,
-    "coinvote": twenty_four_hours
+    "coinvote": twenty_four_hours,
+    "x": twenty_minutes
 }
 choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coincatapult', 'coinmoonhunt',
            'coindiscovery',
            'coinbazooka', 'coinscope', 'ntm.ai', 'top100token', 'rugfreecoins', 'coinboom', 'coinmooner', 'coinhunt',
-           "CNToken.io", "Coinvote"]
+           "CNToken.io", "Coinvote", "x"]
+
+
+@bot.message_handler(commands=['vote-x'])
+def rain(message):
+    chat_id = message.chat.id
+    if chat_id != -4174401511:  # not allow as make it only work for that group only
+        bot.send_message(chat_id,
+                         f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
+                         parse_mode='MarkdownV2')
+        return
+    bot.send_message(chat_id,
+                     f"__X/Twitter__\n*We've introduced an X bounty that can be claimed once every 20 minutes\\.\n\n*Simply type "
+                     f"'X' in the rewards channel, and attach the screenshot of the shill post made on X\\.\n\n*You must abide "
+                     f"by the following requirements with your X post:\n🟣 You must reply to a crypto influencer with more than "
+                     f"*50k followers* on a post *less* than *4hrs old*\n🟣 Use the following hashtags in your reply:\n\\$mBTC "
+                     f"_\\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme \\#utility_\n🟣 X account must not be shadow banned\\. Check here:  "
+                     f"[Shadowban](https://shadowban\\.yuzurisa\\.com/)\n🟣 And most importantly, please attach the recently made "
+                     f"comparison chart in your shill post\\!\n\nComparison chart download link: \n[Link]("
+                     f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\n\n*You will receive 100000000 mSatoshis on submission of the "
+                     f"screenshot\\.",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['vote-info'])

@@ -54,24 +54,24 @@ def compare(token):
         string_builder = ""
         mbtc_fdv = float(get_market_cap(mbtc_pair))
         token_fdv = float(get_market_cap(big_sol_coins[standard_token_version]))
-        ratio = token_fdv / mbtc_fdv
+        ratio = int(token_fdv / mbtc_fdv)
         if ratio < 1:
             string_builder = "decrease"
         else:
             string_builder = "increase"
-        ratio = str(f"{ratio:.3f}").replace(".", ",")
-        return f"To reach *{standard_token_version}* Size , Mini Bitcoin would have to *{string_builder}* by {ratio}x"
+        ratio = str(f"{ratio}").replace(".", ",")
+        return f"To reach the market cap of *{standard_token_version}*, Mini Bitcoin would have to *{string_builder}* by *{ratio}x*"
         # compare market cap x's
     elif standard_token_version == "bitcoin":
         btc_mc = currency("USD") * 21000000
         string_builder = ""
         mbtc_fdv = float(get_market_cap(mbtc_pair))
-        ratio = btc_mc / mbtc_fdv
+        ratio = int(btc_mc / mbtc_fdv)
         if ratio < 1:
             string_builder = "decrease"
         else:
             string_builder = "increase"
-        ratio = str(f"{ratio:.3f}").replace(".", ",")
-        return f"To reach *{standard_token_version}* Size , Mini Bitcoin would have to *{string_builder}* by {ratio}x"
+        ratio = str(f"{ratio}").replace(".", "\\.")
+        return f"To reach the market cap of *{standard_token_version}*, Mini Bitcoin would have to *{string_builder}* by *{ratio}x*"
     else:
         return False

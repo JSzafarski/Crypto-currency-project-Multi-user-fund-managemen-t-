@@ -203,7 +203,7 @@ def time_till_halving():
 
 def send_test_rewards_info():
     bot.send_message("-1002130978267",
-                     f"🟣 __Vote Bounty Info:__\n\nVote on the trackers below, and attach a screenshot with the name of the "
+                     f"*🟣 __Vote Bounty Info:__*\n\nVote on the trackers below, and attach a screenshot with the name of the "
                      f"tracker to instantly receive your reward\\.\n\n💸💸 Click any of the links below to get started\\! 💸💸\n\n["
                      f"DexTools](https://www\\.dextools\\.io/app/en/solana/pair-explorer"
                      f"/DDnvC5rvvZeJLuNKBF6xsdqHA6GPKbLxYq8z1bzaotUC?t=1712460479955) hit the 👍🏻 \\(100,000,000 mSatoshis\\) "
@@ -251,6 +251,23 @@ def send_raid_to_earn():
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
+def send_twitter_raid_info():
+    bot.send_message("-1002130978267",
+                     f"__X/Twitter__\n*We've introduced an X bounty that can be claimed once every 20 "
+                     f"minutes\\.\n\n*Simply type"
+                     f"'X' in the rewards channel, and attach the screenshot of the shill post made on X\\.\n\n*You "
+                     f"must abide"
+                     f"by the following requirements with your X post:\n🟣 You must reply to a crypto influencer with more than "
+                     f"*50k followers* on a post *less* than *4hrs old*\n🟣 Use the following hashtags in your reply:\\$mBTC "
+                     f"_#Bitcoin #BitcoinOnSolana #sol #meme #utility_\n🟣 X account must not be shadow banned. Check "
+                     f"here:"
+                     f"[Shadowban](https://shadowban.yuzurisa.com/)\n🟣 And most importantly, please attach the recently made "
+                     f"comparison chart in your shill post\\!\n\nComparison chart download link: [link]("
+                     f"https://i.ibb.co/PtzJw86/Comparison.png)\n\n*You will receive 100000000 mSatoshis on submission of the "
+                     f"screenshot\\.",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
 def get_holders():
     holder_list = request('GET',
                           "https://pro-api.solscan.io/v1.0/token/holders?tokenAddress"
@@ -264,15 +281,19 @@ def poll():
     start_time = time.time()  # use this for lp pool and other stats
     start_time2 = time.time()
     start_time3 = time.time()
+    start_time4 = time.time()
     time_till_h = time_till_halving()
     temp_txHash_array = []
     while True:
         print("polling...")
         token_address = "mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
-        spl_transfers = request('GET',
-                                "https://pro-api.solscan.io/v1.0/token/transfer?tokenAddress=" + str(
-                                    token_address) + "&limit=20&offset=0",
-                                headers=solscan_header)
+        try:
+            spl_transfers = request('GET',
+                                    "https://pro-api.solscan.io/v1.0/token/transfer?tokenAddress=" + str(
+                                        token_address) + "&limit=20&offset=0",
+                                    headers=solscan_header)
+        except ValueError:
+            continue
         spl_transfers_json = spl_transfers.json()
         for transfer in spl_transfers_json["items"]:
             if transfer["txHash"] not in temp_txHash_array:
@@ -287,13 +308,13 @@ def poll():
                     from_address = transfer["sourceOwnerAccount"]
                     if from_address == "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1":
                         to_address = transfer["destOwnerAccount"]
-                        solsca_link = "https://solscan.io/account/"+str(to_address)
+                        solsca_link = "https://solscan.io/account/" + str(to_address)
                         bot.send_message("-1002130978267",
                                          f"{string_builder} Whale Buy \\! *{transfer_amount} mBTC* Transferred to ["
                                          f"Address]({solsca_link})",
                                          parse_mode='MarkdownV2', disable_web_page_preview=True)
 
-        if time.time() > start_time + (30 * 60): #30 * 60
+        if time.time() > start_time + (30 * 60):  # 30 * 60
             supply = getlppoolinfo.get_lp_info()
             holders = str(get_holders())
             bot.send_message("-1002130978267",  # add holder count
@@ -304,9 +325,12 @@ def poll():
         if time.time() > start_time2 + (63 * 60):
             send_test_rewards_info()
             start_time2 = time.time()
-        if time.time() > start_time3 + (42 * 60):
-            send_raid_to_earn()
-            start_time3 = time.time()
+        #if time.time() > start_time3 + (42 * 60):
+        #    send_raid_to_earn()
+        #    start_time3 = time.time()
+        if time.time() > start_time4 + (25 * 60):
+            send_twitter_raid_info()
+            start_time4 = time.time()
         time.sleep(5)
 
 
