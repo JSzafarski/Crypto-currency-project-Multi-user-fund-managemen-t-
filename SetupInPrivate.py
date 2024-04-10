@@ -109,7 +109,10 @@ async def start(message):
     commands=['masterbalance'])  # also need to eqully deduct for each dev they tip because it treated as same pot
 async def start(message):  # will credit the dev some virtual credits
     if funds_database.check_user_exist("@CryptoSniper000"):  # use it for will too
-        funds_database.update_balance("@CryptoSniper000", 100000000000)
+        current_dev_balance = int(funds_database.check_user_balance("@CryptoSniper000"))
+        print(current_dev_balance)
+        funds_database.update_balance("@CryptoSniper000", 100000000000+current_dev_balance)
+        print("masterbalance added "+str(funds_database.check_user_balance("@CryptoSniper000")))
 
 
 @bot.message_handler(

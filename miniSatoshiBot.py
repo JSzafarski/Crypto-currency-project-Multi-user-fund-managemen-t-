@@ -88,7 +88,7 @@ def convert_to_usd(message):
         if user == "@MINI_BTC_CHAD" or user == "@LongIt345" or user == "@CryptoSniper000":  # enforce same admin controls across multiple
             user = "@CryptoSniper000"
         if funds_database.check_user_exist(user):
-            if len(arguments) < 2:  # clearly they ant to check for themselves
+            if len(arguments) < 2:  # clearly they want to check for themselves
                 funds = funds_database.check_user_balance(user)
                 sats_balance = float(funds)
                 amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * price_per_mbtc)

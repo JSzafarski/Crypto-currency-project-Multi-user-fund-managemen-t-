@@ -310,3 +310,10 @@
 2024-04-10 02:02:14,917:INFO:root:user : @bahamassss requested a withdrawal of : 2172011721 to wallet Gryp39vaKHbtD5pa46oYpjfvjdiwvUpnjtifTtvTCu7i
 2024-04-10 03:35:18,062:ERROR:TeleBot:Aiohttp ClientError: ClientOSError
 2024-04-10 03:35:18,097:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000020F9EDCDF70> files=None request_timeout=300
+2024-04-10 11:22:44,870:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-10 11:22:47,679:INFO:root:user : @CryptoSniper000 requested a withdrawal of : 5658441112 to wallet g3Eo1Bc4hVCDo6QhHEuL4EsjWJwLjmdqtzBYbL6VKtr
+2024-04-10 11:23:18,491:INFO:root:user : @CryptoSniper000 requested a withdrawal of : 5658441112 to wallet g3Eo1Bc4hVCDo6QhHEuL4EsjWJwLjmdqtzBYbL6VKtr
+2024-04-10 11:40:00,366:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-10 11:41:07,661:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-10 15:56:00,652:ERROR:TeleBot:Unknown error: TimeoutError
+2024-04-10 15:56:00,678:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000026045BBF110> files=None request_timeout=300

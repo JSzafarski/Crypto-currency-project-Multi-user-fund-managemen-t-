@@ -88,10 +88,11 @@ def send_meme(message):
     if last_active_epoch == 0:
         last_active_epoch = time.time()
     if time.time() > last_active_epoch + 2.5 * 60 * 60:
-        th = threading.Thread(target=generate_meme_batch)
-        th.start()
+        # th = threading.Thread(target=generate_meme_batch)
+        # th.start()
         last_active_epoch = time.time()
     fetch_cloud_img_links()
+    print(len(temp_array))
     random_index = randint(0, len(temp_array) - 1)
     result = str(temp_array[random_index])
     markup = types.InlineKeyboardMarkup()
@@ -229,10 +230,10 @@ def send_test_rewards_info():
                      f"mSatoshis\\) \\("
                      f"Available every 24hrs\\)\n[Rugfreecoins](https://www\\.rugfreecoins\\.com/coin-details/24899) vote 🔥 \\("
                      f"150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CNToken\\.io](https://cncrypto\\.io/coin/mini-bitcoin) vote "
-                     f"🗳 \\(150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CoinMonHunt](https://coinmoonhunt\\.com/coin/Mini "
+                     f"🗳 \\(150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CoinMoonHunt](https://coinmoonhunt\\.com/coin/Mini "
                      f"Bitcoin)  vote 🗳 \\(150000 mSatoshis\\) \\(Available every hour\\)\n[CoinBoom]("
                      f"https://coinboom\\.net/coin/mini-bitcoin-2) vote 🚀\\(30000 mSatoshis\\) \\(Available every 24hrs\\)\n["
-                     f"CoinMooner](https://coinboom\\.net/coin/mini-bitcoin-2)  vote 🚀\\(30000 mSatoshis\\) \\(Available every "
+                     f"CoinMooner](https://coinmooner.com/coin/mini-bitcoin-mbtc)  vote 🚀\\(30000 mSatoshis\\) \\(Available every "
                      f"24hrs\\)\n[CoinVote](https://coinvote\\.cc/en/coin/Mini-Bitcoin)  login and hit the 👍🏻 \\(30000 "
                      f"mSatoshis\\) \\(Available every 24hrs\\)",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)

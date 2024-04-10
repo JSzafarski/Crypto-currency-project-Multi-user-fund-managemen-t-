@@ -15,7 +15,7 @@ user_tasks = usertasksdb.UserRewardDb()
 allowable_submissions = {
     "dextools": 100000000,
     "dexscreener": 50000000,
-    "birdeye": 25000000,
+    "birdeye": 50000000,
     "gemsradar": 500000000,
     "coinalpha": 5000000,
     "coincatapult": 5000000,
@@ -125,10 +125,10 @@ def rain(message):
                      f"mSatoshis\\) \\("
                      f"Available every 24hrs\\)\n[Rugfreecoins](https://www\\.rugfreecoins\\.com/coin-details/24899) vote 🔥 \\("
                      f"150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CNToken\\.io](https://cncrypto\\.io/coin/mini-bitcoin) vote "
-                     f"🗳 \\(150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CoinMonHunt](https://coinmoonhunt\\.com/coin/Mini "
+                     f"🗳 \\(150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CoinMoonHunt](https://coinmoonhunt\\.com/coin/Mini "
                      f"Bitcoin)  vote 🗳 \\(150000 mSatoshis\\) \\(Available every hour\\)\n[CoinBoom]("
                      f"https://coinboom\\.net/coin/mini-bitcoin-2) vote 🚀\\(30000 mSatoshis\\) \\(Available every 24hrs\\)\n["
-                     f"CoinMooner](https://coinboom\\.net/coin/mini-bitcoin-2)  vote 🚀\\(30000 mSatoshis\\) \\(Available every "
+                     f"CoinMooner](https://coinmooner.com/coin/mini-bitcoin-mbtc)  vote 🚀\\(30000 mSatoshis\\) \\(Available every "
                      f"24hrs\\)\n[CoinVote](https://coinvote\\.cc/en/coin/Mini-Bitcoin)  login and hit the 👍🏻 \\(30000 "
                      f"mSatoshis\\) \\(Available every 24hrs\\)",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
@@ -166,6 +166,17 @@ def check_submission(message):
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
+    '''else:  # here check if its only one photo as we want one submission at once
+        for index, photo in enumerate(message.photo):
+            print(photo.file_id)
+            if index > 0:
+                bot.send_message(chat_id,
+                                 f"*🟣 Please provide only one image per submission\\!*\n\n\nFor more"
+                                 f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /info to get "
+                                 f"more"
+                                 f"information\\.",
+                                 parse_mode='MarkdownV2')
+                return'''
     if message.caption is None:
         bot.send_message(chat_id,
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
@@ -263,7 +274,8 @@ def fund_user(username, task_completed, chat_id):
     new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
     user_funds.update_balance(tipper, new_tipper_balance)
     user_funds.update_balance(username, new_username_to_tip_balance)
-    bot.send_message(chat_id, f"{username} has been tipped {amount_to_tip} mSatoshis for completing a task")
+    bot.send_message(chat_id, f"{username} has been tipped *{amount_to_tip}* mSatoshis for completing a task\\!",
+                     parse_mode='MarkdownV2')
 
 
 if __name__ == "__main__":
