@@ -41,7 +41,7 @@ one_hour = 60 * 60
 thirty_minutes = 60 * 30
 time_outs = {  # ( in epoch time)
     "dextools": infinity,
-    "dexscreener": infinity,
+    "dexscreener": one_hour,
     "birdeye": infinity,
     "gemsradar": twenty_four_hours,
     "coinalpha": twenty_four_hours,
@@ -178,7 +178,10 @@ def check_submission(message):
                     for index, item in enumerate(temp):
                         if item == standard_form:
                             last_epoch = int(float(temp[index + 1]))
-                            if time.time() - last_epoch >= int(time_outs[standard_form]):
+                            inject_dex_correction = False
+                            if time_left > 100000 and standard_form == "dexscreener":
+                                inject_dex_correction = True
+                            if time.time() - last_epoch >= int(time_outs[standard_form]) or inject_dex_correction:
                                 temp[index + 1] = str(time.time())  # change it to current time
                                 completed_tasks = " ".join(temp)
                                 user_tasks.update_completed_tasks(user_name, completed_tasks)
@@ -197,9 +200,13 @@ def check_submission(message):
                         hour_string = "hours"
                         if time_left == 1:
                             hour_string = "one hour"
+                        elif time_left == 0:
+                            time_left = int(float(time_outs[standard_form]) / float(60) - float(
+                                (time.time() - last_epoch) / float(60)))
+                            hour_string = "Minutes"
                         bot.send_message(chat_id,
                                          f"*Task Already competed\\!*\nThis task has already been completed\\.Please "
-                                         f"Try again in {time_left} {hour_string}\\!\\.",
+                                         f"Try again in {time_left} {hour_string}\\!",
                                          parse_mode='MarkdownV2')
                         return
             else:
