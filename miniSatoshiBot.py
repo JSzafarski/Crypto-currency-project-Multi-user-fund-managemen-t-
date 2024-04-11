@@ -3,7 +3,9 @@ import userfunds
 from requests import request
 import getlppoolinfo
 import get_trending_coins
+import raidleaderboard
 
+leaderboard = raidleaderboard.ShillStats()
 my_token = '7179501342:AAGFiuXaX_ainsSXJN8VfTKfgz36PyObdwA'
 bot = telebot.TeleBot(my_token)
 funds_database = userfunds.FundsDatabase()
@@ -43,8 +45,18 @@ def get_trending_tokens():
                            headers=header)
 
 
+@bot.message_handler(commands=['leaderboard'])
+def leaderboard(message):
+    chat_id = message.chat.id
+    total_earned = leaderboard.get_total_awards()
+    task_count = leaderboard.get_total_tasks()
+    bot.send_message(chat_id, f"🟣 __Shill to earn Statistics:__\n\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
+                              f"tasks completed: *{task_count}*",
+                     parse_mode='MarkdownV2')
+
+
 @bot.message_handler(commands=['supplyleft'])
-def rain(message):
+def supplyleft(message):
     chat_id = message.chat.id
     supply = getlppoolinfo.get_lp_info()
     bot.send_message(chat_id, f"Supply left in the Liquidity pool : *{supply}*",

@@ -7,7 +7,9 @@ import usertasksdb
 import time
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+import raidleaderboard
 
+leaderboard = raidleaderboard.ShillStats()
 my_token = '6896610984:AAHOE6ft3wbyXMuAC1FBssFJ4RA5FEWMC-w'
 bot = telebot.TeleBot(my_token)
 user_funds = userfunds.FundsDatabase()
@@ -162,27 +164,16 @@ def check_submission(message):
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
-    '''else:  # here check if its only one photo as we want one submission at once
-        for index, photo in enumerate(message.photo):
-            print(photo.file_id)
-            if index > 0:
-                bot.send_message(chat_id,
-                                 f"*🟣 Please provide only one image per submission\\!*\n\n\nFor more"
-                                 f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get "
-                                 f"more"
-                                 f"information\\.",
-                                 parse_mode='MarkdownV2')
-                return'''
     if message.caption is None:
         bot.send_message(chat_id,
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -192,7 +183,7 @@ def check_submission(message):
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote_info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -256,11 +247,10 @@ def check_submission(message):
             return
     else:
         best_choice = process.extractOne(standard_form, choices)[0].replace(".", "\\.")
-        # here try to give suggestion to what they actually might of meant usign the library fuzzy wuzy
         bot.send_message(chat_id,
                          f"🟣 *Invalid submission*\nDid you mean: *{best_choice}*?\n\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
-                         f"screenshot\\.\n\nOtherwise type: /info to get more "
+                         f"screenshot\\.\n\nOtherwise type: /vote\\_info to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -274,8 +264,15 @@ def fund_user(username, task_completed, chat_id):
     new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
     user_funds.update_balance(tipper, new_tipper_balance)
     user_funds.update_balance(username, new_username_to_tip_balance)
-    bot.send_message(chat_id, f"{username} has been tipped *{amount_to_tip}* mSatoshis for completing a task\\!",
-                     parse_mode='MarkdownV2')
+    # update user stats here #
+    if leaderboard.check_user_exist(username):
+        leaderboard.increment_task_count(username)
+        leaderboard.add_to_total_earnings(username, amount_to_tip)
+    else:
+        leaderboard.add_user(username)
+        leaderboard.increment_task_count(username)
+        leaderboard.add_to_total_earnings(username, amount_to_tip)
+    bot.send_message(chat_id, f"{username} has been tipped {amount_to_tip} mSatoshis for completing a task!")
 
 
 if __name__ == "__main__":

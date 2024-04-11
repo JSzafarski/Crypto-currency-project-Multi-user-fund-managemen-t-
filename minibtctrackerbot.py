@@ -15,6 +15,9 @@ import re
 import filter_response
 from requests import request
 import getlppoolinfo
+import userfunds
+
+funds_database = userfunds.FundsDatabase()
 
 # Enter your Assistant ID here.
 ASSISTANT_ID = "asst_OdboRIxKhLQrirwYRHZFhyZd"
@@ -146,6 +149,12 @@ def mini_btc_assistant(question):
     markup.row(share)
     bot.send_message("-1002130978267",
                      "\n" + f"{filtered_response}", reply_markup=markup)
+
+
+def get_burn_stat():
+    burn_wallet = "@MiniBtcBurn"
+    funds = str(funds_database.check_user_balance(burn_wallet))
+    return funds
 
 
 @bot.message_handler(commands=['askbot'])  # using gaht gpt 4 to generate shill text that users can use for raids
@@ -317,9 +326,10 @@ def poll():
         if time.time() > start_time + (30 * 60):
             supply = getlppoolinfo.get_lp_info()
             holders = str(get_holders())
+            burn = get_burn_stat()
             bot.send_message("-1002130978267",  # add holder count
                              f"*__🟣 mBTC Statistics:__*\n\n⌛️ Time until halving : *{time_till_h}*\n💰 Supply left in "
-                             f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10500*\n🤲 Holder count: *{holders}*",
+                             f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10500*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time = time.time()
         if time.time() > start_time2 + (63 * 60):
