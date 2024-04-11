@@ -71,3 +71,40 @@ class ShillStats:
         for user in rows:
             total += int(user[2])
         return total
+
+    def get_top_five(self):
+        position_dict = {
+            1: "🥇",
+            2: "🥈",
+            3: "🥉",
+            4: "4️⃣",
+            5: "5️⃣",
+            6: "6️⃣",
+            7: "7️⃣",
+            8: "8️⃣",
+            9: "9️⃣",
+            10: "🔟",
+        }
+        self.cursor0.execute("SELECT * FROM userstats")
+        rows = self.cursor0.fetchall()
+        if len(rows) < 10:
+            user_range = len(rows) - 1
+        else:
+            user_range = 10
+        users_in_leaderboard = []
+        string_builder = ""
+        place = 1
+        for x in range(0, user_range):
+            current_highest = 0  # the highest score
+            current_best_user = ""
+            for user in rows:
+                score = user[1]
+                if score > current_highest and user[0] not in users_in_leaderboard:
+                    current_highest = score
+                    current_best_user = user[0]
+            users_in_leaderboard.append(current_best_user)
+            string_builder += f"{position_dict[place]} {current_best_user}: {current_highest}\n"
+            if place == 3:
+                string_builder += "\n"
+            place += 1
+        return string_builder

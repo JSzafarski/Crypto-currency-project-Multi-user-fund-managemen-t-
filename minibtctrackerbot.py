@@ -16,7 +16,7 @@ import filter_response
 from requests import request
 import getlppoolinfo
 import userfunds
-
+import miniSatoshiBot
 funds_database = userfunds.FundsDatabase()
 
 # Enter your Assistant ID here.
@@ -338,6 +338,9 @@ def poll():
         if time.time() > start_time4 + (25 * 60):
             send_twitter_raid_info()
             start_time4 = time.time()
+        if time.time() > start_time3 + (15 * 60):
+            miniSatoshiBot.leader_board()
+            start_time3 = time.time()
         time.sleep(5)
 
 

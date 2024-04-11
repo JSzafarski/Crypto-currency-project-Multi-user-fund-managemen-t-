@@ -46,11 +46,12 @@ def get_trending_tokens():
 
 
 @bot.message_handler(commands=['leaderboard'])
-def leaderboard(message):
+def leader_board(message):
     chat_id = message.chat.id
     total_earned = leaderboard.get_total_awards()
     task_count = leaderboard.get_total_tasks()
-    bot.send_message(chat_id, f"🟣 __Shill to earn Statistics:__\n\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
+    top_users = leaderboard.get_top_five()
+    bot.send_message(chat_id, f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
                               f"tasks completed: *{task_count}*",
                      parse_mode='MarkdownV2')
 

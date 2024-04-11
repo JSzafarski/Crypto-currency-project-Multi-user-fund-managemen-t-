@@ -320,3 +320,9 @@
 2024-04-10 16:21:51,306:DEBUG:asyncio:Using proactor: IocpProactor
 2024-04-10 19:44:49,231:DEBUG:asyncio:Using proactor: IocpProactor
 2024-04-10 20:51:46,072:INFO:root:user : @trinityX147 requested a withdrawal of : 1588783336 to wallet 97t56MCU1QhnUtAAGtFMaGTPYq2N9VtH9gpGThJ1EGy
+2024-04-11 02:41:06,261:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-11 04:44:56,166:INFO:root:user : @baiouyangtw requested a withdrawal of : 163769347 to wallet FvZ62o8nJQMDCnuynP9obGw2ESchR97vipo2G4ji4gCk
+2024-04-11 10:18:31,564:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-11 10:18:31,573:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x00000201BE0F4C20> files=None request_timeout=300
+2024-04-11 10:39:52,614:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-11 11:13:38,274:DEBUG:asyncio:Using proactor: IocpProactor
