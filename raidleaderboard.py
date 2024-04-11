@@ -103,7 +103,10 @@ class ShillStats:
                     current_highest = score
                     current_best_user = user[0]
             users_in_leaderboard.append(current_best_user)
-            string_builder += f"{position_dict[place]} {current_best_user}: {current_highest}\n"
+            current_best_user = current_best_user.replace("@", "")
+            current_best_user = current_best_user.replace("_", "\\_")
+            current_best_user = current_best_user.replace(".", "\\.")
+            string_builder += f"{position_dict[place]} *{current_best_user}*: {current_highest}\n"
             if place == 3:
                 string_builder += "\n"
             place += 1

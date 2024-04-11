@@ -52,8 +52,9 @@ def leader_board(message):
     task_count = leaderboard.get_total_tasks()
     top_users = leaderboard.get_top_five()
     bot.send_message(chat_id, f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                              f"tasks completed: *{task_count}*",
-                     parse_mode='MarkdownV2')
+                              f"tasks completed: *{task_count}*\n\n👯 [Join rewards group]("
+                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['supplyleft'])

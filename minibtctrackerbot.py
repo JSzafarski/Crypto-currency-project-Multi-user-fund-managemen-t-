@@ -16,9 +16,10 @@ import filter_response
 from requests import request
 import getlppoolinfo
 import userfunds
-import miniSatoshiBot
+import raidleaderboard
 funds_database = userfunds.FundsDatabase()
 
+leaderboard = raidleaderboard.ShillStats()
 # Enter your Assistant ID here.
 ASSISTANT_ID = "asst_OdboRIxKhLQrirwYRHZFhyZd"
 
@@ -339,7 +340,14 @@ def poll():
             send_twitter_raid_info()
             start_time4 = time.time()
         if time.time() > start_time3 + (15 * 60):
-            miniSatoshiBot.leader_board()
+            total_earned = leaderboard.get_total_awards()
+            task_count = leaderboard.get_total_tasks()
+            top_users = leaderboard.get_top_five()
+            bot.send_message("-1002130978267",
+                             f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
+                             f"tasks completed: *{task_count}*\n\n👯 [Join rewards group]("
+                             f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
+                             parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time3 = time.time()
         time.sleep(5)
 
