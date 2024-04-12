@@ -106,8 +106,20 @@ class ShillStats:
             current_best_user = current_best_user.replace("@", "")
             current_best_user = current_best_user.replace("_", "\\_")
             current_best_user = current_best_user.replace(".", "\\.")
-            string_builder += f"{position_dict[place]} *{current_best_user}*: {current_highest}\n"
+            string_builder += f"{position_dict[place]} *{current_best_user}*: _{current_highest}_\n"
             if place == 3:
                 string_builder += "\n"
             place += 1
         return string_builder
+
+    def get_first_place(self):
+        self.cursor0.execute("SELECT * FROM userstats")
+        rows = self.cursor0.fetchall()
+        current_highest = 0
+        current_best_user = ""
+        for user in rows:
+            score = user[1]
+            if score > current_highest and user[0]:
+                current_highest = score
+                current_best_user = user[0]
+        return current_best_user

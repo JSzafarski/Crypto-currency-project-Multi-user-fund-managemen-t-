@@ -38,7 +38,9 @@ big_sol_coins = {  # use the pair address ser
     "wen": "7BZzoP3QB2zK3R7WqRzjS5fpeeErgdy3HGzxXrN97aEY",
     "catwif": "J37wzATp3rvAh1y1tq3Y4M3c9Rg1LJSA4YDDXBm9t3x2",
     "myro": "5WGYajM1xtLy3QrLHGSX4YPwsso3jrjEsbU1VivUErzk",
-    "hodl": "6FcHJg65kNUa3DPmG5HfNAh3BBXcHoAYGLxMAzpM2Yyf"
+    "hodl": "6FcHJg65kNUa3DPmG5HfNAh3BBXcHoAYGLxMAzpM2Yyf",
+    "pups": "DLXrjEzjgm7u35MTRbpG38CcBAD2JjRCRhwCszd6bKwf",
+    "ponke" :"5uTwG3y3F5cx4YkodgTjWEHDrX5HDKZ5bZZ72x8eQ6zE"
 }
 
 

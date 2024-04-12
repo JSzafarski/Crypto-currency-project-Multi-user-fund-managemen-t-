@@ -51,9 +51,10 @@ def leader_board(message):
     total_earned = leaderboard.get_total_awards()
     task_count = leaderboard.get_total_tasks()
     top_users = leaderboard.get_top_five()
-    bot.send_message(chat_id, f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                              f"tasks completed: *{task_count}*\n\n👯 [Join rewards group]("
-                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
+    bot.send_message(chat_id,
+                     f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
+                     f"tasks completed: *{task_count}*\n\n👯 [Join rewards group]("
+                     f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
@@ -107,6 +108,7 @@ def convert_to_usd(message):
                 sats_balance = float(funds)
                 amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * price_per_mbtc)
                 substring = f"{amount_in_dollars:.5f}".replace(".", "\\.")
+                user = user.replace("_", "\\_")
                 bot.send_message(chat_id, f"Dear {user}, your converted balance is equal to *${substring}*",
                                  parse_mode='MarkdownV2')
                 return

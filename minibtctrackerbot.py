@@ -17,6 +17,7 @@ from requests import request
 import getlppoolinfo
 import userfunds
 import raidleaderboard
+
 funds_database = userfunds.FundsDatabase()
 
 leaderboard = raidleaderboard.ShillStats()
@@ -264,18 +265,29 @@ def send_raid_to_earn():
 
 def send_twitter_raid_info():
     bot.send_message("-1002130978267",
-                     f"__X/Twitter__\n*We've introduced an X bounty that can be claimed once every 20 "
-                     f"minutes\\.\n\n*Simply type"
-                     f"'X' in the rewards channel, and attach the screenshot of the shill post made on X\\.\n\n*You "
-                     f"must abide"
+                     f"*__X/Twitter__*\nWe've introduced an X bounty that can be claimed once every 5 minutes\\.\n\nSimply type "
+                     f"'X' in the rewards channel, and attach the screenshot of the shill post made on X\\.\n\nYou must abide "
                      f"by the following requirements with your X post:\n🟣 You must reply to a crypto influencer with more than "
-                     f"*50k followers* on a post *less* than *4hrs old*\n🟣 Use the following hashtags in your reply:\\$mBTC "
-                     f"_\\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme \\#utility_\n🟣 X account must not be shadow banned\\. Check "
-                     f"here:"
-                     f"[Shadowban](https://shadowban\\.yuzurisa.com/)\n🟣 And most importantly, please attach the recently made "
-                     f"comparison chart in your shill post\\!\n\nComparison chart download link: [link]("
-                     f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\n\n*You will receive 100000000 mSatoshis on submission of the "
+                     f"*50k followers* on a post *less* than *4hrs old*\n🟣 Use the following hashtags in your reply:\n\\$mBTC "
+                     f"_\\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme \\#utility_\n🟣 X account must not be shadow banned\\. Check here:  "
+                     f"[Shadowban](https://shadowban\\.yuzurisa\\.com/)\n🟣 And most importantly, please attach the recently made "
+                     f"comparison chart in your shill post\\!\n\nComparison chart download: [Link]("
+                     f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\nYou are early download: [Link]("
+                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *100000000* mSatoshis on "
+                     f"submission of the"
                      f"screenshot\\.",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(commands=['stats'])  # using gaht gpt 4 to generate shill text that users can use for raids
+def stats(message):
+    time_till_h = time_till_halving()
+    supply = getlppoolinfo.get_lp_info()
+    holders = str(get_holders())
+    burn = get_burn_stat()
+    bot.send_message("-1002130978267",  # add holder count
+                     f"*__🟣 mBTC Statistics:__*\n\n⌛️ Time until halving : *{time_till_h}*\n💰 Supply left in "
+                     f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10500*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
@@ -288,14 +300,30 @@ def get_holders():
     return int(holder_list_json["total"])
 
 
-def poll():
+def poll():  # problem with slscan glitching out idk why
+
     start_time = time.time()  # use this for lp pool and other stats
     start_time2 = time.time()
     start_time3 = time.time()
     start_time4 = time.time()
     time_till_h = time_till_halving()
     temp_txHash_array = []
+    re_launched = True
+    current_top_user = ""
     while True:
+        # anounce if somone changed place with another user
+        if re_launched:
+            current_top_user = leaderboard.get_first_place()
+        else:
+            temp_best = leaderboard.get_first_place()
+            if temp_best != current_top_user:
+                previous_best = current_top_user
+                current_top_user = temp_best
+                current_top_user = current_top_user.replace("_", "\\_")
+                previous_best = previous_best.replace("_", "\\_")
+                bot.send_message("-1002130978267",
+                                 f"🥇 {current_top_user} has replaced {previous_best} as a top shiller\\!",
+                                 parse_mode='MarkdownV2')
         print("polling...")
         token_address = "mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
         try:
@@ -303,9 +331,10 @@ def poll():
                                     "https://pro-api.solscan.io/v1.0/token/transfer?tokenAddress=" + str(
                                         token_address) + "&limit=20&offset=0",
                                     headers=solscan_header)
+            spl_transfers_json = spl_transfers.json()
         except ValueError:
+            print("errored")
             continue
-        spl_transfers_json = spl_transfers.json()
         for transfer in spl_transfers_json["items"]:
             if transfer["txHash"] not in temp_txHash_array:
                 print("new tx")
@@ -317,13 +346,14 @@ def poll():
                     for iterator in range(0, amount_of_emojis):
                         string_builder += " 💸"
                     from_address = transfer["sourceOwnerAccount"]
-                    if from_address == "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1":
+                    if from_address == "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1" and not re_launched:
                         to_address = transfer["destOwnerAccount"]
                         solsca_link = "https://solscan.io/account/" + str(to_address)
                         bot.send_message("-1002130978267",
                                          f"{string_builder} Whale Buy \\! *{transfer_amount} mBTC* Transferred to ["
                                          f"Address]({solsca_link})",
                                          parse_mode='MarkdownV2', disable_web_page_preview=True)
+        re_launched = False
         if time.time() > start_time + (30 * 60):
             supply = getlppoolinfo.get_lp_info()
             holders = str(get_holders())

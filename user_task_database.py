@@ -34,7 +34,9 @@ allowable_submissions = {
     "coinhunt": 200000,
     "cntoken.io": 150000,
     "coinvote": 30000,
-    "x": 100000000
+    "x": 100000000,
+    "cmc-comment": 1000000000,
+    "cmc-watchlist": 500000000
 }
 
 infinity = 999999999999999999999999
@@ -43,6 +45,7 @@ six_hours = 60 * 60 * 6
 one_hour = 60 * 60
 thirty_minutes = 60 * 30
 twenty_minutes = 20 * 60
+five_minutes = 5 * 60
 time_outs = {  # ( in epoch time)
     "dextools": infinity,
     "dexscreener": one_hour,
@@ -63,12 +66,39 @@ time_outs = {  # ( in epoch time)
     "coinhunt": twenty_four_hours,
     "cntoken.io": thirty_minutes,
     "coinvote": twenty_four_hours,
-    "x": twenty_minutes
+    "x": five_minutes,
+    "cmc-comment": one_hour,
+    "cmc-watchlist": infinity
 }
 choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coincatapult', 'coinmoonhunt',
            'coindiscovery',
            'coinbazooka', 'coinscope', 'ntm.ai', 'top100token', 'rugfreecoins', 'coinboom', 'coinmooner', 'coinhunt',
-           "CNToken.io", "Coinvote", "x"]
+           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist"]
+
+
+@bot.message_handler(commands=['disqualify'])  # add this later
+def rain(message):
+    pass
+
+
+@bot.message_handler(commands=['vote_cmc'])
+def rain(message):
+    chat_id = message.chat.id
+    if chat_id != -4174401511:  # not allow as make it only work for that group only
+        bot.send_message(chat_id,
+                         f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
+                         parse_mode='MarkdownV2')
+        return
+    bot.send_message(chat_id,
+                     "To celebrate our CMC listing we are introducing 2 bounties\\.\n\n1\\) Post a bullish comment on "
+                     "our CMC"
+                     "page: https://coinmarketcap\\.com/currencies/mini\\-bitcoin/\\! \n\nEnsure the following with your comments:\n🟣 Not AI\\-generated and generic\n🟣 "
+                     "Comes across as"
+                     "genuine and not spammy\n\n*This bounty can only be completed once per user\n\nPays out:\n1,000,000,"
+                     "000 mSats\n\n2\\) Click the ⭐️ in the top left corner of our official CMC page to join the Mini Bitcoin "
+                     "watchlist\\. Can only be completed once\\. \n\n*This bounty can only be completed once per user\nPays "
+                     "out:\n500,000,000 mSats\n\n*Keywords to use with your screenshot:*\nFor watchlist: cmc\\-watchlist\nFor comment: cmc\\-comment",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['vote_x'])
@@ -80,14 +110,16 @@ def rain(message):
                          parse_mode='MarkdownV2')
         return
     bot.send_message(chat_id,
-                     f"__X/Twitter__\n*We've introduced an X bounty that can be claimed once every 20 minutes\\.\n\n*Simply type "
-                     f"'X' in the rewards channel, and attach the screenshot of the shill post made on X\\.\n\n*You must abide "
+                     f"*__X/Twitter__*\nWe've introduced an X bounty that can be claimed once every 5 minutes\\.\n\nSimply type "
+                     f"'X' in the rewards channel, and attach the screenshot of the shill post made on X\\.\n\nYou must abide "
                      f"by the following requirements with your X post:\n🟣 You must reply to a crypto influencer with more than "
                      f"*50k followers* on a post *less* than *4hrs old*\n🟣 Use the following hashtags in your reply:\n\\$mBTC "
                      f"_\\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme \\#utility_\n🟣 X account must not be shadow banned\\. Check here:  "
                      f"[Shadowban](https://shadowban\\.yuzurisa\\.com/)\n🟣 And most importantly, please attach the recently made "
-                     f"comparison chart in your shill post\\!\n\nComparison chart download link: \n[Link]("
-                     f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\n\n*You will receive 100000000 mSatoshis on submission of the "
+                     f"comparison chart in your shill post\\!\n\nComparison chart download: [Link]("
+                     f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\nYou are early download: [Link]("
+                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *100000000* mSatoshis on "
+                     f"submission of the"
                      f"screenshot\\.",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
@@ -221,7 +253,7 @@ def check_submission(message):
                         if time_left > 10000:
                             bot.send_message(chat_id,
                                              f"*Task Already competed\\!*\nThis task has already been completed and "
-                                             f"cannot be completed again\\!\\.",
+                                             f"cannot be completed again\\!",
                                              parse_mode='MarkdownV2')
                             return
                         hour_string = "hours"
@@ -230,7 +262,12 @@ def check_submission(message):
                         elif time_left == 0:
                             time_left = int(float(time_outs[standard_form]) / float(60) - float(
                                 (time.time() - last_epoch) / float(60)))
-                            hour_string = "Minutes"
+                            if time_left == 0:
+                                time_left = int(float(time_outs[standard_form]) - float(
+                                    (time.time() - last_epoch)))
+                                hour_string = "Seconds"
+                            else:
+                                hour_string = "Minutes"
                         bot.send_message(chat_id,
                                          f"*Task Already competed\\!*\nThis task has already been completed\\.Please "
                                          f"Try again in {time_left} {hour_string}\\!",
@@ -247,6 +284,7 @@ def check_submission(message):
             return
     else:
         best_choice = process.extractOne(standard_form, choices)[0].replace(".", "\\.")
+        best_choice = best_choice.replace("-", "\\-")
         bot.send_message(chat_id,
                          f"🟣 *Invalid submission*\nDid you mean: *{best_choice}*?\n\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
