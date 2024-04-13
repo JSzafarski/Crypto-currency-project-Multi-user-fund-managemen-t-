@@ -18,7 +18,7 @@ allowable_submissions = {
     "dextools": 100000000,
     "dexscreener": 50000000,
     "birdeye": 50000000,
-    "gemsradar": 500000000,
+    "gemsradar": 100000000,
     "coinalpha": 5000000,
     "coincatapult": 5000000,
     "coinmoonhunt": 5000000,
@@ -34,9 +34,9 @@ allowable_submissions = {
     "coinhunt": 200000,
     "cntoken.io": 150000,
     "coinvote": 30000,
-    "x": 100000000,
+    "x": 50000000,
     "cmc-comment": 1000000000,
-    "cmc-watchlist": 500000000
+    "cmc-watchlist": 250000000
 }
 
 infinity = 999999999999999999999999
@@ -46,6 +46,7 @@ one_hour = 60 * 60
 thirty_minutes = 60 * 30
 twenty_minutes = 20 * 60
 five_minutes = 5 * 60
+ten_minutes = 10 * 60
 time_outs = {  # ( in epoch time)
     "dextools": infinity,
     "dexscreener": one_hour,
@@ -76,7 +77,8 @@ choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coin
            "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist"]
 
 
-@bot.message_handler(commands=['disqualify'])  # add this later
+@bot.message_handler(commands=[
+    'disqualify'])  # set to 0 and set the tokens earned back to me and also set their other database balance to zero 0 !
 def rain(message):
     user_name = "@" + message.from_user.username
     chat_id = message.chat.id
@@ -88,6 +90,9 @@ def rain(message):
             if int(current_balance) > 0:
                 leaderboard.add_to_total_earnings(user_to_remove, -current_balance)
                 user_funds.update_balance(user_to_remove, 0)
+                dev_balance = int(user_funds.check_user_balance("@CryptoSniper000"))
+                reimbursed_balance = dev_balance + current_balance
+                user_funds.update_balance("@CryptoSniper000", reimbursed_balance)  # add back the balance to the dev
                 bot.send_message(chat_id, f"{user_to_remove} has been disqualified!")
 
 
@@ -107,7 +112,7 @@ def rain(message):
                      "genuine and not spammy\n\n*This bounty can only be completed once per user\n\nPays out:\n1,000,000,"
                      "000 mSats\n\n2\\) Click the ⭐️ in the top left corner of our official CMC page to join the Mini Bitcoin "
                      "watchlist\\. Can only be completed once\\. \n\n*This bounty can only be completed once per user\nPays "
-                     "out:\n500,000,000 mSats\n\n*Keywords to use with your screenshot:*\nFor watchlist: cmc\\-watchlist\nFor comment: cmc\\-comment",
+                     "out:\n250,000,000 mSats\n\n*Keywords to use with your screenshot:*\nFor watchlist: cmc\\-watchlist\nFor comment: cmc\\-comment",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
@@ -128,7 +133,7 @@ def rain(message):
                      f"[Shadowban](https://shadowban\\.yuzurisa\\.com/)\n🟣 And most importantly, please attach the recently made "
                      f"comparison chart in your shill post\\!\n\nComparison chart download: [Link]("
                      f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\nYou are early download: [Link]("
-                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *100000000* mSatoshis on "
+                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *50000000* mSatoshis on "
                      f"submission of the"
                      f"screenshot\\.",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
@@ -151,7 +156,7 @@ def rain(message):
                      f"?chain=solana) hit the 👍🏻 \\(50,000,000 mSatoshis\\) \\(Once every 24hours\\)\n\n[DexScreener]("
                      f"https://dexscreener\\.com/solana/ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc)  hit the 🚀 \\(25,000,"
                      f"000 mSatoshis\\) \\(Vote every hour\\)\n\nReach X votes and get "
-                     f"listed:\n\n[GemsRadar](https://gemsradar\\.com/coins/mini-bitcoin) login and vote 🗳 🔥 \\(500,"
+                     f"listed:\n\n[GemsRadar](https://gemsradar\\.com/coins/mini-bitcoin) login and vote 🗳 🔥 \\(100,"
                      f"000,000 mSatoshis\\) 🔥\n\n[CoinAlpha]("
                      f"https://coinalpha\\.app/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ)  login and vote 🗳 \\(5,000,"
                      f"000 mSatoshis\\) \\(Available every 24hrs\\)\n\n[CoinCatapult]("
@@ -203,10 +208,11 @@ def check_submission(message):
         return
     if message.photo is None:
         bot.send_message(chat_id,
-                         f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
+                         f"*🟣 Please provide a screenshot with a correct keyword\\!*\nFor example, if you are "
+                         f"providing"
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info or /vote\\_cmc or /vote\\_x to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -215,7 +221,7 @@ def check_submission(message):
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info or /vote\\_cmc or /vote\\_x to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -225,7 +231,7 @@ def check_submission(message):
                          f"*🟣 Please provide a keyword of the submission type\\!*\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
                          f"screenshot\\.\n\nFor more"
-                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info to get more "
+                         f"information, consult the pinned message\\.\\.\\.\n\nOtherwise type: /vote\\_info or /vote\\_cmc or /vote\\_x to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
@@ -298,7 +304,7 @@ def check_submission(message):
         bot.send_message(chat_id,
                          f"🟣 *Invalid submission*\nDid you mean: *{best_choice}*?\n\nFor example, if you are providing "
                          f"proof you have upvoted on Dexscreener, please type 'Dexscreener' with the attached "
-                         f"screenshot\\.\n\nOtherwise type: /vote\\_info to get more "
+                         f"screenshot\\.\n\nOtherwise type: /vote\\_info or /vote\\_cmc or /vote\\_x to get more "
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return

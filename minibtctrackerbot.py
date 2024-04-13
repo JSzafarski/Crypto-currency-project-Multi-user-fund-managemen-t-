@@ -350,8 +350,11 @@ def poll():  # problem with slscan glitching out idk why
                     if from_address == "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1" and not re_launched:
                         to_address = transfer["destOwnerAccount"]
                         solsca_link = "https://solscan.io/account/" + str(to_address)
+                        huge = ""
+                        if float(transfer["amount"]) / 10 ** 11 >= 30:
+                            huge = "Mega "
                         bot.send_message("-1002130978267",
-                                         f"{string_builder} Whale Buy \\! *{transfer_amount} mBTC* Transferred to ["
+                                         f"{string_builder} {huge}Whale Buy \\! *{transfer_amount} mBTC* Transferred to ["
                                          f"Address]({solsca_link})",
                                          parse_mode='MarkdownV2', disable_web_page_preview=True)
         re_launched = False

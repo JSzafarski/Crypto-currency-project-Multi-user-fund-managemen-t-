@@ -211,8 +211,8 @@ async def help_func_callback(callback_query: types.CallbackQuery):
             await bot.send_message(chat_id, f"Transaction has been Confirmed : {txn_hash}")
             funds_database.update_balance(username, 0)'''
         await bot.send_message(chat_id, "Transaction failed Please retry or wait for the team to perform a manual "
-                                        "transfer (Mini Bitcoin team is trying to resolve this issue asap ,Funds are "
-                                        "SAFU!)")
+                                        "transfer (Minimum withdrawal: 0.25 mBTC) (Mini Bitcoin team is trying to resolve this issue asap ,Funds are "
+                                        "SAFU!)\n")
         # here if confirmed deduct balance.
     elif response == "no_withdraw":
         await bot.send_message(chat_id, "Ok I will not Withdraw funds")

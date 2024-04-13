@@ -128,3 +128,5 @@ class ShillStats:
         self.cursor0.execute("SELECT * FROM userstats")
         rows = self.cursor0.fetchall()
         return len(rows)
+
+    # managing the reset of shiller stats (reset the number of tasks completed and also the amount earned)

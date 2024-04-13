@@ -200,6 +200,7 @@ def burn(message):
                     new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
                     funds_database.update_balance(tipper, new_tipper_balance)
                     funds_database.update_balance(username_to_tip, new_username_to_tip_balance)
+                    tipper = tipper.replace("_","\\_")
                     bot.send_message(chat_id, f"{tipper} has Burned *{amount_to_tip}* mSatoshis",
                                      parse_mode='MarkdownV2')
                 else:  # not enough funds
