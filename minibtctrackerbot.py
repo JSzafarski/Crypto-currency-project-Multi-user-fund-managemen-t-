@@ -316,6 +316,7 @@ def poll():  # problem with slscan glitching out idk why
             current_top_user = leaderboard.get_first_place()
         else:
             temp_best = leaderboard.get_first_place()
+
             if temp_best != current_top_user:
                 previous_best = current_top_user
                 current_top_user = temp_best
@@ -373,9 +374,10 @@ def poll():  # problem with slscan glitching out idk why
             total_earned = leaderboard.get_total_awards()
             task_count = leaderboard.get_total_tasks()
             top_users = leaderboard.get_top_five()
+            number_shillers = leaderboard.get_total_users()
             bot.send_message("-1002130978267",
                              f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                             f"tasks completed: *{task_count}*\n\n👯 [Join rewards group]("
+                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n\n👯 [Join rewards group]("
                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time3 = time.time()

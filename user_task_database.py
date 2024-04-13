@@ -78,7 +78,17 @@ choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coin
 
 @bot.message_handler(commands=['disqualify'])  # add this later
 def rain(message):
-    pass
+    user_name = "@" + message.from_user.username
+    chat_id = message.chat.id
+    if user_name == "@MINI_BTC_CHAD" or user_name == "@LongIt345" or user_name == "@CryptoSniper000":
+        arguments = message.text.split()
+        user_to_remove = arguments[1]
+        if leaderboard.check_user_exist(user_to_remove):
+            current_balance = leaderboard.fetch_total_earned(user_to_remove)
+            if int(current_balance) > 0:
+                leaderboard.add_to_total_earnings(user_to_remove, -current_balance)
+                user_funds.update_balance(user_to_remove, 0)
+                bot.send_message(chat_id, f"{user_to_remove} has been disqualified!")
 
 
 @bot.message_handler(commands=['vote_cmc'])
@@ -177,18 +187,18 @@ def convert_to_standard(input_string):
 @bot.message_handler(func=lambda message: True,
                      content_types=['photo', 'text'])  # any message ( needs to check if user attaches a picture too)
 def check_submission(message):
-    user_name = "@" + message.from_user.username
     chat_id = message.chat.id
+    if message.from_user.username is None:
+        bot.send_message(chat_id,
+                         f"User has no username , Please create a username in your Telegram settings\\!",
+                         parse_mode='MarkdownV2')
+        return
+    user_name = "@" + message.from_user.username
     if user_name == "@MINI_BTC_CHAD" or user_name == "@LongIt345" or user_name == "@CryptoSniper000":  # ignore admin
         return
     if chat_id != -4174401511:  # not allow as make it only work for that group only
         bot.send_message(chat_id,
                          f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
-                         parse_mode='MarkdownV2')
-        return
-    if message.from_user.username is None:
-        bot.send_message(chat_id,
-                         f"User has no username , Please create a username in your Telegram settings\\!",
                          parse_mode='MarkdownV2')
         return
     if message.photo is None:

@@ -136,6 +136,7 @@ async def start(message):  # will credit the dev some virtual credits
     chat_id = message.chat.id
     arguments = message.text.split()
     user_to_reset = arguments[1]
+
     if funds_database.check_user_exist(user_to_reset):  # use it for will too
         funds_database.update_balance(user_to_reset, 0)
     else:

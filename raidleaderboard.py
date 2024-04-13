@@ -123,3 +123,8 @@ class ShillStats:
                 current_highest = score
                 current_best_user = user[0]
         return current_best_user
+
+    def get_total_users(self):  # exclude banned users later
+        self.cursor0.execute("SELECT * FROM userstats")
+        rows = self.cursor0.fetchall()
+        return len(rows)

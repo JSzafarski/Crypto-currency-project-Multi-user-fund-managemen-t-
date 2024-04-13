@@ -330,3 +330,9 @@
 2024-04-12 00:53:40,440:ERROR:TeleBot:Aiohttp ClientError: ClientOSError
 2024-04-12 00:53:40,452:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000021BA7BC30B0> files=None request_timeout=300
 2024-04-12 08:26:31,420:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-12 11:48:52,765:INFO:root:user : @Trevor_Crypto registered
+2024-04-12 12:44:26,380:INFO:root:user : @DuxySOL requested a withdrawal of : 157304798 to wallet 438UaEY6EYsAyH183SoHgt1rA6Yjzton64t2jdD45oPY
+2024-04-12 13:03:29,166:INFO:root:user : @rollin_stone0521 registered
+2024-04-12 13:51:15,128:INFO:root:user : @Sheikh03 registered
+2024-04-12 14:13:42,860:INFO:root:user : @Sheikh03 requested a withdrawal of : 1600000000 to wallet 3wFud6tVZ4JRfy4TLKPAVrHoNi8XwRX6pSFbc2VEtZHM
+2024-04-12 14:15:39,763:INFO:root:user : @B3Forgotten registered
