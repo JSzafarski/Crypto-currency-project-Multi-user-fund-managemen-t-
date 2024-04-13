@@ -153,7 +153,7 @@ def rain(message):
                      f"DexTools](https://www\\.dextools\\.io/app/en/solana/pair-explorer"
                      f"/DDnvC5rvvZeJLuNKBF6xsdqHA6GPKbLxYq8z1bzaotUC?t=1712460479955) hit the 👍🏻 \\(100,000,000 mSatoshis\\) "
                      f"\\(Vote one time\\)\n\n[Birdeye](https://birdeye\\.so/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
-                     f"?chain=solana) hit the 👍🏻 \\(50,000,000 mSatoshis\\) \\(Once every 24hours\\)\n\n[DexScreener]("
+                     f"?chain=solana) hit the 👍🏻 \\(50,000,000 mSatoshis\\) \\(One Time\\)\n\n[DexScreener]("
                      f"https://dexscreener\\.com/solana/ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc)  hit the 🚀 \\(25,000,"
                      f"000 mSatoshis\\) \\(Vote every hour\\)\n\nReach X votes and get "
                      f"listed:\n\n[GemsRadar](https://gemsradar\\.com/coins/mini-bitcoin) login and vote 🗳 🔥 \\(100,"

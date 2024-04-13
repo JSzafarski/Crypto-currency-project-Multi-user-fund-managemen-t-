@@ -1,3 +1,5 @@
+import math
+
 from requests import request
 from time import strftime, localtime
 import telebot
@@ -220,7 +222,7 @@ def send_test_rewards_info():
                      f"DexTools](https://www\\.dextools\\.io/app/en/solana/pair-explorer"
                      f"/DDnvC5rvvZeJLuNKBF6xsdqHA6GPKbLxYq8z1bzaotUC?t=1712460479955) hit the 👍🏻 \\(100,000,000 mSatoshis\\) "
                      f"\\(Vote one time\\)\n\n[Birdeye](https://birdeye\\.so/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
-                     f"?chain=solana) hit the 👍🏻 \\(50,000,000 mSatoshis\\) \\(Once every 24hours\\)\n\n[DexScreener]("
+                     f"?chain=solana) hit the 👍🏻 \\(50,000,000 mSatoshis\\) \\(One time\\)\n\n[DexScreener]("
                      f"https://dexscreener\\.com/solana/ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc)  hit the 🚀 \\(25,000,"
                      f"000 mSatoshis\\) \\(Vote every hour\\)\n\nReach X votes and get "
                      f"listed:\n\n[GemsRadar](https://gemsradar\\.com/coins/mini-bitcoin) login and vote 🗳 🔥 \\(500,"
@@ -298,6 +300,17 @@ def get_holders():
                           headers=solscan_header)
     holder_list_json = holder_list.json()
     return int(holder_list_json["total"])
+
+
+def determine_time_left_till_reset():
+    reference_reset_leaderboard_time = 1713092400  # seed
+    interval = 60 * 60 * 24 * 4  # 4 days
+    current_time = time.time()
+    absoloute_difference = abs(reference_reset_leaderboard_time - current_time)
+    if absoloute_difference < interval:
+        return str(int(absoloute_difference//3600))
+    else:
+        return str(int((absoloute_difference % interval)//3600))
 
 
 def poll():  # problem with slscan glitching out idk why
@@ -378,9 +391,10 @@ def poll():  # problem with slscan glitching out idk why
             task_count = leaderboard.get_total_tasks()
             top_users = leaderboard.get_top_five()
             number_shillers = leaderboard.get_total_users()
+            time_left = determine_time_left_till_reset()
             bot.send_message("-1002130978267",
                              f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n\n👯 [Join rewards group]("
+                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}* hours\n\n👯 [Join rewards group]("
                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time3 = time.time()

@@ -130,3 +130,16 @@ class ShillStats:
         return len(rows)
 
     # managing the reset of shiller stats (reset the number of tasks completed and also the amount earned)
+    def reset_users(self):
+        self.cursor0.execute("SELECT * FROM userstats")
+        rows = self.cursor0.fetchall()
+        for user in rows:
+            user_name = user[0]
+            ##reset score##
+            sql = "UPDATE userstats SET totalearned =? WHERE username=?"
+            self.cursor0.execute(sql, [0, user_name])
+            self.connection.commit()
+            ##reset tasks completed##
+            sql = "UPDATE userstats SET totalcompleted =? WHERE username=?"
+            self.cursor0.execute(sql, [0, user_name])
+            self.connection.commit()

@@ -1,3 +1,6 @@
+from time import strftime, localtime
+import time
+import math
 import telebot
 import userfunds
 from requests import request
@@ -45,6 +48,17 @@ def get_trending_tokens():
                            headers=header)
 
 
+def determine_time_left_till_reset():
+    reference_reset_leaderboard_time = 1713092400  # seed
+    interval = 60 * 60 * 24 * 4  # 4 days
+    current_time = time.time()
+    absoloute_difference = abs(reference_reset_leaderboard_time - current_time)
+    if absoloute_difference < interval:
+        return str(int(absoloute_difference//3600))
+    else:
+        return str(int((absoloute_difference % interval)//3600))
+
+
 @bot.message_handler(commands=['leaderboard'])
 def leader_board(message):
     chat_id = message.chat.id
@@ -52,9 +66,10 @@ def leader_board(message):
     task_count = leaderboard.get_total_tasks()
     top_users = leaderboard.get_top_five()
     number_shillers = leaderboard.get_total_users()
+    time_left = determine_time_left_till_reset()
     bot.send_message(chat_id,
                      f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                     f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n\n👯 [Join rewards "
+                     f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}* hours\n\n👯 [Join rewards"
                      f"group]("
                      f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
@@ -200,7 +215,7 @@ def burn(message):
                     new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
                     funds_database.update_balance(tipper, new_tipper_balance)
                     funds_database.update_balance(username_to_tip, new_username_to_tip_balance)
-                    tipper = tipper.replace("_","\\_")
+                    tipper = tipper.replace("_", "\\_")
                     bot.send_message(chat_id, f"{tipper} has Burned *{amount_to_tip}* mSatoshis",
                                      parse_mode='MarkdownV2')
                 else:  # not enough funds
