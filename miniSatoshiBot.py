@@ -54,9 +54,23 @@ def determine_time_left_till_reset():
     current_time = time.time()
     absoloute_difference = abs(reference_reset_leaderboard_time - current_time)
     if absoloute_difference < interval:
-        return str(int(absoloute_difference//3600))
+        return str(int(absoloute_difference // 3600))
     else:
-        return str(int((absoloute_difference % interval)//3600))
+        return str(int((absoloute_difference % interval) // 3600))
+
+
+@bot.message_handler(commands=['position'])
+def leader_board(message):
+    chat_id = message.chat.id
+    user = "@" + message.from_user.username
+    if leaderboard.check_user_exist:
+        position = leaderboard.get_position(user)
+        user = user.replace("_", "\\_")
+        bot.send_message(chat_id, f"Dear, {user} you are position *{position}* on this week's shill\\-to\\-earn leaderboard",
+                         parse_mode='MarkdownV2', disable_web_page_preview=True)
+    else:
+        bot.send_message(chat_id, "User has not yet used shill to earn!",
+                         parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['leaderboard'])

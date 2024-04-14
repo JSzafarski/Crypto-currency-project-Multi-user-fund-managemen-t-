@@ -370,3 +370,9 @@
 2024-04-13 19:07:56,829:DEBUG:asyncio:Using proactor: IocpProactor
 2024-04-13 19:08:02,076:INFO:root:user : @CryptoSniper000 requested a withdrawal of : 111239937321 to wallet g3Eo1Bc4hVCDo6QhHEuL4EsjWJwLjmdqtzBYbL6VKtr
 2024-04-13 19:08:39,683:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-13 20:30:38,653:INFO:root:user : @Samsoneey requested a withdrawal of : 2922157465 to wallet GZ3h7ZhDEpjNLWftxnVSgvTBM7pr59eSZUJU59rhnrHi
+2024-04-13 22:21:28,732:INFO:root:user : @KurtG95 registered
+2024-04-13 22:59:09,264:INFO:root:user : @Mgeurrt registered
+2024-04-13 23:09:35,701:INFO:root:user : @Abdulaziz_010010 registered
+2024-04-13 23:22:10,608:INFO:root:user : @generalsahu requested a withdrawal of : 1475880951 to wallet Fj2aFNovVMvghHkvDmaNg8bVSkAaMoHatcrAyybA7Ki1
+2024-04-14 02:10:21,096:ERROR:TeleBot:Unhandled exception (full traceback for debug level): A request to the Telegram API was unsuccessful. Error code: 502. Description: Bad Gateway

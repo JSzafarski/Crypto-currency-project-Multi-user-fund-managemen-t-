@@ -112,6 +112,24 @@ class ShillStats:
             place += 1
         return string_builder
 
+    def get_position(self, telegram_username):
+        self.cursor0.execute("SELECT * FROM userstats")
+        rows = self.cursor0.fetchall()
+        user_range = len(rows) - 1
+        users_in_leaderboard = []
+        for x in range(0, user_range):
+            current_highest = 0  # the highest score
+            current_best_user = ""
+            for user in rows:
+                score = user[1]
+                if score > current_highest and user[0] not in users_in_leaderboard:
+                    current_highest = score
+                    current_best_user = user[0]
+            users_in_leaderboard.append(current_best_user)
+        for index, ordered_users in enumerate(users_in_leaderboard):
+            if ordered_users == telegram_username:
+                return index + 1
+
     def get_first_place(self):
         self.cursor0.execute("SELECT * FROM userstats")
         rows = self.cursor0.fetchall()

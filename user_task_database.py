@@ -16,7 +16,7 @@ user_funds = userfunds.FundsDatabase()
 user_tasks = usertasksdb.UserRewardDb()
 allowable_submissions = {
     "dextools": 100000000,
-    "dexscreener": 50000000,
+    "dexscreener": 25000000,
     "birdeye": 50000000,
     "gemsradar": 100000000,
     "coinalpha": 5000000,
