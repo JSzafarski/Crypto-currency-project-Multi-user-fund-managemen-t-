@@ -52,13 +52,12 @@ def determine_time_left_till_reset():
     reference_reset_leaderboard_time = 1713092400  # seed
     interval = 60 * 60 * 24 * 4  # 4 days
     current_time = time.time()
-    absoloute_difference = abs(reference_reset_leaderboard_time - current_time)
-    if absoloute_difference < interval:
-        print(absoloute_difference)
-        return str(int(absoloute_difference // 3600))
+    absoloute_difference = abs(reference_reset_leaderboard_time - current_time) #time since seed
+    epoch_val = int((interval - (absoloute_difference % interval)) // 3600)
+    if epoch_val // 24 > 0:
+        return str(int(epoch_val/24)) + " days"
     else:
-        print(absoloute_difference % interval)
-        return str(int((absoloute_difference % interval) // 3600))
+        return str(epoch_val) + " hours"
 
 
 @bot.message_handler(commands=['position'])
@@ -68,7 +67,8 @@ def leader_board(message):
     if leaderboard.check_user_exist:
         position = leaderboard.get_position(user)
         user = user.replace("_", "\\_")
-        bot.send_message(chat_id, f"Dear, {user} you are position *{position}* on this week's shill\\-to\\-earn leaderboard",
+        bot.send_message(chat_id,
+                         f"Dear, {user} you are position *{position}* on this week's shill\\-to\\-earn leaderboard",
                          parse_mode='MarkdownV2', disable_web_page_preview=True)
     else:
         bot.send_message(chat_id, "User has not yet used shill to earn!",
@@ -83,9 +83,10 @@ def leader_board(message):
     top_users = leaderboard.get_top_five()
     number_shillers = leaderboard.get_total_users()
     time_left = determine_time_left_till_reset()
+    print(time_left)
     bot.send_message(chat_id,
                      f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                     f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}* hours\n\n👯 [Join rewards"
+                     f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards"
                      f"group]("
                      f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)

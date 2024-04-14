@@ -306,28 +306,15 @@ last_reset = 0
 
 
 def determine_time_left_till_reset():
-    global last_reset
     reference_reset_leaderboard_time = 1713092400  # seed
     interval = 60 * 60 * 24 * 4  # 4 days
     current_time = time.time()
-    absoloute_difference = abs(reference_reset_leaderboard_time - current_time)
-    if absoloute_difference < interval:
-        print(absoloute_difference)
-        if absoloute_difference <= 2 and last_reset == 0:
-            last_reset = 1
-            bot.send_message("-1002130978267",
-                             f"🥇 Competition has closed 🎉🎉🎉🎉🎉",
-                             parse_mode='MarkdownV2')
-            print("leaderboard reset")
-            leaderboard.reset_users()
-        return str(int(absoloute_difference // 3600))
+    absoloute_difference = abs(reference_reset_leaderboard_time - current_time) #time since seed
+    epoch_val = int((interval - (absoloute_difference % interval)) // 3600)
+    if epoch_val // 24 > 0:
+        return str(int(epoch_val/24)) + " days"
     else:
-        if absoloute_difference % interval <= 2 and last_reset == 0:
-            last_reset = 1  # change ti to real epoch to prevent double resets
-            print("leaderboard reset")
-            leaderboard.reset_users()
-        print(absoloute_difference % interval // 3600)
-        return str(int((absoloute_difference % interval) // 3600))
+        return str(epoch_val) + " hours"
 
 
 def poll():  # problem with slscan glitching out idk why
@@ -411,7 +398,7 @@ def poll():  # problem with slscan glitching out idk why
             time_left = determine_time_left_till_reset()
             bot.send_message("-1002130978267",
                              f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}* hours\n\n👯 [Join rewards group]("
+                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards group]("
                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time3 = time.time()
