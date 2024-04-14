@@ -36,7 +36,8 @@ allowable_submissions = {
     "coinvote": 30000,
     "x": 50000000,
     "cmc-comment": 1000000000,
-    "cmc-watchlist": 250000000
+    "cmc-watchlist": 250000000,
+    "x-follow": 250000000
 }
 
 infinity = 999999999999999999999999
@@ -69,12 +70,13 @@ time_outs = {  # ( in epoch time)
     "coinvote": twenty_four_hours,
     "x": five_minutes,
     "cmc-comment": one_hour,
-    "cmc-watchlist": infinity
+    "cmc-watchlist": infinity,
+    "x-follow": infinity
 }
 choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coincatapult', 'coinmoonhunt',
            'coindiscovery',
            'coinbazooka', 'coinscope', 'ntm.ai', 'top100token', 'rugfreecoins', 'coinboom', 'coinmooner', 'coinhunt',
-           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist"]
+           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow"]
 
 
 @bot.message_handler(commands=[
@@ -94,6 +96,24 @@ def rain(message):
                 reimbursed_balance = dev_balance + current_balance
                 user_funds.update_balance("@CryptoSniper000", reimbursed_balance)  # add back the balance to the dev
                 bot.send_message(chat_id, f"{user_to_remove} has been disqualified!")
+
+
+@bot.message_handler(commands=['follow_on_x'])
+def rain(message):
+    chat_id = message.chat.id
+    if chat_id != -1002066433992:  # not allow as make it only work for that group only
+        bot.send_message(chat_id,
+                         f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
+                         parse_mode='MarkdownV2')
+        return
+    bot.send_message(chat_id, "🟣 *Follow our X:*\nFollow our X with your official account:\n\n[@mbtc\\_sol]("
+                              "https://twitter\\.com/mbtc\\_sol)\n\nEnsure you meet the requirements:\n🟣 Not "
+                              "shadow\\-banned\\. Check here: [\\_Link\\_](https://shadowban\\.yuzurisa\\.com/)\n🟣 "
+                              "Post a valid screenshot, proving you are following us\n🟣 Duplicate screenshots will "
+                              "result in disqualification\nAttach the keyword: *x\\-follow* with your screenshot for "
+                              "submission to be valid\n\n*This bounty can only be completed once per user*\nPays "
+                              "out: *250,000,000 mSats*"
+                     , parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['vote_cmc'])

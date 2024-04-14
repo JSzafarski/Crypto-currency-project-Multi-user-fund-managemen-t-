@@ -389,3 +389,7 @@
 2024-04-14 13:36:26,684:INFO:root:user : @prixodd requested a withdrawal of : 34770000081 to wallet 9njwaNXb3BZfJTBtgkzRdEsG6HRS7NFfqBGmCZ2FkmeD
 2024-04-14 13:53:02,659:INFO:root:user : @prixodd requested a withdrawal of : 34770000081 to wallet 9njwaNXb3BZfJTBtgkzRdEsG6HRS7NFfqBGmCZ2FkmeD
 2024-04-14 14:01:37,903:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-14 14:16:01,315:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 3637363397 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-14 15:22:42,543:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 10753964969 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-04-14 15:29:15,159:INFO:root:user : @JackPhilliphs registered
+2024-04-14 15:30:18,583:INFO:root:user : @JackPhilliphs requested a withdrawal of : 1000000000 to wallet BhawHSyTTSna55j28tLmanvqjf3V5yPzfv1TSJn7HQZP
