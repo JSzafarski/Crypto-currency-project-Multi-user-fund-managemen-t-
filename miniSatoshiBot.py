@@ -54,8 +54,10 @@ def determine_time_left_till_reset():
     current_time = time.time()
     absoloute_difference = abs(reference_reset_leaderboard_time - current_time)
     if absoloute_difference < interval:
+        print(absoloute_difference)
         return str(int(absoloute_difference // 3600))
     else:
+        print(absoloute_difference % interval)
         return str(int((absoloute_difference % interval) // 3600))
 
 

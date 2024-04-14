@@ -376,3 +376,11 @@
 2024-04-13 23:09:35,701:INFO:root:user : @Abdulaziz_010010 registered
 2024-04-13 23:22:10,608:INFO:root:user : @generalsahu requested a withdrawal of : 1475880951 to wallet Fj2aFNovVMvghHkvDmaNg8bVSkAaMoHatcrAyybA7Ki1
 2024-04-14 02:10:21,096:ERROR:TeleBot:Unhandled exception (full traceback for debug level): A request to the Telegram API was unsuccessful. Error code: 502. Description: Bad Gateway
+2024-04-14 02:10:35,220:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-14 03:01:59,951:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 3491780493 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-14 06:53:34,719:INFO:root:user : @trinityX147 requested a withdrawal of : 1588917861 to wallet 97t56MCU1QhnUtAAGtFMaGTPYq2N9VtH9gpGThJ1EGy
+2024-04-14 07:12:58,410:INFO:root:user : @generalsahu requested a withdrawal of : 2525881011 to wallet Fj2aFNovVMvghHkvDmaNg8bVSkAaMoHatcrAyybA7Ki1
+2024-04-14 08:00:20,851:INFO:root:user : @Kamrul6578 registered
+2024-04-14 11:34:43,892:INFO:root:user : @Kamrul6578 requested a withdrawal of : 75082822 to wallet AbWZeXURJh3KhXoiRKwra3wVhA2yrzgMHbzef3m9knfV
+2024-04-14 12:05:39,417:INFO:root:user : @Mgeurrt requested a withdrawal of : 1461082964 to wallet CUCd9AV83UqtfEJHuUn6rzQGUgLa7hiJqSrwBioNw8iB
+2024-04-14 12:11:31,442:INFO:root:user : @laaazim requested a withdrawal of : 31410000081 to wallet 9UHj6NTHhJaPWdcHDTHv3zxBJsUKPYuMHoLobM1ZN6vc

@@ -99,7 +99,7 @@ def rain(message):
 @bot.message_handler(commands=['vote_cmc'])
 def rain(message):
     chat_id = message.chat.id
-    if chat_id != -4174401511:  # not allow as make it only work for that group only
+    if chat_id != -1002066433992:  # not allow as make it only work for that group only
         bot.send_message(chat_id,
                          f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
                          parse_mode='MarkdownV2')
@@ -119,7 +119,7 @@ def rain(message):
 @bot.message_handler(commands=['vote_x'])
 def rain(message):
     chat_id = message.chat.id
-    if chat_id != -4174401511:  # not allow as make it only work for that group only
+    if chat_id != -1002066433992:  # not allow as make it only work for that group only
         bot.send_message(chat_id,
                          f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
                          parse_mode='MarkdownV2')
@@ -142,7 +142,7 @@ def rain(message):
 @bot.message_handler(commands=['vote_info'])
 def rain(message):
     chat_id = message.chat.id
-    if chat_id != -4174401511:  # not allow as make it only work for that group only
+    if chat_id != -1002066433992:  # not allow as make it only work for that group only
         bot.send_message(chat_id,
                          f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
                          parse_mode='MarkdownV2')
@@ -201,7 +201,7 @@ def check_submission(message):
     user_name = "@" + message.from_user.username
     if user_name == "@MINI_BTC_CHAD" or user_name == "@LongIt345" or user_name == "@CryptoSniper000":  # ignore admin
         return
-    if chat_id != -4174401511:  # not allow as make it only work for that group only
+    if chat_id != -1002066433992:  # not allow as make it only work for that group only
         bot.send_message(chat_id,
                          f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
                          parse_mode='MarkdownV2')
