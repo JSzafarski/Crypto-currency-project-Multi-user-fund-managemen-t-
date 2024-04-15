@@ -37,7 +37,9 @@ allowable_submissions = {
     "x": 50000000,
     "cmc-comment": 1000000000,
     "cmc-watchlist": 250000000,
-    "x-follow": 250000000
+    "x-follow": 250000000,
+    "x-saylor": 500000000,
+    "x-davinci": 500000000
 }
 
 infinity = 999999999999999999999999
@@ -71,16 +73,18 @@ time_outs = {  # ( in epoch time)
     "x": five_minutes,
     "cmc-comment": one_hour,
     "cmc-watchlist": infinity,
-    "x-follow": infinity
+    "x-follow": infinity,
+    "x-saylor": twenty_four_hours,
+    "x-davinci": twenty_four_hours
 }
 choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coincatapult', 'coinmoonhunt',
            'coindiscovery',
            'coinbazooka', 'coinscope', 'ntm.ai', 'top100token', 'rugfreecoins', 'coinboom', 'coinmooner', 'coinhunt',
-           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow"]
+           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow", "x-saylor", "x-davinci"]
 
 
 @bot.message_handler(commands=[
-    'disqualify'])  # set to 0 and set the tokens earned back to me and also set their other database balance to zero 0 !
+    'disqualify'])  # set to 0 and set the tokens earned back to me and also set their other database balance to zero
 def rain(message):
     user_name = "@" + message.from_user.username
     chat_id = message.chat.id
@@ -98,7 +102,34 @@ def rain(message):
                 bot.send_message(chat_id, f"{user_to_remove} has been disqualified!")
 
 
-@bot.message_handler(commands=['follow_on_x'])
+@bot.message_handler(commands=['special_x'])
+def rain(message):
+    chat_id = message.chat.id
+    if chat_id != -1002066433992:  # not allow as make it only work for that group only
+        bot.send_message(chat_id,
+                         f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
+                         parse_mode='MarkdownV2')
+        return
+    bot.send_message(chat_id, "*X/Twitter \\- Special Bounties:*\n\nWe have special X bounties dedicated to Michael "
+                              "Saylor and DaVinci that pay *5x* 📈 the rate of a regular X bounty\\.\n Simply type 'X\\-"
+                              "Saylor' or 'X\\-Davinci' in the rewards channel, and attach the relevant "
+                              "screenshot\\.\nYou must abide by the following requirements with your X post:\n🟣 Use "
+                              "the following hashtags in your reply:\n\\$mBTC \\#Bitcoin \\#BitcoinOnSolana \\#sol "
+                              "\\#meme \\#utility\n🟣 Tag our official Twitter \\- @mbtc\\_sol\n🟣 X "
+                              "account must not be shadow banned\\.\nCheck here: Shadowban \\("
+                              "https://shadowban\\.yuzurisa\\.com/\\)\n🟣 Ensure your reply is posted on a ["
+                              "@Davincij15 Profile](https://twitter\\.com/Davincij15) or [@saylor Profile]("
+                              "https://twitter\\.com/saylor) post less than 6 hours old\n🟣 And most importantly, "
+                              "please attach the Saylor GIF for your Saylor reply or Davinci GIF for your Davinci "
+                              "reply\\. Download links below\\!\n\nDaVinci GIF: [Link]("
+                              "https://imgur\\.com/IlkOdMI)\nSaylor GIF: [Link]("
+                              "https://imgur\\.com/a/PglCK7N)\n\nThis bounty can only be claimed once every "
+                              "24 hours per user\nYou will receive 💰 500,000,000 mSatoshis on submission of a "
+                              "valid screenshot\\!"
+                     , parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(commands=['follow_x'])
 def rain(message):
     chat_id = message.chat.id
     if chat_id != -1002066433992:  # not allow as make it only work for that group only
@@ -129,7 +160,7 @@ def rain(message):
                      "our CMC"
                      "page: https://coinmarketcap\\.com/currencies/mini\\-bitcoin/\\! \n\nEnsure the following with your comments:\n🟣 Not AI\\-generated and generic\n🟣 "
                      "Comes across as"
-                     "genuine and not spammy\n\n*This bounty can only be completed once per user\n\nPays out:\n1,000,000,"
+                     "genuine and not spammy\n\n*This bounty can only be completed once per hour\n\nPays out:\n1,000,000,"
                      "000 mSats\n\n2\\) Click the ⭐️ in the top left corner of our official CMC page to join the Mini Bitcoin "
                      "watchlist\\. Can only be completed once\\. \n\n*This bounty can only be completed once per user\nPays "
                      "out:\n250,000,000 mSats\n\n*Keywords to use with your screenshot:*\nFor watchlist: cmc\\-watchlist\nFor comment: cmc\\-comment",
@@ -303,7 +334,10 @@ def check_submission(message):
                                     (time.time() - last_epoch)))
                                 hour_string = "Seconds"
                             else:
-                                hour_string = "Minutes"
+                                if time_left == 1:
+                                    hour_string = "Minute"
+                                else:
+                                    hour_string = "Minutes"
                         bot.send_message(chat_id,
                                          f"*Task Already competed\\!*\nThis task has already been completed\\.Please "
                                          f"Try again in {time_left} {hour_string}\\!",

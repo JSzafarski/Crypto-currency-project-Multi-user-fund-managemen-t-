@@ -46,7 +46,118 @@ def get_trending_tokens():
     token_result = request('GET',
                            f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
                            headers=header)
+#shill bot commands in main :
 
+@bot.message_handler(commands=['special_x'])
+def rain(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id, "*X/Twitter \\- Special Bounties:*\n\nWe have special X bounties dedicated to Michael "
+                              "Saylor and DaVinci that pay *5x* 📈 the rate of a regular X bounty\\.\n Simply type 'X\\-"
+                              "Saylor' or 'X\\-Davinci' in the rewards channel, and attach the relevant "
+                              "screenshot\\.\nYou must abide by the following requirements with your X post:\n🟣 Use "
+                              "the following hashtags in your reply:\n\\$mBTC \\#Bitcoin \\#BitcoinOnSolana \\#sol "
+                              "\\#meme \\#utility\n🟣 Tag our official Twitter \\- @mbtc\\_sol\n🟣 X "
+                              "account must not be shadow banned\\.\nCheck here: Shadowban \\("
+                              "https://shadowban\\.yuzurisa\\.com/\\)\n🟣 Ensure your reply is posted on a ["
+                              "@Davincij15 Profile](https://twitter\\.com/Davincij15) or [@saylor Profile]("
+                              "https://twitter\\.com/saylor) post less than 6 hours old\n🟣 And most importantly, "
+                              "please attach the Saylor GIF for your Saylor reply or Davinci GIF for your Davinci "
+                              "reply\\. Download links below\\!\n\nDaVinci GIF: [Link]("
+                              "https://imgur\\.com/IlkOdMI)\nSaylor GIF: [Link]("
+                              "https://imgur\\.com/a/PglCK7N)\n\nThis bounty can only be claimed once every "
+                              "24 hours per user\nYou will receive 💰 500,000,000 mSatoshis on submission of a "
+                              "valid screenshot\\!"
+                     , parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(commands=['follow_x'])
+def rain(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id, "🟣 *Follow our X:*\nFollow our X with your official account:\n\n[@mbtc\\_sol]("
+                              "https://twitter\\.com/mbtc\\_sol)\n\nEnsure you meet the requirements:\n🟣 Not "
+                              "shadow\\-banned\\. Check here: [\\_Link\\_](https://shadowban\\.yuzurisa\\.com/)\n🟣 "
+                              "Post a valid screenshot, proving you are following us\n🟣 Duplicate screenshots will "
+                              "result in disqualification\nAttach the keyword: *x\\-follow* with your screenshot for "
+                              "submission to be valid\n\n*This bounty can only be completed once per user*\nPays "
+                              "out: *250,000,000 mSats*"
+                     , parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(commands=['vote_cmc'])
+def rain(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id,
+                     "To celebrate our CMC listing we are introducing 2 bounties\\.\n\n1\\) Post a bullish comment on "
+                     "our CMC"
+                     "page: https://coinmarketcap\\.com/currencies/mini\\-bitcoin/\\! \n\nEnsure the following with your comments:\n🟣 Not AI\\-generated and generic\n🟣 "
+                     "Comes across as"
+                     "genuine and not spammy\n\n*This bounty can only be completed once per hour\n\nPays out:\n1,000,000,"
+                     "000 mSats\n\n2\\) Click the ⭐️ in the top left corner of our official CMC page to join the Mini Bitcoin "
+                     "watchlist\\. Can only be completed once\\. \n\n*This bounty can only be completed once per user\nPays "
+                     "out:\n250,000,000 mSats\n\n*Keywords to use with your screenshot:*\nFor watchlist: cmc\\-watchlist\nFor comment: cmc\\-comment",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(commands=['vote_x'])
+def rain(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id,
+                     f"*__X/Twitter__*\nWe've introduced an X bounty that can be claimed once every 5 minutes\\.\n\nSimply type "
+                     f"'X' in the rewards channel, and attach the screenshot of the shill post made on X\\.\n\nYou must abide "
+                     f"by the following requirements with your X post:\n🟣 You must reply to a crypto influencer with more than "
+                     f"*50k followers* on a post *less* than *4hrs old*\n🟣 Use the following hashtags in your reply:\n\\$mBTC "
+                     f"_\\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme \\#utility_\n🟣 X account must not be shadow banned\\. Check here:  "
+                     f"[Shadowban](https://shadowban\\.yuzurisa\\.com/)\n🟣 And most importantly, please attach the recently made "
+                     f"comparison chart in your shill post\\!\n\nComparison chart download: [Link]("
+                     f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\nYou are early download: [Link]("
+                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *50000000* mSatoshis on "
+                     f"submission of the"
+                     f"screenshot\\.",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(commands=['vote_info'])
+def rain(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id,
+                     f"🟣 __Vote Bounty Info:__\n\nVote on the trackers below, and attach a screenshot with the name of the "
+                     f"tracker to instantly receive your reward\\.\n\n💸💸 Click any of the links below to get started\\! 💸💸\n\n["
+                     f"DexTools](https://www\\.dextools\\.io/app/en/solana/pair-explorer"
+                     f"/DDnvC5rvvZeJLuNKBF6xsdqHA6GPKbLxYq8z1bzaotUC?t=1712460479955) hit the 👍🏻 \\(100,000,000 mSatoshis\\) "
+                     f"\\(Vote one time\\)\n\n[Birdeye](https://birdeye\\.so/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
+                     f"?chain=solana) hit the 👍🏻 \\(50,000,000 mSatoshis\\) \\(One Time\\)\n\n[DexScreener]("
+                     f"https://dexscreener\\.com/solana/ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc)  hit the 🚀 \\(25,000,"
+                     f"000 mSatoshis\\) \\(Vote every hour\\)\n\nReach X votes and get "
+                     f"listed:\n\n[GemsRadar](https://gemsradar\\.com/coins/mini-bitcoin) login and vote 🗳 🔥 \\(100,"
+                     f"000,000 mSatoshis\\) 🔥\n\n[CoinAlpha]("
+                     f"https://coinalpha\\.app/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ)  login and vote 🗳 \\(5,000,"
+                     f"000 mSatoshis\\) \\(Available every 24hrs\\)\n\n[CoinCatapult]("
+                     f"https://coincatapult\\.com/coin/mini-bitcoin-mbtc) vote 🗳 \\(5,000,000 mSatoshis\\) \\(Available every "
+                     f"6hrs\\)\n\n[CoinDiscovery](https://coindiscovery\\.app/coin/mini-bitcoin#description) vote 🗳 \\(5,000,"
+                     f"000 mSatoshis\\) \\(Available every hour\\)\n\n*Other Trackers:*\n[NTM\\.ai]("
+                     f"https://ntm\\.ai/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ?graph"
+                     f"=DDnvC5rvvZeJLuNKBF6xsdqHA6GPKbLxYq8z1bzaotUC) vote 'Bullish' or 'Safu' \\(500,000 mSatoshis\\) \\("
+                     f"Available"
+                     f"every hour\\)\n[CoinBazooka](https://coinbazooka\\.com/coin/mini-bitcoin) vote 🗳 \\(250000 mSatoshis\\) \\("
+                     f"Available every 24hrs\\)\n[CoinScope](https://www\\.coinscope\\.co/coin/1-mbtc) login and vote 🗳 \\(250000 "
+                     f"mSatoshis\\) \\(Available every 24hrs\\)\n[CoinSniper](https://coinsniper\\.net/coin/63289) login and vote "
+                     f"🗳 \\(250000 mSatoshis\\) \\(Available every 24hrs\\)\n[top100token]("
+                     f"https://top100token\\.com/address/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ) vote 🚀 \\(250000 "
+                     f"mSatoshis\\) \\("
+                     f"Available every 24hrs\\)\n[Rugfreecoins](https://www\\.rugfreecoins\\.com/coin-details/24899) vote 🔥 \\("
+                     f"150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CNToken\\.io](https://cncrypto\\.io/coin/mini-bitcoin) vote "
+                     f"🗳 \\(150000 mSatoshis\\) \\(Available every 24hrs\\)\n[CoinMoonHunt](https://coinmoonhunt\\.com/coin/Mini "
+                     f"Bitcoin)  vote 🗳 \\(150000 mSatoshis\\) \\(Available every hour\\)\n[CoinBoom]("
+                     f"https://coinboom\\.net/coin/mini-bitcoin-2) vote 🚀\\(30000 mSatoshis\\) \\(Available every 24hrs\\)\n["
+                     f"CoinMooner](https://coinmooner.com/coin/mini-bitcoin-mbtc)  vote 🚀\\(30000 mSatoshis\\) \\(Available every "
+                     f"24hrs\\)\n[CoinVote](https://coinvote\\.cc/en/coin/Mini-Bitcoin)  login and hit the 👍🏻 \\(30000 "
+                     f"mSatoshis\\) \\(Available every 24hrs\\)",
+                     parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+
+
+####################################
 
 def determine_time_left_till_reset():
     reference_reset_leaderboard_time = 1713092400  # seed
@@ -83,7 +194,6 @@ def leader_board(message):
     top_users = leaderboard.get_top_five()
     number_shillers = leaderboard.get_total_users()
     time_left = determine_time_left_till_reset()
-    print(time_left)
     bot.send_message(chat_id,
                      f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
                      f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards"
@@ -317,7 +427,7 @@ def rain(message):
         if argument_length < 3:
             bot.send_message(chat_id,
                              f"*Invalid Input*\nPlease us the following syntax:\n/tip \\<@\\username1\\>\\ "
-                             f"\\<@\\username2\\>\\ ... \\<@\\username\\>\\"
+                             f"\\<@\\username2\\> \\.\\.\\. \\<@\\username\\>\\"
                              f"\\<\\amount in"
                              f" mSatoshis\\>\\ \\.",
                              parse_mode='MarkdownV2')

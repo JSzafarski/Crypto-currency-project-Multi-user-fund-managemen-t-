@@ -393,3 +393,4 @@
 2024-04-14 15:22:42,543:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 10753964969 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
 2024-04-14 15:29:15,159:INFO:root:user : @JackPhilliphs registered
 2024-04-14 15:30:18,583:INFO:root:user : @JackPhilliphs requested a withdrawal of : 1000000000 to wallet BhawHSyTTSna55j28tLmanvqjf3V5yPzfv1TSJn7HQZP
+2024-04-14 17:16:22,437:DEBUG:asyncio:Using proactor: IocpProactor
