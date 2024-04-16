@@ -355,7 +355,6 @@ def poll():  # problem with slscan glitching out idk why
             continue
         for transfer in spl_transfers_json["items"]:
             if transfer["txHash"] not in temp_txHash_array:
-                print("new tx")
                 temp_txHash_array.append(transfer["txHash"])
                 if float(transfer["amount"]) / 10 ** 11 >= 10:
                     transfer_amount = int(float(transfer["amount"]) / 10 ** 11)

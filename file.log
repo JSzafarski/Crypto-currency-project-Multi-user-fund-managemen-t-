@@ -394,3 +394,14 @@
 2024-04-14 15:29:15,159:INFO:root:user : @JackPhilliphs registered
 2024-04-14 15:30:18,583:INFO:root:user : @JackPhilliphs requested a withdrawal of : 1000000000 to wallet BhawHSyTTSna55j28tLmanvqjf3V5yPzfv1TSJn7HQZP
 2024-04-14 17:16:22,437:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-14 19:41:24,983:INFO:root:user : @bebethetenth registered
+2024-04-14 19:46:09,836:INFO:root:user : @bebethetenth requested a withdrawal of : 250000000 to wallet DUSYjVVqHzAkMWH4Lho3w3MvRaKVAfSj2AbUGucd66F1
+2024-04-14 22:29:46,467:INFO:root:user : @tiktakhead registered
+2024-04-14 22:41:11,766:INFO:root:user : @Kamrul6578 requested a withdrawal of : 1597073454 to wallet AbWZeXURJh3KhXoiRKwra3wVhA2yrzgMHbzef3m9knfV
+2024-04-15 01:04:08,806:INFO:root:user : @TrevorM87 registered
+2024-04-15 14:25:14,494:INFO:root:user : @DiMR903 registered
+2024-04-15 15:11:12,571:INFO:root:user : @faci88888 registered
+2024-04-15 16:51:57,744:ERROR:TeleBot:Aiohttp ClientError: ClientConnectorError
+2024-04-15 16:51:57,748:ERROR:TeleBot:Request timeout. Request: method=get url=sendMessage params=<aiohttp.formdata.FormData object at 0x0000027B82B978C0> files=None request_timeout=300
+2024-04-15 17:09:28,439:INFO:root:user : @AtlasCkT registered
+2024-04-15 17:31:33,359:INFO:root:user : @AtlasCkT requested a withdrawal of : 155000000 to wallet hoxmcvK3rEKqm6DriCtLSPgq2XwhbUSXjsyxR7izgzn

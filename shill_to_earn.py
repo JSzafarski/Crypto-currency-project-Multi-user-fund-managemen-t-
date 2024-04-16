@@ -8,6 +8,8 @@ import time
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import raidleaderboard
+import hashlib
+import image_verification
 
 leaderboard = raidleaderboard.ShillStats()
 my_token = '6896610984:AAHOE6ft3wbyXMuAC1FBssFJ4RA5FEWMC-w'
@@ -286,6 +288,7 @@ def check_submission(message):
                          f"information\\.",
                          parse_mode='MarkdownV2')
         return
+    # perform a security check on the image
     standard_form = convert_to_standard(user_submission_type)
     if standard_form in allowable_submissions:  # this means user has submitted a potentially allowable submission
         if user_funds.check_user_exist(user_name):  # if user is registered
@@ -293,6 +296,18 @@ def check_submission(message):
                 # fetch the existing tasks
                 temp = user_tasks.get_user_tesks(user_name).split()  # split into list
                 if standard_form not in temp:
+                    raw = message.photo[0].file_id
+                    file_info = bot.get_file(raw)
+                    downloaded_file = bot.download_file(file_info.file_path)
+                    readable_hash = hashlib.sha256(downloaded_file).hexdigest()
+                    if not image_verification.verify_image(
+                            str(readable_hash)):  # if it failed (then give the user a warning!)
+                        user_name = user_name.replace("_", "\\_")
+                        bot.send_message(chat_id,
+                                         f"⚠️ Our System have detected signs of cheating ⚠️\n\n❌ User : {user_name} may be disqualified "
+                                         f"if this presists\\!\n\n @CryptoSniper000 please review this incident",
+                                         parse_mode='MarkdownV2')
+                        return
                     temp.append(standard_form + " " + str(time.time()))
                     completed_tasks = " ".join(temp)
                     user_tasks.update_completed_tasks(user_name, completed_tasks)
@@ -308,6 +323,19 @@ def check_submission(message):
                             if time_left > 100000 and standard_form == "dexscreener":
                                 inject_dex_correction = True
                             if time.time() - last_epoch >= int(time_outs[standard_form]) or inject_dex_correction:
+                                #check if the image is sound
+                                raw = message.photo[0].file_id
+                                file_info = bot.get_file(raw)
+                                downloaded_file = bot.download_file(file_info.file_path)
+                                readable_hash = hashlib.sha256(downloaded_file).hexdigest()
+                                if not image_verification.verify_image(
+                                        str(readable_hash)):  # if it failed (then give the user a warning!)
+                                    user_name = user_name.replace("_", "\\_")
+                                    bot.send_message(chat_id,
+                                                     f"⚠️ Our System have detected signs of cheating ⚠️\n\n❌ User : {user_name} may be disqualified "
+                                                     f"if this presists\\!\n\n @CryptoSniper000 please review this incident",
+                                                     parse_mode='MarkdownV2')
+                                    return
                                 temp[index + 1] = str(time.time())  # change it to current time
                                 completed_tasks = " ".join(temp)
                                 user_tasks.update_completed_tasks(user_name, completed_tasks)
@@ -335,9 +363,9 @@ def check_submission(message):
                                 hour_string = "Seconds"
                             else:
                                 if time_left == 1:
-                                    hour_string = "Minute"
+                                    hour_string = "minute"
                                 else:
-                                    hour_string = "Minutes"
+                                    hour_string = "minutes"
                         bot.send_message(chat_id,
                                          f"*Task Already competed\\!*\nThis task has already been completed\\.Please "
                                          f"Try again in {time_left} {hour_string}\\!",
