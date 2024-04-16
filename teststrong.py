@@ -1,40 +1,17 @@
-string = '''*X/Twitter \\- Special Bounties:*
-
-We have special X bounties dedicated to Michael Saylor and DaVinci that pay *5x* 📈 the rate of a regular X bounty\\. 
-
-
-
-Simply type 'X Saylor' or 'X Davinci' in the rewards channel, and attach the relevant screenshot\\. 
-
-
-
-You must abide by the following requirements with your X post:
-
-🟣 Use the following hashtags in your reply:
-
-\\_$mBTC \\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme \\#utility\\_
-
-🟣 Tag our official Twitter \\- \\_@mbtc\\\\\\_sol\\_
-
-🟣 X account must not be shadow banned\\.
-
-Check here: Shadowban \\(https://shadowban\\.yuzurisa\\.com/\\)
-
-🟣 Ensure your reply is posted on a [@Davincij15 Profile](https://twitter\\.com/Davincij15) or [@saylor Profile](https://twitter\\.com/saylor) post less than 6 hours old
-
-🟣 And most importantly, please attach the Saylor GIF for your Saylor reply or Davinci GIF for your Davinci reply\\. Download links below\\!
-
-
-
-DaVinci GIF: [Link](https://imgur\\.com/IlkOdMI)
-
-Saylor GIF: [Link](https://imgur\\.com/a/PglCK7N)
-
-
-
-\\_\\\\\\*This bounty can only be claimed once every 24 hours per user\\_ 
-
-
-
-You will receive 💰 500000000 mSatoshis on submission of a valid screenshot\\!
-'''
+string = ("🟣 *X/Twitter \\\\- raid $HULVIN and \\\\#HULVIN posts\\\\!*\n\n\n\nHULVIN is a halving\\\\-meta token on "
+          "SOL sitting at $20m market cap\\\\. People are falsely claiming that it was the first token to the halving "
+          "meta\\\\.\n\n\n\nReply to any $HULVIN posts, and shill $mBTC on them\\\\. These can include the official ["
+          "HULVIN X account](https://twitter\\\\.com/hulvinsol) and any $HULVIN relevant posts\\\\.\n\n\n\n*Consider "
+          "the following pointers and anything else you can come up with:*\n\n🟣 We were first\\\\. $mBTC was "
+          "launched on 3rd April, whereas $HULVIN was made a week later\n\n🟣 We have actual utilities, $HULVIN does "
+          "not\n\n🟣 $mBTC is a much lower market cap, therefore a bargain in comparison and much more scope for "
+          "growth\n\n\n\n*You must abide by the following requirements with your X post:*\n\n🟣 Tag "
+          "@mbtc\\\\\\\\\\\\_sol\n\n🟣 Do not reply to a post more than 12 hours old\n\n🟣 Each reply should be "
+          "unique and thoughtful\\\\. Don\'t come across as spammy/AI generated\\\\.\n\n🟣 Use the following hashtags "
+          "in your reply:\n\n\\\\_$mBTC \\\\#halving \\\\#Bitcoin \\\\#BitcoinOnSolana \\\\#sol \\\\#meme "
+          "\\\\#utility\\\\_\n\n🟣 X account must not be shadow banned\\\\. Check here: Shadowban \\\\("
+          "https://shadowban\\\\.yuzurisa\\\\.com/\\\\)\n\n\n\n\\\\\\\\\\\\*Simply type \'X\\\\-Meta\' in the rewards "
+          "channel, and attach the screenshot of the shill post made\\\\. Any irrelevant posts that do not meet the "
+          "requirements can result in disqualification\\\\.\n\nThe cooldown period for this bounty is *15 "
+          "minutes*\n\n\n\n\\\\\\\\\\\\*You will receive *2,000,000,000* mSatoshis on submission of the "
+          "screenshot\\\\!\n")

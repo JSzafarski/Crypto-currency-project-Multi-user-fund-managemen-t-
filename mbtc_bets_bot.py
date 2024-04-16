@@ -22,6 +22,10 @@ def bet_mockup(message):
                      parse_mode='MarkdownV2', reply_markup=markup)
 
 
+
+#create the funsing system ( create wallet withdrawal of the sol in the wallet also the ability to view funds)
+#mbtc burn statisics section too
+
 if __name__ == "__main__":
     # generate_meme_batch()
     bot.infinity_polling(timeout=None)

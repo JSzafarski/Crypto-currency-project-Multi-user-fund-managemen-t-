@@ -309,12 +309,31 @@ def determine_time_left_till_reset():
     reference_reset_leaderboard_time = 1713092400  # seed
     interval = 60 * 60 * 24 * 4  # 4 days
     current_time = time.time()
-    absoloute_difference = abs(reference_reset_leaderboard_time - current_time) #time since seed
+    absoloute_difference = abs(reference_reset_leaderboard_time - current_time)  # time since seed
     epoch_val = int((interval - (absoloute_difference % interval)) // 3600)
     if epoch_val // 24 > 0:
-        return str(int(epoch_val/24)) + " days"
+        return str(int(epoch_val / 24)) + " days"
     else:
         return str(epoch_val) + " hours"
+
+
+header = {
+    "User-Agent": " ".join(
+        [
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+            "AppleWebKit/537.36 (KHTML, like Gecko)"
+            "Chrome/113.0.0.0 Safari/537.36",
+        ]
+    )
+}
+
+
+def get_price():
+    token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
+    token_result = request('GET',
+                           f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
+                           headers=header)
+    return float(token_result.json()["pairs"][0]["priceUsd"])
 
 
 def poll():  # problem with slscan glitching out idk why
@@ -328,7 +347,7 @@ def poll():  # problem with slscan glitching out idk why
     re_launched = True
     current_top_user = ""
     while True:
-        #determine_time_left_till_reset()
+        # determine_time_left_till_reset()
         # anounce if somone changed place with another user
         if re_launched:
             current_top_user = leaderboard.get_first_place()
@@ -395,9 +414,13 @@ def poll():  # problem with slscan glitching out idk why
             top_users = leaderboard.get_top_five()
             number_shillers = leaderboard.get_total_users()
             time_left = determine_time_left_till_reset()
-            bot.send_message("-1002130978267",
-                             f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}* mSats\n📚 Total "
-                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards group]("
+            sats_balance = float(total_earned)
+            amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * get_price())
+            total_earned_dollars = f"{amount_in_dollars:.2f}".replace(".", "\\.")
+            bot.send_message(chat_id,
+                             f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}*mSats \\(${total_earned_dollars}\\)\n📚 Total "
+                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards"
+                             f"group]("
                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time3 = time.time()

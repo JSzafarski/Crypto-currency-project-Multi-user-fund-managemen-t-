@@ -41,7 +41,8 @@ allowable_submissions = {
     "cmc-watchlist": 250000000,
     "x-follow": 250000000,
     "x-saylor": 500000000,
-    "x-davinci": 500000000
+    "x-davinci": 500000000,
+    "x-meta": 2000000000
 }
 
 infinity = 999999999999999999999999
@@ -52,6 +53,7 @@ thirty_minutes = 60 * 30
 twenty_minutes = 20 * 60
 five_minutes = 5 * 60
 ten_minutes = 10 * 60
+fiveteen_minutes = 15 * 60
 time_outs = {  # ( in epoch time)
     "dextools": infinity,
     "dexscreener": one_hour,
@@ -77,12 +79,13 @@ time_outs = {  # ( in epoch time)
     "cmc-watchlist": infinity,
     "x-follow": infinity,
     "x-saylor": twenty_four_hours,
-    "x-davinci": twenty_four_hours
+    "x-davinci": twenty_four_hours,
+    "x-meta": thirty_minutes
 }
 choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coincatapult', 'coinmoonhunt',
            'coindiscovery',
            'coinbazooka', 'coinscope', 'ntm.ai', 'top100token', 'rugfreecoins', 'coinboom', 'coinmooner', 'coinhunt',
-           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow", "x-saylor", "x-davinci"]
+           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow", "x-saylor", "x-davinci", "x-meta"]
 
 
 @bot.message_handler(commands=[
@@ -128,6 +131,35 @@ def rain(message):
                               "https://imgur\\.com/a/PglCK7N)\n\nThis bounty can only be claimed once every "
                               "24 hours per user\nYou will receive 💰 500,000,000 mSatoshis on submission of a "
                               "valid screenshot\\!"
+                     , parse_mode='MarkdownV2', disable_web_page_preview=True)
+
+
+@bot.message_handler(commands=['raid_shitcoins'])
+def rain(message):
+    chat_id = message.chat.id
+    if chat_id != -1002066433992:  # not allow as make it only work for that group only
+        bot.send_message(chat_id,
+                         f"This bot only works in : https://t\\.me/\\+OGXZpC7yGXQ2MDZk \\!",
+                         parse_mode='MarkdownV2')
+        return
+    bot.send_message(chat_id, "🟣 *X/Twitter \\- raid $HULVIN and \\#HULVIN posts\\!*\n\nHULVIN is a "
+                              "halving\\-meta token on"
+                              "SOL sitting at $20m market cap\\. People are falsely claiming that it was the first token to the halving "
+                              "meta\\.\n\nReply to any $HULVIN posts, and shill $mBTC on them\\. These can include the official ["
+                              "HULVIN X account](https://twitter\\.com/hulvinsol) and any $HULVIN relevant posts\\.\n\n*Consider "
+                              "the following pointers and anything else you can come up with:*\n\n🟣 We were first\\. $mBTC was "
+                              "launched on 3rd April, whereas $HULVIN was made a week later\n\n🟣 We have actual utilities, $HULVIN does "
+                              "not\n\n🟣 $mBTC is a much lower market cap, therefore a bargain in comparison and much more scope for "
+                              "growth\n\n*You must abide by the following requirements with your X post:*\n\n🟣 Tag "
+                              "@mbtc\\_sol\n\n🟣 Do not reply to a post more than 12 hours old\n\n🟣 Each reply should be "
+                              "unique and thoughtful\\. Don't come across as spammy/AI generated\\.\n\n🟣 Use the following hashtags "
+                              "in your reply:\n\n\\_$mBTC \\#halving \\#Bitcoin \\#BitcoinOnSolana \\#sol \\#meme "
+                              "\\#utility\\_\n\n🟣 X account must not be shadow banned\\. Check here: Shadowban \\("
+                              "https://shadowban\\.yuzurisa\\.com/\\)\n\n*Simply type \'X\\-Meta\' in the rewards "
+                              "channel, and attach the screenshot of the shill post made\\. Any irrelevant posts that do not meet the "
+                              "requirements can result in disqualification\\.\n\nThe cooldown period for this bounty is *15 "
+                              "minutes*\n\n*You will receive *2,000,000,000* mSatoshis on submission of the "
+                              "screenshot\\!"
                      , parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
@@ -304,7 +336,7 @@ def check_submission(message):
                             str(readable_hash)):  # if it failed (then give the user a warning!)
                         user_name = user_name.replace("_", "\\_")
                         bot.send_message(chat_id,
-                                         f"⚠️ Our System have detected signs of cheating ⚠️\n\n❌ User : {user_name} may be disqualified "
+                                         f"⚠️ Our Systems have detected signs of cheating ⚠️\n\n❌ User : {user_name} may be disqualified "
                                          f"if this presists\\!\n\n @CryptoSniper000 please review this incident",
                                          parse_mode='MarkdownV2')
                         return
@@ -323,7 +355,7 @@ def check_submission(message):
                             if time_left > 100000 and standard_form == "dexscreener":
                                 inject_dex_correction = True
                             if time.time() - last_epoch >= int(time_outs[standard_form]) or inject_dex_correction:
-                                #check if the image is sound
+                                # check if the image is sound
                                 raw = message.photo[0].file_id
                                 file_info = bot.get_file(raw)
                                 downloaded_file = bot.download_file(file_info.file_path)
@@ -332,7 +364,7 @@ def check_submission(message):
                                         str(readable_hash)):  # if it failed (then give the user a warning!)
                                     user_name = user_name.replace("_", "\\_")
                                     bot.send_message(chat_id,
-                                                     f"⚠️ Our System have detected signs of cheating ⚠️\n\n❌ User : {user_name} may be disqualified "
+                                                     f"⚠️ Our Systems have detected signs of cheating ⚠️\n\n❌ User : {user_name} may be disqualified "
                                                      f"if this presists\\!\n\n @CryptoSniper000 please review this incident",
                                                      parse_mode='MarkdownV2')
                                     return
