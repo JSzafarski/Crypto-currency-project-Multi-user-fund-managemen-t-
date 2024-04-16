@@ -1,4 +1,15 @@
 import sqlite3
+from requests import request
+
+header = {
+    "User-Agent": " ".join(
+        [
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+            "AppleWebKit/537.36 (KHTML, like Gecko)"
+            "Chrome/113.0.0.0 Safari/537.36",
+        ]
+    )
+}
 
 
 class ShillStats:
@@ -72,6 +83,13 @@ class ShillStats:
             total += int(user[2])
         return total
 
+    def get_price(self):
+        token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
+        token_result = request('GET',
+                               f"https://api.dexscreener.com/latest/dex/pairs/solana/{token_address}",
+                               headers=header)
+        return float(token_result.json()["pairs"][0]["priceUsd"])
+
     def get_top_five(self):
         position_dict = {
             1: "🥇",
@@ -106,7 +124,10 @@ class ShillStats:
             current_best_user = current_best_user.replace("@", "")
             current_best_user = current_best_user.replace("_", "\\_")
             current_best_user = current_best_user.replace(".", "\\.")
-            string_builder += f"{position_dict[place]} *{current_best_user}*: _{current_highest}_\n"
+            sats_balance = float(current_highest)
+            amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * self.get_price())
+            total_earned_dollars = f"{amount_in_dollars:.2f}".replace(".", "\\.")
+            string_builder += f"{position_dict[place]} *{current_best_user}*: _{current_highest}_ \\($*{total_earned_dollars}*\\)\n"
             if place == 3:
                 string_builder += "\n"
             place += 1

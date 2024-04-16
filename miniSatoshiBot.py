@@ -171,6 +171,8 @@ def determine_time_left_till_reset():
     absoloute_difference = abs(reference_reset_leaderboard_time - current_time)  # time since seed
     epoch_val = int((interval - (absoloute_difference % interval)) // 3600)
     if epoch_val // 24 > 0:
+        if int(epoch_val / 24) == 1:
+            return str(int(epoch_val / 24)) + " day"
         return str(int(epoch_val / 24)) + " days"
     else:
         return str(epoch_val) + " hours"

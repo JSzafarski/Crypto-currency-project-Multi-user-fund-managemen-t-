@@ -312,6 +312,8 @@ def determine_time_left_till_reset():
     absoloute_difference = abs(reference_reset_leaderboard_time - current_time)  # time since seed
     epoch_val = int((interval - (absoloute_difference % interval)) // 3600)
     if epoch_val // 24 > 0:
+        if int(epoch_val / 24) == 1:
+            return str(int(epoch_val / 24)) + " day"
         return str(int(epoch_val / 24)) + " days"
     else:
         return str(epoch_val) + " hours"
@@ -417,7 +419,7 @@ def poll():  # problem with slscan glitching out idk why
             sats_balance = float(total_earned)
             amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * get_price())
             total_earned_dollars = f"{amount_in_dollars:.2f}".replace(".", "\\.")
-            bot.send_message(chat_id,
+            bot.send_message("-1002130978267",
                              f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}*mSats \\(${total_earned_dollars}\\)\n📚 Total "
                              f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards"
                              f"group]("

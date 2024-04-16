@@ -416,3 +416,15 @@
 2024-04-16 05:31:58,450:INFO:root:user : @jc6077 registered
 2024-04-16 09:03:38,978:INFO:root:user : @tiktakhead requested a withdrawal of : 479009441 to wallet E7XHCTyB1qfGtkYCMi7z5L5MN6AJ5btZFobsPJpZ94Q2
 2024-04-16 12:38:23,507:INFO:root:user : @Yacine_d1 requested a withdrawal of : 3228772635 to wallet 6Yj5fCmu1BmeULftTFHVcbPaHsPCsc8CWtY4jLfQRkso
+2024-04-16 15:15:30,971:INFO:root:user : @tiktakhead requested a withdrawal of : 479016716 to wallet E7XHCTyB1qfGtkYCMi7z5L5MN6AJ5btZFobsPJpZ94Q2
+2024-04-16 15:21:13,268:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 16444485207 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-04-16 17:15:03,667:INFO:root:user : @luke_1237 registered
+2024-04-16 17:50:27,489:INFO:root:user : @KingdomMinded23 registered
+2024-04-16 18:02:23,339:INFO:root:user : @Tikuki registered
+2024-04-16 18:28:45,660:INFO:root:user : @Tikuki requested a withdrawal of : 2071445612 to wallet 6HDV6EAH3yPEEgDuihCJf2ctxTaYkMjFcHoNnmB1ZR3D
+2024-04-16 22:09:11,333:INFO:root:user : @Kamrul6578 requested a withdrawal of : 3772142581 to wallet AbWZeXURJh3KhXoiRKwra3wVhA2yrzgMHbzef3m9knfV
+2024-04-16 22:24:53,321:INFO:root:user : @bjarkeVdl registered
+2024-04-16 22:26:21,116:INFO:root:user : @bjarkeVdl requested a withdrawal of : 25100000 to wallet 42QpFB96XZ8Y6LHTpNQTzwW5etRiYda3PZUoEAR8mkmu
+2024-04-16 22:39:15,591:INFO:root:user : @bjarkeVdl requested a withdrawal of : 2075600000 to wallet 42QpFB96XZ8Y6LHTpNQTzwW5etRiYda3PZUoEAR8mkmu
+2024-04-16 23:14:12,115:ERROR:TeleBot:Unhandled exception (full traceback for debug level): A request to the Telegram API was unsuccessful. Error code: 502. Description: Bad Gateway
+2024-04-16 23:14:25,055:DEBUG:asyncio:Using proactor: IocpProactor
