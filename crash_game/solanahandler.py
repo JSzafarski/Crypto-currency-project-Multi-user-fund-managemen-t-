@@ -30,4 +30,5 @@ def create_wallet():  # this is the wallet the user will deposit sol to
 
 def withdraw(withdrawal_address, user_name):  # give a confirmation /failed message
     # check if the adress is valid and make one more prompt confiriming the withdrawal then withdraw the sol from thier wallet to another one
+    # return true if all worked (also retunt the tx if posible)
     pass

@@ -1,4 +1,5 @@
 import telebot
+from solders.pubkey import Pubkey
 from telebot import types
 import crash_algorithm
 import threading
@@ -111,6 +112,23 @@ def hide_settings(callback_query: types.CallbackQuery):
     bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
 
 
+def withdrawal_handler(message):
+    user_name = "@" + message.from_user.username
+    user_input = message.text  # verify if the input is on curve
+    if 44 >= len(str(user_input)) >= 32:
+        key = Pubkey.from_string(str(user_input))
+        if key.is_on_curve():
+            #process the tx
+            result = solanahandler.withdraw(user_input,user_name)
+            if result is True:
+            else:
+                #failed
+        else:
+
+    else:
+
+
+
 @bot.callback_query_handler(func=lambda call: True)
 def handle_buttons(callback_query: types.CallbackQuery):
     response_value = str(callback_query.data)
@@ -195,7 +213,8 @@ def handle_buttons(callback_query: types.CallbackQuery):
         back = types.InlineKeyboardButton("↪️ Back", callback_data=f"hide2")  # pass the
         # username so we know hows checking
         markup.row(withdraw, refresh, back)
-        bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n🟣 *{addy}*\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*",
+        bot.send_message(chat_id,
+                         f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n🟣 *{addy}*\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*",
                          parse_mode='MarkdownV2', reply_markup=markup)
     elif response_value.split()[0] == "withdraw":
         bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
@@ -206,8 +225,12 @@ def handle_buttons(callback_query: types.CallbackQuery):
         cancel = types.InlineKeyboardButton("❌ Cancel", callback_data=f"hide2")
         markup.row(confirm, cancel)
         bot.send_message(chat_id,
-                         f"__Mini Bitcoin Games__\n\n🟣Please confirm that you wish to withdraw: *{user_balance} SOL*",
+                         f"__Mini Bitcoin Games__\n\n🟣 Please confirm that you wish to withdraw: *{user_balance} SOL*",
                          parse_mode='MarkdownV2', reply_markup=markup)
+    elif response_value.split()[0] == "confirm":
+        sent_msg = bot.send_message(chat_id, "Please enter the withdrawal address.")
+        bot.register_next_step_handler(sent_msg, withdrawal_handler)  # Next message will call the name_handler function
+        # once user presses the address and the addres is correct then send them the tx and obv send the funds to their wallet
 
         # needs a withdrawal button , refresh button ,and a back button
 
