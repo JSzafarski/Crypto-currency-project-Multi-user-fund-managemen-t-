@@ -55,8 +55,51 @@ def crash_game(message):
     # username so we know hows checking
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
-    bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
-                              f" Not running_\\.\\.\\.\n\n🟣 Current Bet "
+    bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
+                              f"running_\\.\\.\\.\n\n🟣 Current Bet"
+                              f"Size: *{bet_size} SOL* \n\n💰 Max Win Amount: *{max_win_size} "
+                              f"SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| 🟣 "
+                              f"Wallet Balance: *{current_balance} SOL*",
+                     parse_mode='MarkdownV2', reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda query: query.data == "hide2")  # hiding the settings menu
+def hide_settings(callback_query: types.CallbackQuery):
+    bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+    chat_id = int(callback_query.from_user.id)
+    if callback_query.from_user.username is None:  # if they don't have a username
+        bot.send_message(chat_id, f"You need a Telegram username to play the game.")
+        return
+    user_name = "@" + callback_query.from_user.username
+    if not game_users.check_user_exist(user_name):
+        fresh_address, fresh_private_key = solanahandler.create_wallet()
+        if fresh_address != "" and fresh_private_key != "":
+            game_users.add_user(user_name, fresh_address, fresh_private_key)
+            # will ad artificial balance to test it
+            game_users.update_balance(user_name, "20.0")
+
+    # fetch master wallet info to determine max win,max apes
+    master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+    max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
+    max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+
+    current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
+    bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
+
+    max_bet_size = str(max_bet_size)
+    max_win_size = str(max_win_size)
+    markup = types.InlineKeyboardMarkup()
+    Place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
+    start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
+    change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
+    bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
+    share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
+    configure_funds = types.InlineKeyboardButton("configure funds", callback_data=f"funds {user_name}")  # pass the
+    # username so we know hows checking
+    markup.row(Place_bet, configure_funds, change_game)
+    markup.row(bet, share_win, start)
+    bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
+                              f"running_\\.\\.\\.\n\n🟣 Current Bet"
                               f"Size: *{bet_size} SOL* \n\n💰 Max Win Amount: *{max_win_size} "
                               f"SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| 🟣 "
                               f"Wallet Balance: *{current_balance} SOL*",
@@ -83,7 +126,23 @@ def handle_buttons(callback_query: types.CallbackQuery):
             user_who_pressed_stop.append(user_name)
     elif response_value.split()[0] == "start":
         if user_name not in current_players:
-            current_players[user_name] = [chat_id, time.time(), message_id, max_multiplier, 0, "", win_loss]
+            if pos_size < float(game_users.check_user_balance(user_name)):
+                current_players[user_name] = [chat_id, time.time(), message_id, max_multiplier, 0, "", win_loss]
+            else:
+                master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+                max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
+                max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
+                bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
+                max_bet_size = str(max_bet_size)
+                max_win_size = str(max_win_size)
+                modified_main_game_pos_size = (
+                    f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
+                    f"running_\\.\\.\\.\n\n🟣"
+                    f"Current Bet Size: *{bet_size} SOL* \\(You have Insufficient funds\\) \n\n💰 Max Win"
+                    f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
+                    f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
+                edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
     elif response_value.split()[0] == "betup":
         current_bet_size = float(game_users.check_user_betsize(user_name))
         new_bet_size = str(round(current_bet_size + 0.01, 3))
@@ -98,8 +157,8 @@ def handle_buttons(callback_query: types.CallbackQuery):
         max_win_size = str(max_win_size)
 
         modified_main_game_pos_size = (
-            f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
-            f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
+            f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not running_\\.\\.\\.\n\n🟣 "
+            f"Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win"
             f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
             f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
         edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
@@ -120,11 +179,29 @@ def handle_buttons(callback_query: types.CallbackQuery):
             max_win_size = str(max_win_size)
 
             modified_main_game_pos_size = (
-                f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is  Not "
+                f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                 f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
                 f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
                 f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
             edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
+    elif response_value.split()[0] == "funds":
+        bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+        topup_string = ""
+        user_balance_float = round(float(game_users.check_user_balance(user_name)), 3)
+        addy = str(game_users.get_user_wallet(user_name))
+        user_balance = str(user_balance_float).replace(".", "\\.")
+        if user_balance_float < 0.5:
+            topup_string = "Low balance"
+        markup = types.InlineKeyboardMarkup()
+        withdraw = types.InlineKeyboardButton("💸 Withdraw", callback_data=f"betup {user_name}")
+        refresh = types.InlineKeyboardButton("♻️ Refresh", callback_data=f"betdown {user_name}")
+        back = types.InlineKeyboardButton("↪️ Back", callback_data=f"hide2")  # pass the
+        # username so we know hows checking
+        markup.row(withdraw, refresh, back)
+        bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n🟣 *{addy}*\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*",
+                         parse_mode='MarkdownV2', reply_markup=markup)
+
+        # needs a withdrawal button , refresh button ,and a back button
 
 
 def string_builder(multiplier):  # based on the multiplier it will build a string
@@ -274,7 +351,7 @@ def game_polling_engine():
         for removed_player in removed_players:
             if removed_player in current_players:
                 del current_players[removed_player]
-        time.sleep(0.2)  # small pause
+        time.sleep(0.5)  # small pause
 
 
 if __name__ == "__main__":
