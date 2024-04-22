@@ -26,3 +26,8 @@ def create_wallet():  # this is the wallet the user will deposit sol to
     encoded_keypair2 = private_key_bytes + public_key_bytes
     private_key = base58.b58encode(encoded_keypair2).decode()
     return str(wallet_address), str(private_key)
+
+
+def withdraw(withdrawal_address, user_name):  # give a confirmation /failed message
+    # check if the adress is valid and make one more prompt confiriming the withdrawal then withdraw the sol from thier wallet to another one
+    pass

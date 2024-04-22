@@ -51,7 +51,7 @@ def crash_game(message):
     change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
     bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
     share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
-    configure_funds = types.InlineKeyboardButton("configure funds", callback_data=f"funds {user_name}")  # pass the
+    configure_funds = types.InlineKeyboardButton("💰 configure funds", callback_data=f"funds {user_name}")  # pass the
     # username so we know hows checking
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
@@ -94,7 +94,7 @@ def hide_settings(callback_query: types.CallbackQuery):
     change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
     bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
     share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
-    configure_funds = types.InlineKeyboardButton("configure funds", callback_data=f"funds {user_name}")  # pass the
+    configure_funds = types.InlineKeyboardButton("💰 configure funds", callback_data=f"funds {user_name}")  # pass the
     # username so we know hows checking
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
@@ -158,7 +158,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
 
         modified_main_game_pos_size = (
             f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not running_\\.\\.\\.\n\n🟣 "
-            f"Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win"
+            f"Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
             f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
             f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
         edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
@@ -171,13 +171,10 @@ def handle_buttons(callback_query: types.CallbackQuery):
             master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
-
             current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
             bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
-            print(bet_size)
             max_bet_size = str(max_bet_size)
             max_win_size = str(max_win_size)
-
             modified_main_game_pos_size = (
                 f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                 f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
@@ -191,14 +188,25 @@ def handle_buttons(callback_query: types.CallbackQuery):
         addy = str(game_users.get_user_wallet(user_name))
         user_balance = str(user_balance_float).replace(".", "\\.")
         if user_balance_float < 0.5:
-            topup_string = "Low balance"
+            topup_string = "\\(Low Balance\\)"
         markup = types.InlineKeyboardMarkup()
-        withdraw = types.InlineKeyboardButton("💸 Withdraw", callback_data=f"betup {user_name}")
-        refresh = types.InlineKeyboardButton("♻️ Refresh", callback_data=f"betdown {user_name}")
+        withdraw = types.InlineKeyboardButton("💸 Withdraw", callback_data=f"withdraw {user_name}")
+        refresh = types.InlineKeyboardButton("♻️ Refresh", callback_data=f"funds {user_name}")
         back = types.InlineKeyboardButton("↪️ Back", callback_data=f"hide2")  # pass the
         # username so we know hows checking
         markup.row(withdraw, refresh, back)
         bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n🟣 *{addy}*\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*",
+                         parse_mode='MarkdownV2', reply_markup=markup)
+    elif response_value.split()[0] == "withdraw":
+        bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+        user_balance_float = round(float(game_users.check_user_balance(user_name)), 3)
+        user_balance = str(user_balance_float).replace(".", "\\.")
+        markup = types.InlineKeyboardMarkup()
+        confirm = types.InlineKeyboardButton("✅ Confirm", callback_data=f"confirm {user_name}")
+        cancel = types.InlineKeyboardButton("❌ Cancel", callback_data=f"hide2")
+        markup.row(confirm, cancel)
+        bot.send_message(chat_id,
+                         f"__Mini Bitcoin Games__\n\n🟣Please confirm that you wish to withdraw: *{user_balance} SOL*",
                          parse_mode='MarkdownV2', reply_markup=markup)
 
         # needs a withdrawal button , refresh button ,and a back button
@@ -230,7 +238,7 @@ def edit_message(chat_id, new_text, msg_id, user_name):
     change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
     bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
     share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
-    configure_funds = types.InlineKeyboardButton("configure funds", callback_data=f"funds {user_name}")  # pass the
+    configure_funds = types.InlineKeyboardButton("💰 configure funds", callback_data=f"funds {user_name}")  # pass the
     # username so we know hows checking
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
@@ -326,7 +334,7 @@ def game_polling_engine():
                                    f"🟣 Wallet Balance: *{new_balance} SOL*")
                     edit_message(chat_id, main_string, msg_id, user)  # to edit the msg
                     removed_players.append(user)
-                else:  # won
+                else:
                     wallet_balance = float(game_users.check_user_balance(user))
                     chat_id = int(current_players[user][0])
                     msg_id = current_players[user][2]
@@ -340,7 +348,8 @@ def game_polling_engine():
                     new_balance = new_balance.replace(".", "\\.")
                     main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                                    f"running_\\.\\.\\.{win_string}🟣 Current Bet Size: *{bet_size} "
-                                   f"SOL*  \\| 🤑 Current Profit: *{win_amount}* \\(_{multiplier}x_\\)\n\n💰 Max Win Amount: *"
+                                   f"SOL*  \\| 🤑 Current Profit: *{win_amount}* \\(_{multiplier}x_\\)\n\n💰 Max Win "
+                                   f"Amount: *"
                                    f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: "
                                    f"*0\\.1 SOL* \\|"
                                    f"🟣 Wallet Balance: *{new_balance}*")
