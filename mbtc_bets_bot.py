@@ -6,25 +6,28 @@ my_token = '7090902228:AAHIF5lOVRa5yMIUAGj29Y3r_d1GRRp86uU'
 bot = telebot.TeleBot(my_token)
 
 
-@bot.message_handler(commands=['bet'])
+
+
+# create the funsing system ( create wallet withdrawal of the sol in the wallet also the ability to view funds)
+# mbtc burn statisics section too
+@bot.message_handler(commands=['crash'])
 def bet_mockup(message):
     chat_id = message.chat.id
     markup = types.InlineKeyboardMarkup()
-    Place_bet = types.InlineKeyboardButton("Place a Bet", callback_data="rt")
-    configure_funds = types.InlineKeyboardButton("Configure Funding", callback_data="rtrt")
-    change_game = types.InlineKeyboardButton("Change Game", callback_data="rtrt")
-    refer = types.InlineKeyboardButton("Referrals", callback_data="rtr")
-    share_win = types.InlineKeyboardButton("Share Win", callback_data="rtrt")
-    stats = types.InlineKeyboardButton("Stats", callback_data="rtr")
+    Place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data="rt")
+    configure_funds = types.InlineKeyboardButton("🚀 Start", callback_data="rtrt")
+    change_game = types.InlineKeyboardButton("💸 Cashout", callback_data="rtrt")
+    refer = types.InlineKeyboardButton("⬆️ Bet Size", callback_data="rtr")
+    share_win = types.InlineKeyboardButton("😎 Share Win", callback_data="rtrt")
+    stats = types.InlineKeyboardButton("Go back", callback_data="rtr")
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(refer, share_win, stats)
-    bot.send_message(chat_id, f"🟣 Mini Bitcoin Bets\n\n🎲 Current Game: *Bet BTC price on the halving event*\n\n✅ Active Bet \\? : *No*\n\n🕐 Time Until Halving :  *15 days , 17:03:50 \\(2432 Blocks\\)*\n\n💰 Max bet size: *1 SOL*\n\n📈 Current Multiplier: *4\\.6x*",
+    bot.send_message(chat_id, "__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
+                              "running_\\.\\.\\.\n\n\n🚀  🟪🟪🟪🟪 \\(4\\.32x\\)\n\n\n🟣 Current Bet "
+                              "Size: *0\\.2 SOL*  \\| 🤑 Current Profit: *0\\.864 SOL* \\(_4\\.32x_\\)\n\n💰 Max Win Amount: *48 "
+                              "SOL*\n🔹 Min Bet Size: *0\\.01 SOL*",
                      parse_mode='MarkdownV2', reply_markup=markup)
 
-
-
-#create the funsing system ( create wallet withdrawal of the sol in the wallet also the ability to view funds)
-#mbtc burn statisics section too
 
 if __name__ == "__main__":
     # generate_meme_batch()

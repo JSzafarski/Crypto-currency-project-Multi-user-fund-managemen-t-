@@ -18,7 +18,7 @@ user_funds = userfunds.FundsDatabase()
 user_tasks = usertasksdb.UserRewardDb()
 allowable_submissions = {
     "dextools": 100000000,
-    "dexscreener": 25000000,
+    "dexscreener": 20000000,
     "birdeye": 50000000,
     "gemsradar": 100000000,
     "coinalpha": 5000000,
@@ -36,14 +36,16 @@ allowable_submissions = {
     "coinhunt": 200000,
     "cntoken.io": 150000,
     "coinvote": 30000,
-    "x": 50000000,
-    "cmc-comment": 1000000000,
+    "x": 25000000,
+    "cmc-comment": 200000000,
     "cmc-watchlist": 250000000,
-    "x-follow": 250000000,
-    "x-saylor": 500000000,
-    "x-davinci": 500000000,
-    "x-meta": 2000000000
+    "x-follow": 125000000,
+    "x-saylor": 250000000,
+    "x-davinci": 250000000
 }
+""""reddit-upvote": 25000000,
+    "reddit-commnet": 25000000,
+    "reddit-post": 100000000"""
 
 infinity = 999999999999999999999999
 twenty_four_hours = 60 * 60 * 24
@@ -75,17 +77,30 @@ time_outs = {  # ( in epoch time)
     "cntoken.io": thirty_minutes,
     "coinvote": twenty_four_hours,
     "x": five_minutes,
-    "cmc-comment": one_hour,
+    "cmc-comment": fiveteen_minutes,
     "cmc-watchlist": infinity,
     "x-follow": infinity,
     "x-saylor": twenty_four_hours,
-    "x-davinci": twenty_four_hours,
-    "x-meta": thirty_minutes
+    "x-davinci": twenty_four_hours
 }
 choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coincatapult', 'coinmoonhunt',
            'coindiscovery',
            'coinbazooka', 'coinscope', 'ntm.ai', 'top100token', 'rugfreecoins', 'coinboom', 'coinmooner', 'coinhunt',
-           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow", "x-saylor", "x-davinci", "x-meta"]
+           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow", "x-saylor", "x-davinci"]
+
+
+@bot.message_handler(commands=['expense'])
+def expense_check():
+    user_count = 118
+    four_days = 60 * 60 * 24 * 4
+    top_submission = 0
+    top_using_task = ""
+    for key in allowable_submissions:  # also need to account for time
+        if int(allowable_submissions[key]) / int(time_outs[key]) > top_submission:
+            top_using_task = key
+            top_submission = int(allowable_submissions[key]) / int(time_outs[key])  # msats per second
+    print(f"Current expense: " + str(
+        (user_count * four_days * top_submission) / 100000000000) + f" By task {top_using_task} as a upperbound")
 
 
 @bot.message_handler(commands=[
@@ -109,6 +124,7 @@ def rain(message):
 
 @bot.message_handler(commands=['special_x'])
 def rain(message):
+    expense_check()
     chat_id = message.chat.id
     if chat_id != -1002066433992:  # not allow as make it only work for that group only
         bot.send_message(chat_id,
@@ -116,7 +132,7 @@ def rain(message):
                          parse_mode='MarkdownV2')
         return
     bot.send_message(chat_id, "*X/Twitter \\- Special Bounties:*\n\nWe have special X bounties dedicated to Michael "
-                              "Saylor and DaVinci that pay *5x* 📈 the rate of a regular X bounty\\.\n Simply type 'X\\-"
+                              "Saylor and DaVinci that pay at a higher the rate of a regular X bounty\\.\n Simply type 'X\\-"
                               "Saylor' or 'X\\-Davinci' in the rewards channel, and attach the relevant "
                               "screenshot\\.\nYou must abide by the following requirements with your X post:\n🟣 Use "
                               "the following hashtags in your reply:\n\\$mBTC \\#Bitcoin \\#BitcoinOnSolana \\#sol "
@@ -129,7 +145,7 @@ def rain(message):
                               "reply\\. Download links below\\!\n\nDaVinci GIF: [Link]("
                               "https://imgur\\.com/IlkOdMI)\nSaylor GIF: [Link]("
                               "https://imgur\\.com/a/PglCK7N)\n\nThis bounty can only be claimed once every "
-                              "24 hours per user\nYou will receive 💰 500,000,000 mSatoshis on submission of a "
+                              "24 hours per user\nYou will receive 💰 25,000,000 mSatoshis on submission of a "
                               "valid screenshot\\!"
                      , parse_mode='MarkdownV2', disable_web_page_preview=True)
 
@@ -157,8 +173,8 @@ def rain(message):
                               "\\#utility\\_\n\n🟣 X account must not be shadow banned\\. Check here: Shadowban \\("
                               "https://shadowban\\.yuzurisa\\.com/\\)\n\n*Simply type \'X\\-Meta\' in the rewards "
                               "channel, and attach the screenshot of the shill post made\\. Any irrelevant posts that do not meet the "
-                              "requirements can result in disqualification\\.\n\nThe cooldown period for this bounty is *15 "
-                              "minutes*\n\n*You will receive *2,000,000,000* mSatoshis on submission of the "
+                              "requirements can result in disqualification\\.\n\nThe cooldown period for this bounty is *15 minutes "
+                              "hours*\n\n*You will receive *50,000,000* mSatoshis on submission of the "
                               "screenshot\\!"
                      , parse_mode='MarkdownV2', disable_web_page_preview=True)
 
@@ -177,7 +193,7 @@ def rain(message):
                               "Post a valid screenshot, proving you are following us\n🟣 Duplicate screenshots will "
                               "result in disqualification\nAttach the keyword: *x\\-follow* with your screenshot for "
                               "submission to be valid\n\n*This bounty can only be completed once per user*\nPays "
-                              "out: *250,000,000 mSats*"
+                              "out: *125,000,000 mSats*"
                      , parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
@@ -194,7 +210,7 @@ def rain(message):
                      "our CMC"
                      "page: https://coinmarketcap\\.com/currencies/mini\\-bitcoin/\\! \n\nEnsure the following with your comments:\n🟣 Not AI\\-generated and generic\n🟣 "
                      "Comes across as"
-                     "genuine and not spammy\n\n*This bounty can only be completed once per hour\n\nPays out:\n1,000,000,"
+                     "genuine and not spammy\n\n*This bounty can only be completed once per hour\n\nPays out:\n1,500,000,"
                      "000 mSats\n\n2\\) Click the ⭐️ in the top left corner of our official CMC page to join the Mini Bitcoin "
                      "watchlist\\. Can only be completed once\\. \n\n*This bounty can only be completed once per user\nPays "
                      "out:\n250,000,000 mSats\n\n*Keywords to use with your screenshot:*\nFor watchlist: cmc\\-watchlist\nFor comment: cmc\\-comment",
@@ -218,7 +234,7 @@ def rain(message):
                      f"[Shadowban](https://shadowban\\.yuzurisa\\.com/)\n🟣 And most importantly, please attach the recently made "
                      f"comparison chart in your shill post\\!\n\nComparison chart download: [Link]("
                      f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\nYou are early download: [Link]("
-                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *50000000* mSatoshis on "
+                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *30000000* mSatoshis on "
                      f"submission of the"
                      f"screenshot\\.",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
@@ -238,7 +254,7 @@ def rain(message):
                      f"DexTools](https://www\\.dextools\\.io/app/en/solana/pair-explorer"
                      f"/DDnvC5rvvZeJLuNKBF6xsdqHA6GPKbLxYq8z1bzaotUC?t=1712460479955) hit the 👍🏻 \\(100,000,000 mSatoshis\\) "
                      f"\\(Vote one time\\)\n\n[Birdeye](https://birdeye\\.so/token/mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
-                     f"?chain=solana) hit the 👍🏻 \\(50,000,000 mSatoshis\\) \\(One Time\\)\n\n[DexScreener]("
+                     f"?chain=solana) hit the 👍🏻 \\(20,000,000 mSatoshis\\) \\(One Time\\)\n\n[DexScreener]("
                      f"https://dexscreener\\.com/solana/ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc)  hit the 🚀 \\(25,000,"
                      f"000 mSatoshis\\) \\(Vote every hour\\)\n\nReach X votes and get "
                      f"listed:\n\n[GemsRadar](https://gemsradar\\.com/coins/mini-bitcoin) login and vote 🗳 🔥 \\(100,"
@@ -371,9 +387,10 @@ def check_submission(message):
                                 temp[index + 1] = str(time.time())  # change it to current time
                                 completed_tasks = " ".join(temp)
                                 user_tasks.update_completed_tasks(user_name, completed_tasks)
+                                print(f"{user_name}  completed {standard_form}")
                                 fund_user(user_name, standard_form, chat_id)
                                 updated = True
-                            break
+                                break  # changed this
                     if not updated:
                         time_left = int(float(time_outs[standard_form]) / float(60 * 60) - float(
                             (time.time() - last_epoch) / float(60 * 60)))
@@ -406,7 +423,9 @@ def check_submission(message):
             else:
                 user_tasks.add_user(user_name)
                 user_tasks.update_completed_tasks(user_name, standard_form + " " + str(time.time()))
+                print(f"{user_name}  completed {standard_form}")
                 fund_user(user_name, standard_form, chat_id)
+                return
         else:
             bot.send_message(chat_id,
                              f"*User not registered*\nPlease register an account using : https://t\\.me/mBTCTipbot\\.",
@@ -424,9 +443,32 @@ def check_submission(message):
         return
 
 
+def show_delay(standard_form):
+    time_left = int(time_outs[standard_form] / 3600)  # hours
+    if time_left > 10000:
+        return "Cannot be completed again"
+    hour_string = "hours"
+    if time_left == 1:
+        hour_string = "hour"
+    elif time_left == 0:
+        time_left = int(float(time_outs[standard_form]) / float(60))  # minutes
+        if time_left == 0:
+            time_left = int(float(time_outs[standard_form]))  # seconds
+            hour_string = "Seconds"
+        else:
+            if time_left == 1:
+                hour_string = "minute"
+            else:
+                hour_string = "minutes"
+    return f"{time_left} {hour_string}"
+
+
 def fund_user(username, task_completed, chat_id):
     tipper = "@CryptoSniper000"
     amount_to_tip = int(allowable_submissions[task_completed])
+    if user_funds.check_user_balance(tipper) < amount_to_tip:
+        bot.send_message(chat_id, "error!")
+        return
     new_tipper_balance = int(user_funds.check_user_balance(tipper)) - int(amount_to_tip)
     username_to_tip_balance = int(user_funds.check_user_balance(username))
     new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
@@ -440,7 +482,11 @@ def fund_user(username, task_completed, chat_id):
         leaderboard.add_user(username)
         leaderboard.increment_task_count(username)
         leaderboard.add_to_total_earnings(username, amount_to_tip)
-    bot.send_message(chat_id, f"{username} has been tipped {amount_to_tip} mSatoshis for completing a task!")
+        # task_completed = task_completed.replace(".", "\\.")
+        # task_completed = task_completed.replace("_", "\\_")
+    bot.send_message(chat_id,
+                     f"{username} has been tipped {amount_to_tip} mSatoshis for completing ({task_completed}) task! "
+                     f"The cooldown on this task is: {show_delay(task_completed)}")
 
 
 if __name__ == "__main__":

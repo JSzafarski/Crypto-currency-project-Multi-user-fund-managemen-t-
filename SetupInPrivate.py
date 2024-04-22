@@ -27,6 +27,7 @@ async def start(message):
     chat_id = message.chat.id  # need to figure out how to get user id as this will be the point of reference to tip
     # the user
     username = message.from_user.username
+    print(f"{username} has clicked start")
     if username is None:
         await bot.send_message(chat_id,
                                f"You need an associated username to create an account")
@@ -139,6 +140,9 @@ async def start(message):  # will credit the dev some virtual credits
 
     if funds_database.check_user_exist(user_to_reset):  # use it for will too
         funds_database.update_balance(user_to_reset, 0)
+        await bot.send_message(chat_id,
+                               f"User reset complete",
+                               parse_mode='MarkdownV2')
     else:
         await bot.send_message(chat_id,
                                f"⚠️ User not found",

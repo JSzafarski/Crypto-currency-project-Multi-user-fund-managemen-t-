@@ -428,3 +428,111 @@
 2024-04-16 22:39:15,591:INFO:root:user : @bjarkeVdl requested a withdrawal of : 2075600000 to wallet 42QpFB96XZ8Y6LHTpNQTzwW5etRiYda3PZUoEAR8mkmu
 2024-04-16 23:14:12,115:ERROR:TeleBot:Unhandled exception (full traceback for debug level): A request to the Telegram API was unsuccessful. Error code: 502. Description: Bad Gateway
 2024-04-16 23:14:25,055:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-17 00:13:13,162:INFO:root:user : @Mandaren6733 registered
+2024-04-17 01:34:39,489:INFO:root:user : @Danktastic_21 requested a withdrawal of : 1640553186 to wallet 2xBtZGchsmw3uwnNfQ8uY1LBpcVFCZXGeVtCGNdAXqWq
+2024-04-17 08:58:41,536:INFO:root:user : @bjarkeVdl requested a withdrawal of : 2375600005 to wallet 42QpFB96XZ8Y6LHTpNQTzwW5etRiYda3PZUoEAR8mkmu
+2024-04-17 09:48:44,261:INFO:root:user : @Michiokun registered
+2024-04-17 14:43:50,735:INFO:root:user : @JackPhilliphs requested a withdrawal of : 1250055429 to wallet BhawHSyTTSna55j28tLmanvqjf3V5yPzfv1TSJn7HQZP
+2024-04-17 18:43:47,414:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message can't be deleted for everyone
+2024-04-17 18:44:20,261:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 104035079104 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-17 19:05:12,683:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-17 19:05:12,696:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000018DF9F9CAA0> files=None request_timeout=300
+2024-04-17 19:19:16,651:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-17 19:20:37,953:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 29379508583 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-04-17 19:40:40,049:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-17 19:40:40,050:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x000001F9AB4183B0> files=None request_timeout=300
+2024-04-17 20:25:48,540:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-17 20:46:10,685:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-17 20:46:10,686:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x00000202CA885BB0> files=None request_timeout=300
+2024-04-17 21:49:06,109:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-17 21:49:30,747:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 104105079104 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-17 21:49:58,787:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 104105079104 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-17 22:03:16,377:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-17 22:15:33,727:INFO:root:user : @fernandoMRafael requested a withdrawal of : 1623671739 to wallet HPU93YMmVdow1uE3b2bk63iWAnzYo2KKDzdGhHXzJcuC
+2024-04-17 23:40:42,163:INFO:root:user : @Dopaaround registered
+2024-04-18 00:33:27,569:INFO:root:user : @Paritosh_sol registered
+2024-04-18 06:05:21,649:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-18 06:05:21,655:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x000001F097FF6F00> files=None request_timeout=300
+2024-04-18 11:40:27,508:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 11:49:28,661:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-18 11:49:28,662:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x00000244C0668140> files=None request_timeout=300
+2024-04-18 12:04:13,072:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 12:05:05,376:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 12:35:06,473:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 12:37:14,314:INFO:root:user : @laaazim requested a withdrawal of : 106029387368 to wallet 9UHj6NTHhJaPWdcHDTHv3zxBJsUKPYuMHoLobM1ZN6vc
+2024-04-18 12:37:40,310:INFO:root:user : @laaazim requested a withdrawal of : 106029387368 to wallet 9UHj6NTHhJaPWdcHDTHv3zxBJsUKPYuMHoLobM1ZN6vc
+2024-04-18 13:21:30,015:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 19:25:50,942:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-18 19:25:50,985:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x000001976AC95760> files=None request_timeout=300
+2024-04-18 19:42:48,963:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 19:56:14,543:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-18 19:56:14,546:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000023BD0C5B5F0> files=None request_timeout=300
+2024-04-18 20:58:14,101:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 21:06:15,337:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-18 21:06:15,338:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000019FE4463CB0> files=None request_timeout=300
+2024-04-18 21:06:20,824:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 21:08:21,131:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-18 21:08:21,131:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x000001CC837652E0> files=None request_timeout=300
+2024-04-18 21:09:21,542:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-18 22:06:35,070:INFO:root:user : @justanoo registered
+2024-04-19 01:51:04,679:INFO:root:user : @SemutKekejangan requested a withdrawal of : 166238101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 01:51:26,113:INFO:root:user : @SemutKekejangan requested a withdrawal of : 166238101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 01:57:00,135:INFO:root:user : @SemutKekejangan requested a withdrawal of : 168238101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 02:10:32,508:INFO:root:user : @SemutKekejangan requested a withdrawal of : 172238101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 02:11:04,299:INFO:root:user : @The_Crypto_Joker01 requested a withdrawal of : 5817111989 to wallet UFFhDwSSL6vdTv7rosdqu8EKWMFDB6AAxw9d5461nfB
+2024-04-19 04:19:06,802:INFO:root:user : @Danktastic_21 requested a withdrawal of : 1645987839 to wallet 2xBtZGchsmw3uwnNfQ8uY1LBpcVFCZXGeVtCGNdAXqWq
+2024-04-19 05:39:02,402:INFO:root:user : @SemutKekejangan requested a withdrawal of : 214258101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 09:16:23,313:INFO:root:user : @GambleAddicte registered
+2024-04-19 10:31:11,344:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-19 10:31:11,355:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x000001F268E32B70> files=None request_timeout=300
+2024-04-19 13:12:42,797:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-19 13:16:25,019:INFO:root:user : @SatoshiNakamotor requested a withdrawal of : 2769245397 to wallet F4XFG6VdwjpueoCgRV9QQFiharEUZCFdnaDs76fjtY5r
+2024-04-19 13:30:47,162:INFO:root:user : @James777777777777777 requested a withdrawal of : 95881910259 to wallet HPeUGZycXFEKgkmrkwM5B3bojsd9toaHk5vXQeW76mP5
+2024-04-19 13:31:14,503:INFO:root:user : @James777777777777777 requested a withdrawal of : 95881910259 to wallet HPeUGZycXFEKgkmrkwM5B3bojsd9toaHk5vXQeW76mP5
+2024-04-19 13:52:16,635:INFO:root:user : @generalsahu requested a withdrawal of : 5631455831 to wallet Fj2aFNovVMvghHkvDmaNg8bVSkAaMoHatcrAyybA7Ki1
+2024-04-19 14:07:14,327:INFO:root:user : @SemutKekejangan requested a withdrawal of : 247168101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 14:07:20,095:INFO:root:user : @SemutKekejangan requested a withdrawal of : 247168101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 14:07:47,112:INFO:root:user : @SemutKekejangan requested a withdrawal of : 247168101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 14:23:02,976:INFO:root:user : @Germantor_000 requested a withdrawal of : 12305500000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
+2024-04-19 14:54:10,966:INFO:root:user : @Germantor_000 requested a withdrawal of : 22355500000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
+2024-04-19 15:00:59,035:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-19 15:01:12,324:INFO:root:user : @Germantor_000 requested a withdrawal of : 22355500000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
+2024-04-19 15:01:27,773:INFO:root:user : @Germantor_000 requested a withdrawal of : 22355500000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
+2024-04-19 15:01:57,752:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-19 15:03:14,185:INFO:root:user : @SemutKekejangan requested a withdrawal of : 261168101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 15:03:29,483:INFO:root:user : @SemutKekejangan requested a withdrawal of : 261168101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 15:03:39,901:INFO:root:user : @SemutKekejangan requested a withdrawal of : 261168101422 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-04-19 15:06:57,404:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-19 15:27:09,108:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 52635437918 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-04-19 15:34:15,829:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 54635437918 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-04-19 15:40:56,615:INFO:root:user : @Nugget744 registered
+2024-04-19 15:50:56,566:INFO:root:user : @froggish_spl registered
+2024-04-19 15:52:46,718:INFO:root:user : @tiktakhead requested a withdrawal of : 776026048 to wallet E7XHCTyB1qfGtkYCMi7z5L5MN6AJ5btZFobsPJpZ94Q2
+2024-04-19 15:56:34,650:INFO:root:user : @Nugget744 requested a withdrawal of : 6374 to wallet GZKW2bc4h8B6xDnhCjCHSaB5NNWBYRwL8w8Tyotb7194
+2024-04-19 17:14:31,844:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-19 17:14:45,031:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-19 17:14:58,701:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-19 17:18:29,322:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-19 17:22:00,393:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-19 17:29:16,891:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-19 18:42:46,857:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 70785448524 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-19 19:01:16,536:INFO:root:user : @SatoshiNakamotor requested a withdrawal of : 2769251771 to wallet F4XFG6VdwjpueoCgRV9QQFiharEUZCFdnaDs76fjtY5r
+2024-04-19 20:41:23,183:INFO:root:user : @ToNs42 registered
+2024-04-19 20:51:01,286:INFO:root:user : @ToNs42 requested a withdrawal of : 2875000000 to wallet GgvSPDCN1dDcNsPtuTrNgo3vRmVVvpHwdVaau4YXFN9a
+2024-04-19 21:42:57,485:INFO:root:user : @TikoSmith2 registered
+2024-04-19 21:47:28,944:INFO:root:user : @Katja55 registered
+2024-04-19 22:33:20,036:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 77285448524 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-19 23:27:52,797:INFO:root:user : @Erinayo1234 requested a withdrawal of : 130791952 to wallet GTk6r1Mht7cn9uhD7qXXEL3Eypy8FtiTxfZJXGXebsS4
+2024-04-20 00:27:18,625:INFO:root:user : @SatoshiNakamotor requested a withdrawal of : 7769251771 to wallet F4XFG6VdwjpueoCgRV9QQFiharEUZCFdnaDs76fjtY5r
+2024-04-20 00:35:33,799:INFO:root:user : @ToNs42 requested a withdrawal of : 15980500000 to wallet GgvSPDCN1dDcNsPtuTrNgo3vRmVVvpHwdVaau4YXFN9a
+2024-04-20 01:18:08,927:INFO:root:user : @Astrongmedia requested a withdrawal of : 46155286 to wallet GtNdFtkB8Ncs33vDruwcb4xcxrYmXuYCahwg53BU3oeB
+2024-04-20 02:23:36,120:INFO:root:user : @bigromio requested a withdrawal of : 96677935 to wallet 745PKx8JxKXZCd5RSYjDAiRG2eiyK5B1DSpWxKfEq7q3
+2024-04-20 02:23:53,098:INFO:root:user : @bigromio requested a withdrawal of : 96677935 to wallet 745PKx8JxKXZCd5RSYjDAiRG2eiyK5B1DSpWxKfEq7q3
+2024-04-20 03:12:18,352:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-20 03:12:30,324:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-20 03:13:29,035:INFO:root:user : @ToNs42 requested a withdrawal of : 16005500000 to wallet GgvSPDCN1dDcNsPtuTrNgo3vRmVVvpHwdVaau4YXFN9a
+2024-04-20 04:27:23,604:INFO:root:user : @UNKNOWNASSISTANT requested a withdrawal of : 115345448524 to wallet G9AoJL2gJv1RqPEMwz5ijqL73JJpFFFqdAevf9VSsZBM
+2024-04-20 07:59:39,807:INFO:root:user : @Yacine_d1 requested a withdrawal of : 22189665687 to wallet 6Yj5fCmu1BmeULftTFHVcbPaHsPCsc8CWtY4jLfQRkso
+2024-04-20 08:01:46,335:INFO:root:user : @Yacine_d1 requested a withdrawal of : 22189665687 to wallet 6Yj5fCmu1BmeULftTFHVcbPaHsPCsc8CWtY4jLfQRkso
+2024-04-20 10:17:54,833:INFO:root:user : @SatoshiNakamotor requested a withdrawal of : 17769251771 to wallet F4XFG6VdwjpueoCgRV9QQFiharEUZCFdnaDs76fjtY5r
+2024-04-20 10:55:15,810:INFO:root:user : @Mossneon requested a withdrawal of : 26503777882 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM

@@ -24,6 +24,12 @@ header = {
 }
 admins = ["@MINI_BTC_CHAD", "@LongIt345", "@CryptoSniper000"]
 
+raider_cooldown_tracker = {"@Bligga": 0,
+                           "@BarberQc": 0,
+                           "@Naterulestheworld": 0,
+                           "@laaazim": 0,
+                           "@KevvnnDR":0}
+
 
 def get_price():
     token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
@@ -48,28 +54,61 @@ def get_trending_tokens():
                            headers=header)
 
 
+# special command for detecting raiders
+@bot.message_handler(commands=['raid'])
+def raid(message):
+    reward_amount = 100000000  # 100 m msats
+    cooldown = 60 * 15  # 15 minutes
+    chat_id = message.chat.id
+    user = "@" + message.from_user.username
+    if chat_id == -1002130978267:
+        if user in raider_cooldown_tracker:
+            if user in raider_cooldown_tracker:  # means they have used the bot
+                last_time = int(raider_cooldown_tracker[user])
+                if time.time() > last_time + cooldown:
+                    raider_cooldown_tracker[user] = time.time()
+                    tipper = "@CryptoSniper000"
+                    if funds_database.check_user_balance(tipper) < reward_amount:
+                        return
+                    amount_to_tip = reward_amount
+                    new_tipper_balance = int(funds_database.check_user_balance(tipper)) - int(amount_to_tip)
+                    username_to_tip_balance = int(funds_database.check_user_balance(user))
+                    new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
+                    funds_database.update_balance(tipper, new_tipper_balance)
+                    funds_database.update_balance(user, new_username_to_tip_balance)
+                    sats_balance = float(reward_amount)
+                    amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * get_price())
+                    substring = f"{amount_in_dollars:.2f}".replace(".", "\\.")
+                    bot.send_message(chat_id,
+                                     f"🤖 Raider: {user} , has been tipped *100000000*mSats \\(${substring}\\) for raiding\\!",
+                                     parse_mode='MarkdownV2')
+                    # chenge new time to this time creadit raider inform them they got credited and the next time
+                    # until they get credited if they radi again (they can radie again before creditign time
+
+
 # shill bot commands in main :
 
 @bot.message_handler(commands=['special_x'])
 def rain(message):
     chat_id = message.chat.id
     if chat_id == -1002130978267:
-        bot.send_message(chat_id, "*X/Twitter \\- Special Bounties:*\n\nWe have special X bounties dedicated to Michael "
-                                  "Saylor and DaVinci that pay *5x* 📈 the rate of a regular X bounty\\.\n Simply type 'X\\-"
-                                  "Saylor' or 'X\\-Davinci' in the rewards channel, and attach the relevant "
-                                  "screenshot\\.\nYou must abide by the following requirements with your X post:\n🟣 Use "
-                                  "the following hashtags in your reply:\n\\$mBTC \\#Bitcoin \\#BitcoinOnSolana \\#sol "
-                                  "\\#meme \\#utility\n🟣 Tag our official Twitter \\- @mbtc\\_sol\n🟣 X "
-                                  "account must not be shadow banned\\.\nCheck here: Shadowban \\("
-                                  "https://shadowban\\.yuzurisa\\.com/\\)\n🟣 Ensure your reply is posted on a ["
-                                  "@Davincij15 Profile](https://twitter\\.com/Davincij15) or [@saylor Profile]("
-                                  "https://twitter\\.com/saylor) post less than 6 hours old\n🟣 And most importantly, "
-                                  "please attach the Saylor GIF for your Saylor reply or Davinci GIF for your Davinci "
-                                  "reply\\. Download links below\\!\n\nDaVinci GIF: [Link]("
-                                  "https://imgur\\.com/IlkOdMI)\nSaylor GIF: [Link]("
-                                  "https://imgur\\.com/a/PglCK7N)\n\nThis bounty can only be claimed once every "
-                                  "24 hours per user\nYou will receive 💰 500,000,000 mSatoshis on submission of a "
-                                  "valid screenshot\\!"
+        bot.send_message(chat_id,
+                         "*X/Twitter \\- Special Bounties:*\n\nWe have special X bounties dedicated to Michael "
+                         "Saylor and DaVinci that pay *5x* 📈 the rate of a regular X bounty\\.\n Simply type 'X\\-"
+                         "Saylor' or 'X\\-Davinci' in the rewards channel, and attach the relevant "
+                         "screenshot\\.\nYou must abide by the following requirements with your X post:\n🟣 Use "
+                         "the following hashtags in your reply:\n\\$mBTC \\#Bitcoin \\#BitcoinOnSolana \\#sol "
+                         "\\#meme \\#utility\n🟣 Tag our official Twitter \\- @mbtc\\_sol\n🟣 X "
+                         "account must not be shadow banned\\.\nCheck here: Shadowban \\("
+                         "https://shadowban\\.yuzurisa\\.com/\\)\n🟣 Ensure your reply is posted on a ["
+                         "@Davincij15 Profile](https://twitter\\.com/Davincij15) or [@saylor Profile]("
+                         "https://twitter\\.com/saylor) post less than 6 hours old\n🟣 And most importantly, "
+                         "please attach the Saylor GIF for your Saylor reply or Davinci GIF for your Davinci "
+                         "reply\\. Download links below\\!\n\nDaVinci GIF: [Link]("
+                         "https://imgur\\.com/IlkOdMI)\nSaylor GIF: [Link]("
+                         "https://imgur\\.com/a/PglCK7N)\n\nThis bounty can only be claimed once every "
+                         "24 hours per user\nYou will receive 💰 500,000,000 mSatoshis on submission of a "
+                         "valid screenshot\\!"
                          , parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
@@ -203,14 +242,14 @@ def leader_board(message):
         top_users = leaderboard.get_top_five()
         number_shillers = leaderboard.get_total_users()
         time_left = determine_time_left_till_reset()
-        #convert total earned to dollars too
+        # convert total earned to dollars too
         sats_balance = float(total_earned)
         amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * get_price())
         total_earned_dollars = f"{amount_in_dollars:.2f}".replace(".", "\\.")
         bot.send_message(chat_id,
                          f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}*mSats \\(${total_earned_dollars}\\)\n📚 Total "
                          f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards"
-                         f"group]("
+                         f" group]("
                          f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                          parse_mode='MarkdownV2', disable_web_page_preview=True)
 
@@ -352,7 +391,8 @@ def burn(message):
             if funds_database.check_user_exist(username_to_tip):
                 amount_to_tip = arguments[1]
                 if not amount_to_tip.isnumeric():
-                    bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
+                    bot.send_message(chat_id,
+                                     f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
                                      parse_mode='MarkdownV2')
                     return
                 else:
@@ -375,9 +415,10 @@ def burn(message):
                                  "User has not setup their tipping wallet.\nUse the bot : https://t.me/mBTCTipbot ")
                 return
         else:
-            bot.send_message(chat_id, "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
-                                      "need to be tipped by a team member before you can send mBTC to other users in the "
-                                      "group")
+            bot.send_message(chat_id,
+                             "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
+                             "need to be tipped by a team member before you can send mBTC to other users in the "
+                             "group")
             return
 
 
@@ -409,7 +450,8 @@ def tipping(message):
             if funds_database.check_user_exist(username_to_tip):
                 amount_to_tip = arguments[2]
                 if not amount_to_tip.isnumeric():
-                    bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
+                    bot.send_message(chat_id,
+                                     f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
                                      parse_mode='MarkdownV2')
                     return
                 else:
@@ -430,9 +472,10 @@ def tipping(message):
                                  "User has not setup their tipping wallet.\nUse the bot : https://t.me/mBTCTipbot ")
                 return
         else:
-            bot.send_message(chat_id, "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
-                                      "need to be tipped by a team member before you can send mBTC to other users in the "
-                                      "group")
+            bot.send_message(chat_id,
+                             "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
+                             "need to be tipped by a team member before you can send mBTC to other users in the "
+                             "group")
             return
 
 
@@ -464,7 +507,8 @@ def rain(message):
                             bot.send_message(chat_id, f"{tipper},You cannot tip yourself!")
                             return
                 if not arguments[len(arguments) - 1].isnumeric():
-                    bot.send_message(chat_id, f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
+                    bot.send_message(chat_id,
+                                     f"*Requires an Integer Input*\nPlease Provide a whole number in mSatoshis\\.",
                                      parse_mode='MarkdownV2')
                     return
                 amount_to_tip = int(arguments[len(arguments) - 1])
@@ -475,16 +519,18 @@ def rain(message):
                         new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
                         funds_database.update_balance(tipper, new_tipper_balance)
                         funds_database.update_balance(arguments[index], new_username_to_tip_balance)
-                    bot.send_message(chat_id, f"{tipper} has tipped {amount_to_tip} mSatoshis each to each selected user.")
+                    bot.send_message(chat_id,
+                                     f"{tipper} has tipped {amount_to_tip} mSatoshis each to each selected user.")
                 else:  # not enough funds
                     bot.send_message(chat_id,
                                      f"*Insufficient funds*\nThe cumulative amount tipped is greater than your balance\\.",
                                      parse_mode='MarkdownV2')
                     return
         else:
-            bot.send_message(chat_id, "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
-                                      "need to be tipped by a team member before you can send mBTC to other users in the "
-                                      "group")
+            bot.send_message(chat_id,
+                             "Please first Dm the : 'https://t.me/mBTCTipbot' bot to setup a wallet.\nYou will "
+                             "need to be tipped by a team member before you can send mBTC to other users in the "
+                             "group")
             return
 
 

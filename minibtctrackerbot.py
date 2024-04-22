@@ -212,7 +212,7 @@ def mini_btc_assistant(question):
 
 
 def time_till_halving():
-    return str(strftime('%d', localtime(halving_epoch - time.time()))).replace("-", ",") + " days"
+    return " few hours"
 
 
 def send_test_rewards_info():
@@ -275,7 +275,7 @@ def send_twitter_raid_info():
                      f"[Shadowban](https://shadowban\\.yuzurisa\\.com/)\n🟣 And most importantly, please attach the recently made "
                      f"comparison chart in your shill post\\!\n\nComparison chart download: [Link]("
                      f"https://i\\.ibb\\.co/PtzJw86/Comparison\\.png)\nYou are early download: [Link]("
-                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *100000000* mSatoshis on "
+                     f"https://i\\.ibb\\.co/j3L7N6V/Programmed-to-send-2\\.png)\n\nYou will receive *💰 25,000,000* mSatoshis on "
                      f"submission of the"
                      f"screenshot\\.",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
@@ -288,7 +288,7 @@ def stats(message):
     holders = str(get_holders())
     burn = get_burn_stat()
     bot.send_message("-1002130978267",  # add holder count
-                     f"*__🟣 mBTC Statistics:__*\n\n⌛️ Time until halving : *{time_till_h}*\n💰 Supply left in "
+                     f"*__🟣 mBTC Statistics:__*\n\n💰 Supply left in "
                      f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10500*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
@@ -339,7 +339,6 @@ def get_price():
 
 
 def poll():  # problem with slscan glitching out idk why
-
     start_time = time.time()  # use this for lp pool and other stats
     start_time2 = time.time()
     start_time3 = time.time()
@@ -355,13 +354,13 @@ def poll():  # problem with slscan glitching out idk why
             current_top_user = leaderboard.get_first_place()
         else:
             temp_best = leaderboard.get_first_place()
-
             if temp_best != current_top_user:
                 previous_best = current_top_user
                 current_top_user = temp_best
                 current_top_user = current_top_user.replace("_", "\\_")
                 previous_best = previous_best.replace("_", "\\_")
-                bot.send_message("-1002130978267",
+                if previous_best != "":
+                    bot.send_message("-1002130978267",
                                  f"🥇 {current_top_user} has replaced {previous_best} as a top shiller\\!",
                                  parse_mode='MarkdownV2')
         token_address = "mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
@@ -390,6 +389,8 @@ def poll():  # problem with slscan glitching out idk why
                         huge = ""
                         if float(transfer["amount"]) / 10 ** 11 >= 30:
                             huge = "Mega "
+                        if float(transfer["amount"]) / 10 ** 11 >= 50:
+                            huge = "Terra "
                         bot.send_message("-1002130978267",
                                          f"{string_builder} {huge}Whale Buy \\! *{transfer_amount} mBTC* Transferred to ["
                                          f"Address]({solsca_link})",
@@ -400,7 +401,7 @@ def poll():  # problem with slscan glitching out idk why
             holders = str(get_holders())
             burn = get_burn_stat()
             bot.send_message("-1002130978267",  # add holder count
-                             f"*__🟣 mBTC Statistics:__*\n\n⌛️ Time until halving : *{time_till_h}*\n💰 Supply left in "
+                             f"*__🟣 mBTC Statistics:__*\n\n💰 Supply left in "
                              f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10500*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time = time.time()
@@ -421,7 +422,7 @@ def poll():  # problem with slscan glitching out idk why
             total_earned_dollars = f"{amount_in_dollars:.2f}".replace(".", "\\.")
             bot.send_message("-1002130978267",
                              f"🟣 *__Shill to earn Leaderboard__*\n\n{top_users}\n💰 Total earned: *{total_earned}*mSats \\(${total_earned_dollars}\\)\n📚 Total "
-                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards"
+                             f"tasks completed: *{task_count}*\n👯 Number of shillers: *{number_shillers}*\n🕐 Time left: *{time_left}*\n\n👯 [Join rewards "
                              f"group]("
                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
