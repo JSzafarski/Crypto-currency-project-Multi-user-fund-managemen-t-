@@ -27,8 +27,12 @@ def create_wallet():  # this is the wallet the user will deposit sol to
     private_key = base58.b58encode(encoded_keypair2).decode()
     return str(wallet_address), str(private_key)
 
+def transfer_to_master(user_priv_key,amount): # identical to withdraw function but it will have one withdrawal adress
+    # which si the madter wallet
+    return True
+
 
 def withdraw(withdrawal_address, user_name):  # give a confirmation /failed message
-    # check if the adress is valid and make one more prompt confiriming the withdrawal then withdraw the sol from thier wallet to another one
-    # return true if all worked (also retunt the tx if posible)
-    pass
+    return True, "https://solscan.io/tx/3rtxwvKsttg92MnijbaLHAcNQRJaRWPD9KMKWt1q2qAzNL4e7t1YKkFQZhxs5eFNRqJimZqN5JLC5S4zcAQdrBGw"
+
+# every time a user looses their loss i places to a loss engine queue and their vitual balance is immidiately reduced

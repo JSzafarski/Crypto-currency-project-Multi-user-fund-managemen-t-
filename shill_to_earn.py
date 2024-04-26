@@ -11,6 +11,8 @@ import raidleaderboard
 import hashlib
 import image_verification
 
+paused_users = []  # user to keep specific memebers paused.
+
 leaderboard = raidleaderboard.ShillStats()
 my_token = '6896610984:AAHOE6ft3wbyXMuAC1FBssFJ4RA5FEWMC-w'
 bot = telebot.TeleBot(my_token)
@@ -37,11 +39,12 @@ allowable_submissions = {
     "cntoken.io": 150000,
     "coinvote": 30000,
     "x": 25000000,
-    "cmc-comment": 200000000,
+    "cmc-comment": 2000000000,
     "cmc-watchlist": 250000000,
     "x-follow": 125000000,
     "x-saylor": 250000000,
-    "x-davinci": 250000000
+    "x-davinci": 250000000,
+    "medium": 2000000000
 }
 """"reddit-upvote": 25000000,
     "reddit-commnet": 25000000,
@@ -77,16 +80,17 @@ time_outs = {  # ( in epoch time)
     "cntoken.io": thirty_minutes,
     "coinvote": twenty_four_hours,
     "x": five_minutes,
-    "cmc-comment": fiveteen_minutes,
+    "cmc-comment": six_hours,
     "cmc-watchlist": infinity,
     "x-follow": infinity,
     "x-saylor": twenty_four_hours,
-    "x-davinci": twenty_four_hours
+    "x-davinci": twenty_four_hours,
+    "medium": infinity
 }
 choices = ['dextools', 'dexscreener', 'birdeye', 'gemsradar', 'coinalpha', 'coincatapult', 'coinmoonhunt',
            'coindiscovery',
            'coinbazooka', 'coinscope', 'ntm.ai', 'top100token', 'rugfreecoins', 'coinboom', 'coinmooner', 'coinhunt',
-           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow", "x-saylor", "x-davinci"]
+           "CNToken.io", "Coinvote", "x", "cmc-comment", "cmc-watchlist", "x-follow", "x-saylor", "x-davinci","medium"]
 
 
 @bot.message_handler(commands=['expense'])

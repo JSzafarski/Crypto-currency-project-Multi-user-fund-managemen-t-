@@ -289,7 +289,7 @@ def stats(message):
     burn = get_burn_stat()
     bot.send_message("-1002130978267",  # add holder count
                      f"*__🟣 mBTC Statistics:__*\n\n💰 Supply left in "
-                     f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10500*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
+                     f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10488\\.9*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
                      parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
@@ -402,7 +402,7 @@ def poll():  # problem with slscan glitching out idk why
             burn = get_burn_stat()
             bot.send_message("-1002130978267",  # add holder count
                              f"*__🟣 mBTC Statistics:__*\n\n💰 Supply left in "
-                             f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10500*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
+                             f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10488\\.99*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time = time.time()
         if time.time() > start_time2 + (63 * 60):

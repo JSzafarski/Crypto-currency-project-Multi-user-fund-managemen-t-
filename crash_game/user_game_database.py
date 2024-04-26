@@ -12,7 +12,8 @@ class VirtualBalance:
                 virbalance TEXT,
                 walletaddress TEXT,
                 privatekey TEXT,
-                betsize TEXT
+                betsize TEXT,
+                walletbalance TEXT
                 )""")
             # virtual balance has to be a reflection of real assets
             self.connection.commit()
@@ -27,6 +28,12 @@ class VirtualBalance:
             return False
         else:
             return True
+
+    def return_all_users(self): #used for updating the virtual balance
+        sql = "SELECT * FROM virtualbalancetable"
+        self.cursor.execute(sql)
+        users = self.cursor.fetchall()  # should be only one ofc
+        return users
 
     def add_user(self, telegram_username, wallet, private_key):  # INITIALISE NEW USER
         sql = "INSERT INTO virtualbalancetable VALUES (?,?,?,?,?)"
