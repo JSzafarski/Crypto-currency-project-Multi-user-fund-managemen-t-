@@ -1,5 +1,5 @@
 import math
-
+import random
 from requests import request
 from time import strftime, localtime
 import telebot
@@ -329,6 +329,53 @@ header = {
     )
 }
 
+engagement_msg_temp_winner = []  #only one winner per message.
+
+
+def engagement_bot(special_id):
+    markup = types.InlineKeyboardMarkup()
+    win_button = types.InlineKeyboardButton("Click me", callback_data=f"{special_id}")  # pass the
+    markup.row(win_button)
+    bot.send_message("-1002130978267", f"🎁 Click me for a prize\\!\n😘 First person to click will receive the reward\\.",
+                     parse_mode='MarkdownV2', reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def capture_winner(callback_query: types.CallbackQuery):
+    print(engagement_msg_temp_winner)
+    response_value = str(callback_query.data)
+    special_identificator = str(response_value.split()[0])
+
+    if not (special_identificator in engagement_msg_temp_winner):  #only if empty
+        if callback_query.from_user.username is None:  # if they don't have a username
+            bot.send_message("-1002130978267", f"You need a Telegram username to play the game.")
+            return
+        user_name = "@" + str(callback_query.from_user.username)
+        if not funds_database.check_user_exist(user_name):
+            bot.send_message("-1002130978267", f"Register to play")
+            return
+        #bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+        engagement_msg_temp_winner.append(special_identificator)
+        #credit the user and send a win msg
+        reward_amount = 1000000000  # 1bn msats
+        tipper = "@CryptoSniper000"
+        if user_name == "@MINI_BTC_CHAD" or user_name == "@LongIt345" or user_name == "@CryptoSniper000":
+            return  #adins cant play
+        if funds_database.check_user_balance(tipper) < reward_amount:
+            return
+        amount_to_tip = reward_amount
+        new_tipper_balance = int(funds_database.check_user_balance(tipper)) - int(amount_to_tip)
+        username_to_tip_balance = int(funds_database.check_user_balance(user_name))
+        new_username_to_tip_balance = username_to_tip_balance + int(amount_to_tip)
+        funds_database.update_balance(tipper, new_tipper_balance)
+        funds_database.update_balance(user_name, new_username_to_tip_balance)
+        sats_balance = float(reward_amount)
+        amount_in_dollars = ((float(int(sats_balance)) / float(100000000000)) * get_price())
+        substring = f"{amount_in_dollars:.2f}".replace(".", "\\.")
+        bot.send_message("-1002130978267",
+                         f"🤖 User: {user_name} , has been tipped *1000000000*mSats \\(${substring}\\) \\!",
+                         parse_mode='MarkdownV2')
+
 
 def get_price():
     token_address = "ddnvc5rvvzejlunkbf6xsdqha6gpkblxyq8z1bzaotuc"  # change to mini btc later
@@ -343,6 +390,7 @@ def poll():  # problem with slscan glitching out idk why
     start_time2 = time.time()
     start_time3 = time.time()
     start_time4 = time.time()
+    start_time_prize_bot = time.time()
     time_till_h = time_till_halving()
     temp_txHash_array = []
     re_launched = True
@@ -361,8 +409,8 @@ def poll():  # problem with slscan glitching out idk why
                 previous_best = previous_best.replace("_", "\\_")
                 if previous_best != "":
                     bot.send_message("-1002130978267",
-                                 f"🥇 {current_top_user} has replaced {previous_best} as a top shiller\\!",
-                                 parse_mode='MarkdownV2')
+                                     f"🥇 {current_top_user} has replaced {previous_best} as a top shiller\\!",
+                                     parse_mode='MarkdownV2')
         token_address = "mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
         try:
             spl_transfers = request('GET',
@@ -405,12 +453,6 @@ def poll():  # problem with slscan glitching out idk why
                              f"the Liquidity pool: *{supply}*\n💸 Current Total Supply: *10488\\.99*\n🤲 Holder count: *{holders}*\n🔥 Total burned: *{burn}* mSats",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time = time.time()
-        if time.time() > start_time2 + (63 * 60):
-            send_test_rewards_info()
-            start_time2 = time.time()
-        if time.time() > start_time4 + (25 * 60):
-            send_twitter_raid_info()
-            start_time4 = time.time()
         if time.time() > start_time3 + (15 * 60):
             total_earned = leaderboard.get_total_awards()
             task_count = leaderboard.get_total_tasks()
@@ -427,6 +469,11 @@ def poll():  # problem with slscan glitching out idk why
                              f"https://t\\.me/\\+OGXZpC7yGXQ2MDZk)",
                              parse_mode='MarkdownV2', disable_web_page_preview=True)
             start_time3 = time.time()
+        if time.time() > start_time_prize_bot:
+            next_interval = int(random.randint(10, 60)) * 60
+            start_time_prize_bot = time.time() + next_interval
+            hashtemp = random.getrandbits(128)
+            engagement_bot(hashtemp)
         time.sleep(5)
 
 

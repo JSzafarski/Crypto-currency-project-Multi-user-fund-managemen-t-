@@ -1,9 +1,8 @@
-# here i will process actual blockchain info and also grind new user wallet witht eh priv keys
 from helius import BalancesAPI
 from solana.rpc.api import Client, Keypair
 import base58
 
-client2 = Client("https://mainnet.helius-rpc.com/?api-key=f61ec600-eb2e-492c-b5ca-5c6393d1b7e1")
+client = Client("https://api.mainnet-beta.solana.com")
 balances_api = BalancesAPI("f61ec600-eb2e-492c-b5ca-5c6393d1b7e1")
 
 
@@ -14,7 +13,7 @@ def return_solana_balance(wallet_address):  # up to 25 addresses return a string
 
 
 def create_wallet():  # this is the wallet the user will deposit sol to
-    if client2:
+    if client:
         print("Connected to Solana cluster.")
     else:
         print("Unable to connect to Solana cluster.")
@@ -26,13 +25,3 @@ def create_wallet():  # this is the wallet the user will deposit sol to
     encoded_keypair2 = private_key_bytes + public_key_bytes
     private_key = base58.b58encode(encoded_keypair2).decode()
     return str(wallet_address), str(private_key)
-
-def transfer_to_master(user_priv_key,amount): # identical to withdraw function but it will have one withdrawal adress
-    # which si the madter wallet
-    return True
-
-
-def withdraw(withdrawal_address, user_name):  # give a confirmation /failed message
-    return True, "https://solscan.io/tx/3rtxwvKsttg92MnijbaLHAcNQRJaRWPD9KMKWt1q2qAzNL4e7t1YKkFQZhxs5eFNRqJimZqN5JLC5S4zcAQdrBGw"
-
-# every time a user looses their loss i places to a loss engine queue and their vitual balance is immidiately reduced

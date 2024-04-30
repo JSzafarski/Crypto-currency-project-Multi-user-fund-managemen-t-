@@ -28,7 +28,7 @@ raider_cooldown_tracker = {"@Bligga": 0,
                            "@BarberQc": 0,
                            "@Naterulestheworld": 0,
                            "@laaazim": 0,
-                           "@KevvnnDR":0}
+                           "@KevvnnDR": 0}
 
 
 def get_price():

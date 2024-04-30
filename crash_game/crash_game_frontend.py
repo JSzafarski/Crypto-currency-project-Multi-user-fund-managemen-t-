@@ -6,6 +6,7 @@ import threading
 import time
 import user_game_database
 import solanahandler
+import transferfunds
 
 game_users = user_game_database.VirtualBalance()
 
@@ -14,8 +15,10 @@ bot = telebot.TeleBot(my_token)
 
 # when is a good time to transfer the losses to master wallet?
 
-deposit_queue = {}  # i rather make a dict tbh as i need to match a blance snpashot to a username
-# [[username,their private key(to send funds),amount lost in sol]]
+
+deposit_queue = {}
+
+withdrawal_queue = {}
 
 current_players = {  # will show user who are currently in the game
 
@@ -37,9 +40,7 @@ def crash_game(message):
     if not game_users.check_user_exist(user_name):
         fresh_address, fresh_private_key = solanahandler.create_wallet()
         if fresh_address != "" and fresh_private_key != "":
-            game_users.add_user(user_name, fresh_address, fresh_private_key)
-            # will ad artificial balance to test it
-            game_users.update_balance(user_name, "20.0")
+            game_users.add_user(user_name, fresh_address, fresh_private_key, str(chat_id))
 
     # fetch master wallet info to determine max win,max apes
     master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
@@ -117,24 +118,21 @@ def hide_settings(callback_query: types.CallbackQuery):
     bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
 
 
-def withdrawal_handler(message):  # work on this after gym
+def withdrawal_handler(message):
     chat_id = message.chat.id
     message_id = message.message_id
     user_name = "@" + message.from_user.username
     user_input = message.text  # verify if the input is on curve
     failed_test = False
-    failed_tx = False
     if 44 >= len(str(user_input)) >= 32:
         key = Pubkey.from_string(str(user_input))
         if key.is_on_curve():
-            # process the tx
-            result, tx = solanahandler.withdraw(user_input, user_name)
-            if result is True:
-                bot.send_message(chat_id, f"✅ Funds Withdrawn: {tx}", disable_web_page_preview=True)
+            if user_name not in withdrawal_queue:
+                withdrawal_queue[user_name] = user_input
+                bot.send_message(chat_id, f"Withdrawal will be processed shortly...")
             else:
-                bot.send_message(chat_id,
-                                 f"*Transaction Failed*, Please retry the process \\(Solana congestion likely\\)",
-                                 parse_mode='MarkdownV2')
+                bot.send_message(chat_id, f"Please wait for your withdrawal request to be processed")
+
             markup = types.InlineKeyboardMarkup()
             Place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
             start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
@@ -336,28 +334,74 @@ def edit_message(chat_id, new_text, msg_id, user_name):
         return
 
 
-def check_for_deposits():  # will djur user balance if they deposited money
-    all_user_accounts = game_users.return_all_users()
-    for user in all_user_accounts:
-        user_wallet = str(user[2])
-        current_balance_snapshot = float(solanahandler.return_solana_balance(user_wallet))
-        if current_balance_snapshot > 0:  # this means money has been deposited.
-            # check if the wallet balance is non-zero ( this means money has ben deposited into the wallet)
-            if str(user[0]) not in deposit_queue:  # we will ignore if they have some pending deposit
-                # add to the queue
-                deposit_queue[str(user[0])] = current_balance_snapshot  # snapshot of the deposit amount in sol
+def check_for_deposits():  # will update user balance if they deposited money (needs cooldown)
+    while True:
+        all_user_accounts = game_users.return_all_users()
+        for user in all_user_accounts:
+            if user not in deposit_queue:
+                user_wallet = str(user[2])
+                current_balance_snapshot = float(solanahandler.return_solana_balance(user_wallet))
+                if current_balance_snapshot > 0.01:  # this means money has been deposited.
+                    print(f"processing {user[0]} deposit of {current_balance_snapshot}")
+                    # check if the wallet balance is non-zero ( this means money has been deposited into the wallet)
+                    if str(user[0]) not in deposit_queue:  # we will ignore if they have some pending deposit
+                        # add to the queue
+                        deposit_queue[str(user[0])] = [current_balance_snapshot,
+                                                       time.time()]  # snapshot of the deposit amount in sol
+        time.sleep(2)
 
-    # check for an incoming deposit by detection a non-zero balance in each players' wallet.
-    # transfer funds to master wallet and credit the users the amount they have deposited.
-    # once a new balance is detected in the wallet plac it onn a queue to process it and also plce the balance of the snapshot in case the user deposts again.if the once the withdraal is completed remove ti from the withdrawal quque and keep polling
 
-    pass
-
+#processing real fund transfers #
 def process_deposit():
-    #check if there is something in the queue
-    #credit verital balance after the transfer to master wallet was successful
+    minimum_cooldown = 25
+    processed_deposits = []
+    while True:
+        for incoming_deposit in deposit_queue:
+            if incoming_deposit not in processed_deposits:
+                if not (incoming_deposit in withdrawal_queue):
+                    user_to_credit = incoming_deposit
+                    account_to_credit = float(
+                        deposit_queue[incoming_deposit][0])  #key is the username of the person depositing
+                    users_private_key = game_users.get_user_keys(user_to_credit)
+                    confitmation_check = transferfunds.transfer_to_master(users_private_key, str(account_to_credit))
+                    if confitmation_check:  #confirmed so we can update their virtual balance
+                        pre_credit_balance = float(game_users.check_user_balance(user_to_credit))
+                        post_credit_balance = pre_credit_balance + (account_to_credit)
+                        game_users.update_balance(user_to_credit, str(post_credit_balance))
+                        processed_deposits.append(user_to_credit)
+                        chat_id = game_users.get_chat_id(user_to_credit)
+                        bot.send_message(chat_id,
+                                         f"Deposit of {account_to_credit} SOL has been processed and it's ready to "
+                                         f"be used")
+                    else:
+                        print(user_to_credit, "error with deposit please check!")
+        for index, processed_deposit in enumerate(processed_deposits):
+            if int(deposit_queue[processed_deposit][1]) > time.time() + minimum_cooldown:
+                del deposit_queue[processed_deposit]
+                processed_deposits.pop(index)
+        time.sleep(1)
+
 
 def process_withdrawal_request():
+    while True:
+        processed_withdrawals = []
+        for withdrawal_request in withdrawal_queue:
+            if not (withdrawal_request in deposit_queue):  #users funds aren't being processed at the moment
+                user_to_process = withdrawal_request
+                withdrawal_adress = withdrawal_queue[withdrawal_request]
+                amount = float(game_users.check_user_balance(user_to_process))
+                confirmation, tx = transferfunds.withdraw(withdrawal_adress, amount)
+                if confirmation:  #processed
+                    game_users.update_balance(user_to_process, str(0.0))
+                    processed_withdrawals.append(user_to_process)
+                    #send a conformation mdg here:
+                    chat_id = game_users.get_chat_id(user_to_process)
+                    bot.send_message(chat_id, f"✅ Funds Withdrawn: {tx}", disable_web_page_preview=True)
+                else:
+                    print(user_to_process, "error with withdrawal please check!")
+        for prcessed_withdrawal in processed_withdrawals:
+            del withdrawal_queue[prcessed_withdrawal]
+        time.sleep(1)
 
 
 def game_polling_engine():
@@ -476,5 +520,12 @@ def game_polling_engine():
 
 if __name__ == "__main__":
     t1 = threading.Thread(target=game_polling_engine)
+    t2 = threading.Thread(target=check_for_deposits)
+    t3 = threading.Thread(target=process_deposit)
+    t4 = threading.Thread(target=process_withdrawal_request)
+
+    t4.start()
+    t3.start()
+    t2.start()
     t1.start()
     bot.infinity_polling(timeout=None)

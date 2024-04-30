@@ -589,3 +589,18 @@
 2024-04-25 21:24:41,764:INFO:root:user : @Germantor_000 requested a withdrawal of : 27042028702 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
 2024-04-25 22:10:26,594:ERROR:TeleBot:Aiohttp ClientError: ClientOSError
 2024-04-25 22:10:26,606:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x00000260E05DDD60> files=None request_timeout=300
+2024-04-28 00:15:27,846:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-28 00:15:28,391:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-04-28 01:14:52,003:INFO:root:user : @Danktastic_21 requested a withdrawal of : 1646500725 to wallet 2xBtZGchsmw3uwnNfQ8uY1LBpcVFCZXGeVtCGNdAXqWq
+2024-04-28 03:04:15,791:INFO:root:user : @Mossneon requested a withdrawal of : 26624289551 to wallet 6qdCwkjd7rehKaFkK77yjjKd9MEeiq1KE6aRJqKBsPMM
+2024-04-28 05:12:43,175:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 84442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-04-28 05:16:42,894:INFO:root:user : @Stornwolf registered
+2024-04-28 12:25:30,342:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-04-28 12:25:30,342:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000018EA83D1580> files=None request_timeout=300
+2024-04-28 15:26:52,578:DEBUG:asyncio:Using proactor: IocpProactor
+2024-04-28 15:26:52,889:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-04-28 15:26:52,920:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-04-28 16:52:54,728:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 87442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-04-28 16:53:13,459:INFO:root:user : @Germantor_000 requested a withdrawal of : 41185000000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
+2024-04-28 23:02:45,533:INFO:root:user : @Germantor_000 requested a withdrawal of : 42150000000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
+2024-04-29 01:16:14,659:INFO:root:user : @laaazim requested a withdrawal of : 116721512501 to wallet 9UHj6NTHhJaPWdcHDTHv3zxBJsUKPYuMHoLobM1ZN6vc

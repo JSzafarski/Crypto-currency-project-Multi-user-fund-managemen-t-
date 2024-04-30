@@ -13,7 +13,7 @@ class VirtualBalance:
                 walletaddress TEXT,
                 privatekey TEXT,
                 betsize TEXT,
-                walletbalance TEXT
+                chatid TEXT
                 )""")
             # virtual balance has to be a reflection of real assets
             self.connection.commit()
@@ -29,15 +29,15 @@ class VirtualBalance:
         else:
             return True
 
-    def return_all_users(self): #used for updating the virtual balance
+    def return_all_users(self):  #used for updating the virtual balance
         sql = "SELECT * FROM virtualbalancetable"
         self.cursor.execute(sql)
         users = self.cursor.fetchall()  # should be only one ofc
         return users
 
-    def add_user(self, telegram_username, wallet, private_key):  # INITIALISE NEW USER
-        sql = "INSERT INTO virtualbalancetable VALUES (?,?,?,?,?)"
-        self.cursor.execute(sql, (telegram_username, 0, wallet, private_key, "0.1"))
+    def add_user(self, telegram_username, wallet, private_key, chat_id):  # INITIALISE NEW USER
+        sql = "INSERT INTO virtualbalancetable VALUES (?,?,?,?,?,?)"
+        self.cursor.execute(sql, (telegram_username, 0, wallet, private_key, "0.1", chat_id))
         self.connection.commit()
 
     def check_user_balance(self, telegram_username):
@@ -63,6 +63,12 @@ class VirtualBalance:
         self.cursor.execute(sql, [telegram_username])
         user_settings = self.cursor.fetchone()
         return user_settings[3]
+
+    def get_chat_id(self, telegram_username):
+        sql = "SELECT * FROM virtualbalancetable WHERE username =?"
+        self.cursor.execute(sql, [telegram_username])
+        user_settings = self.cursor.fetchone()
+        return user_settings[5]
 
     def update_balance(self, telegram_username, new_virtual_balance):
         sql = "UPDATE virtualbalancetable SET virbalance =? WHERE username=?"
