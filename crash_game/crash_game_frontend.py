@@ -7,8 +7,20 @@ import time
 import user_game_database
 import solanahandler
 import transferfunds
+import txhashdb
+from requests import request
+from solana.rpc.api import Client, Pubkey
+import json
+from helius import TransactionsAPI
+
+helius_key = "f61ec600-eb2e-492c-b5ca-5c6393d1b7e1"
+URI = "https://mainnet.helius-rpc.com/?api-key=" + str(helius_key)
+solana_client = Client(URI)
+transactions_api = TransactionsAPI(helius_key)
 
 game_users = user_game_database.VirtualBalance()
+
+txhash_database = txhashdb.TxHash()
 
 my_token = '7090902228:AAHIF5lOVRa5yMIUAGj29Y3r_d1GRRp86uU'
 bot = telebot.TeleBot(my_token)
@@ -30,7 +42,9 @@ min_bet = 0.01  # this is standard across all players
 
 
 @bot.message_handler(commands=['start'])
-def crash_game(message):
+def crash_game(
+        message):  #every user that makes accoutn will have small amout of sol credited so it account for the intial transfer
+    intial_transfer = 0.001
     chat_id = message.chat.id
     # grab a username here
     if message.from_user.username is None:  # if they don't have a username
@@ -41,6 +55,8 @@ def crash_game(message):
         fresh_address, fresh_private_key = solanahandler.create_wallet()
         if fresh_address != "" and fresh_private_key != "":
             game_users.add_user(user_name, fresh_address, fresh_private_key, str(chat_id))
+            #transfer small amount of sol fro master to help then the transaction process
+            transferfunds.withdraw(fresh_address, intial_transfer)
 
     # fetch master wallet info to determine max win,max apes
     master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
@@ -58,7 +74,7 @@ def crash_game(message):
     change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
     bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
     share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
-    configure_funds = types.InlineKeyboardButton("💰 configure funds", callback_data=f"funds {user_name}")  # pass the
+    configure_funds = types.InlineKeyboardButton("💰 Wallet", callback_data=f"funds {user_name}")  # pass the
     # username so we know hows checking
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
@@ -81,7 +97,7 @@ def hide_settings(callback_query: types.CallbackQuery):
     if not game_users.check_user_exist(user_name):
         fresh_address, fresh_private_key = solanahandler.create_wallet()
         if fresh_address != "" and fresh_private_key != "":
-            game_users.add_user(user_name, fresh_address, fresh_private_key)
+            game_users.add_user(user_name, fresh_address, fresh_private_key, str(chat_id))
             # will ad artificial balance to test it
             game_users.update_balance(user_name, "20.0")
 
@@ -101,7 +117,7 @@ def hide_settings(callback_query: types.CallbackQuery):
     change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
     bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
     share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
-    configure_funds = types.InlineKeyboardButton("💰 configure funds", callback_data=f"funds {user_name}")  # pass the
+    configure_funds = types.InlineKeyboardButton("💰 Wallet", callback_data=f"funds {user_name}")  # pass the
     # username so we know hows checking
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
@@ -139,7 +155,7 @@ def withdrawal_handler(message):
             change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
             bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
             share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
-            configure_funds = types.InlineKeyboardButton("💰 configure funds",
+            configure_funds = types.InlineKeyboardButton("💰 Wallet",
                                                          callback_data=f"funds {user_name}")  # pass the
             # username so we know hows checking
             markup.row(Place_bet, configure_funds, change_game)
@@ -269,7 +285,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
         # username so we know hows checking
         markup.row(withdraw, refresh, back)
         bot.send_message(chat_id,
-                         f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n🟣 *{addy}*\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*",
+                         f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n🟣 *{addy}*\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*\n⚠️ Minimum deposit amount: *0\\.015 SOL*",
                          parse_mode='MarkdownV2', reply_markup=markup)
     elif response_value.split()[0] == "withdraw":
         bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
@@ -323,7 +339,7 @@ def edit_message(chat_id, new_text, msg_id, user_name):
     change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
     bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
     share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
-    configure_funds = types.InlineKeyboardButton("💰 configure funds", callback_data=f"funds {user_name}")  # pass the
+    configure_funds = types.InlineKeyboardButton("💰 Wallet", callback_data=f"funds {user_name}")  # pass the
     # username so we know hows checking
     markup.row(Place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
@@ -334,28 +350,56 @@ def edit_message(chat_id, new_text, msg_id, user_name):
         return
 
 
+solscan_header = {
+    'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+             '.eyJjcmVhdGVkQXQiOjE3MDY3NTM5ODAzOTQsImVtYWlsIjoic29sYmFieTMyNUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJpYXQiOjE3MDY3NTM5ODB9.Lp77APFLV-rOnNbDzc1ob43Vp-9-KpeMe_b-fiOQrr0',
+    'accept': 'application/json',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/89.0.4389.82 Safari/537.36'
+}
+
+
 def check_for_deposits():  # will update user balance if they deposited money (needs cooldown)
     while True:
         all_user_accounts = game_users.return_all_users()
         for user in all_user_accounts:
             if user not in deposit_queue:
                 user_wallet = str(user[2])
-                current_balance_snapshot = float(solanahandler.return_solana_balance(user_wallet))
-                if current_balance_snapshot > 0.01:  # this means money has been deposited.
-                    print(f"processing {user[0]} deposit of {current_balance_snapshot}")
-                    # check if the wallet balance is non-zero ( this means money has been deposited into the wallet)
-                    if str(user[0]) not in deposit_queue:  # we will ignore if they have some pending deposit
-                        # add to the queue
-                        deposit_queue[str(user[0])] = [current_balance_snapshot,
-                                                       time.time()]  # snapshot of the deposit amount in sol
+                try:
+                    recent_tx = solana_client.get_signatures_for_address(
+                        Pubkey.from_string(user_wallet),
+                        limit=1
+                    )
+                    transaction = json.loads(str(recent_tx.to_json()))["result"]
+                    tx_hash = str(transaction[0]["signature"])
+                    if not txhash_database.check_hash_exist(tx_hash):
+                        try:
+                            sol_transfer = request('GET',
+                                                   "https://pro-api.solscan.io/v1.0/transaction/" + str(
+                                                       tx_hash),
+                                                   headers=solscan_header).json()
+                            sol_transfer_amount = float(sol_transfer["solTransfers"][0]["amount"]) / 10 ** 9
+                            destination_address = str(sol_transfer["solTransfers"][0]["destination"])
+                            incoming_transfer = float(sol_transfer_amount)
+                            if incoming_transfer >= 0.015 and destination_address == user_wallet:  # this means money has been deposited.
+                                print(f"processing {user[0]} deposit of {incoming_transfer}")
+                                if str(user[
+                                           0]) not in deposit_queue:  # we will ignore if they have some pending deposit
+                                    deposit_queue[str(user[0])] = [incoming_transfer, time.time()]
+                        except KeyError:
+                            pass
+                        txhash_database.add_hash(tx_hash)
+                except IndexError:
+                    pass
         time.sleep(2)
 
 
 #processing real fund transfers #
 def process_deposit():
-    minimum_cooldown = 25
+    minimum_cooldown = 10
     processed_deposits = []
     while True:
+        #print(deposit_queue, withdrawal_queue)
         for incoming_deposit in deposit_queue:
             if incoming_deposit not in processed_deposits:
                 if not (incoming_deposit in withdrawal_queue):
@@ -376,9 +420,8 @@ def process_deposit():
                     else:
                         print(user_to_credit, "error with deposit please check!")
         for index, processed_deposit in enumerate(processed_deposits):
-            if int(deposit_queue[processed_deposit][1]) > time.time() + minimum_cooldown:
-                del deposit_queue[processed_deposit]
-                processed_deposits.pop(index)
+            del deposit_queue[processed_deposit]
+            processed_deposits.pop(index)
         time.sleep(1)
 
 
@@ -386,6 +429,7 @@ def process_withdrawal_request():
     while True:
         processed_withdrawals = []
         for withdrawal_request in withdrawal_queue:
+            chat_id = game_users.get_chat_id(withdrawal_request)
             if not (withdrawal_request in deposit_queue):  #users funds aren't being processed at the moment
                 user_to_process = withdrawal_request
                 withdrawal_adress = withdrawal_queue[withdrawal_request]
@@ -395,10 +439,12 @@ def process_withdrawal_request():
                     game_users.update_balance(user_to_process, str(0.0))
                     processed_withdrawals.append(user_to_process)
                     #send a conformation mdg here:
-                    chat_id = game_users.get_chat_id(user_to_process)
                     bot.send_message(chat_id, f"✅ Funds Withdrawn: {tx}", disable_web_page_preview=True)
                 else:
                     print(user_to_process, "error with withdrawal please check!")
+            else:
+                bot.send_message(chat_id, f"Seems like there are still funds being deposited.please wait",
+                                 disable_web_page_preview=True)
         for prcessed_withdrawal in processed_withdrawals:
             del withdrawal_queue[prcessed_withdrawal]
         time.sleep(1)
