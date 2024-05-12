@@ -13,7 +13,7 @@ from solana.rpc.api import Client, Pubkey
 import json
 from helius import TransactionsAPI
 
-helius_key = "f61ec600-eb2e-492c-b5ca-5c6393d1b7e1"
+helius_key = "b2571c88-bb50-44bc-aa4f-198451c158b6"
 URI = "https://mainnet.helius-rpc.com/?api-key=" + str(helius_key)
 solana_client = Client(URI)
 transactions_api = TransactionsAPI(helius_key)
@@ -25,17 +25,12 @@ txhash_database = txhashdb.TxHash()
 my_token = '7090902228:AAHIF5lOVRa5yMIUAGj29Y3r_d1GRRp86uU'
 bot = telebot.TeleBot(my_token)
 
-# when is a good time to transfer the losses to master wallet?
 
 
 deposit_queue = {}
-
 withdrawal_queue = {}
-
-current_players = {  # will show user who are currently in the game
-
-}
-user_who_pressed_stop = []  # only need to be a list
+current_players = {}
+user_who_pressed_stop = []
 
 master_wallet = "HH1ewQT9tbjAe9qb2y833FqAYreSYVHyzxsgxkhEp34L"
 min_bet = 0.01  # this is standard across all players
@@ -59,7 +54,7 @@ def crash_game(
             transferfunds.withdraw(fresh_address, intial_transfer)
 
     # fetch master wallet info to determine max win,max apes
-    master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
 
@@ -102,7 +97,7 @@ def hide_settings(callback_query: types.CallbackQuery):
             game_users.update_balance(user_name, "20.0")
 
     # fetch master wallet info to determine max win,max apes
-    master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
 
@@ -160,7 +155,7 @@ def withdrawal_handler(message):
             # username so we know hows checking
             markup.row(Place_bet, configure_funds, change_game)
             markup.row(bet, share_win, start)
-            master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+            master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
@@ -181,7 +176,7 @@ def withdrawal_handler(message):
     if failed_test:
         if not user_input.isnumeric():
             if user_input.lower() == "cancel":
-                master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+                master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
                 max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                 max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                 current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
@@ -206,7 +201,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
     response_value = str(callback_query.data)
     chat_id = int(callback_query.from_user.id)
     message_id = callback_query.message.message_id
-    pool_size = 50  # solanahandler.return_solana_balance(master_wallet)
+    pool_size = solanahandler.return_solana_balance(master_wallet)
     user_name = "@" + str(callback_query.from_user.username)
     pos_size = float(game_users.check_user_betsize(user_name))
     multiplier, win_loss = crash_algorithm.determine_win_or_loss(pos_size, pool_size)
@@ -216,28 +211,32 @@ def handle_buttons(callback_query: types.CallbackQuery):
             user_who_pressed_stop.append(user_name)
     elif response_value.split()[0] == "start":
         if user_name not in current_players:
-            if pos_size <= float(game_users.check_user_balance(user_name)):
-                current_players[user_name] = [chat_id, time.time(), message_id, max_multiplier, 0, "", win_loss]
+            if user_name not in withdrawal_queue:
+                if pos_size <= float(game_users.check_user_balance(user_name)):
+                    current_players[user_name] = [chat_id, time.time(), message_id, max_multiplier, 0, "", win_loss]
+                else:
+                    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+                    max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
+                    max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                    current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
+                    bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
+                    max_bet_size = str(max_bet_size)
+                    max_win_size = str(max_win_size)
+                    modified_main_game_pos_size = (
+                        f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
+                        f"running_\\.\\.\\.\n\n🟣"
+                        f"Current Bet Size: *{bet_size} SOL* \\(You have Insufficient funds\\) \n\n💰 Max Win"
+                        f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
+                        f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
+                    edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
             else:
-                master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
-                max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
-                current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
-                bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
-                max_bet_size = str(max_bet_size)
-                max_win_size = str(max_win_size)
-                modified_main_game_pos_size = (
-                    f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
-                    f"running_\\.\\.\\.\n\n🟣"
-                    f"Current Bet Size: *{bet_size} SOL* \\(You have Insufficient funds\\) \n\n💰 Max Win"
-                    f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
-                    f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
-                edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
+                bot.send_message(chat_id,
+                                 f"You cannot play until your withdrawals have been processed.Please wait few moments.")
     elif response_value.split()[0] == "betup":
         current_bet_size = float(game_users.check_user_betsize(user_name))
         new_bet_size = str(round(current_bet_size + 0.01, 3))
         game_users.update_bet_size(user_name, new_bet_size)
-        master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+        master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
         max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
         max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
 
@@ -257,7 +256,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
         if current_bet_size > 0.01:
             new_bet_size = str(round(current_bet_size - 0.01, 3))
             game_users.update_bet_size(user_name, new_bet_size)
-            master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+            master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
@@ -285,7 +284,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
         # username so we know hows checking
         markup.row(withdraw, refresh, back)
         bot.send_message(chat_id,
-                         f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n🟣 *{addy}*\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*\n⚠️ Minimum deposit amount: *0\\.015 SOL*",
+                         f"__Mini Bitcoin Games__\n\n🟣 Deposit Address:\n`{addy}`\n\n💰 Wallet Balance: *{user_balance} SOL {topup_string}*\n\n⚠️ Minimum deposit amount: *0\\.015 SOL*",
                          parse_mode='MarkdownV2', reply_markup=markup)
     elif response_value.split()[0] == "withdraw":
         bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
@@ -308,9 +307,6 @@ def handle_buttons(callback_query: types.CallbackQuery):
     elif response_value.split()[0] == "confirm":
         sent_msg = bot.send_message(chat_id, "Please enter the withdrawal address.")
         bot.register_next_step_handler(sent_msg, withdrawal_handler)  # Next message will call the name_handler function
-        # once user presses the address and the addres is correct then send them the tx and obv send the funds to their wallet
-
-        # needs a withdrawal button , refresh button ,and a back button
 
 
 def string_builder(multiplier):  # based on the multiplier it will build a string
@@ -394,23 +390,20 @@ def check_for_deposits():  # will update user balance if they deposited money (n
         time.sleep(2)
 
 
-#processing real fund transfers #
 def process_deposit():
-    minimum_cooldown = 10
     processed_deposits = []
     while True:
-        #print(deposit_queue, withdrawal_queue)
         for incoming_deposit in deposit_queue:
             if incoming_deposit not in processed_deposits:
                 if not (incoming_deposit in withdrawal_queue):
                     user_to_credit = incoming_deposit
                     account_to_credit = float(
-                        deposit_queue[incoming_deposit][0])  #key is the username of the person depositing
+                        deposit_queue[incoming_deposit][0])
                     users_private_key = game_users.get_user_keys(user_to_credit)
                     confitmation_check = transferfunds.transfer_to_master(users_private_key, str(account_to_credit))
-                    if confitmation_check:  #confirmed so we can update their virtual balance
+                    if confitmation_check:
                         pre_credit_balance = float(game_users.check_user_balance(user_to_credit))
-                        post_credit_balance = pre_credit_balance + (account_to_credit)
+                        post_credit_balance = pre_credit_balance + account_to_credit
                         game_users.update_balance(user_to_credit, str(post_credit_balance))
                         processed_deposits.append(user_to_credit)
                         chat_id = game_users.get_chat_id(user_to_credit)
@@ -439,7 +432,8 @@ def process_withdrawal_request():
                     game_users.update_balance(user_to_process, str(0.0))
                     processed_withdrawals.append(user_to_process)
                     #send a conformation mdg here:
-                    bot.send_message(chat_id, f"✅ Funds Withdrawn: {tx}", disable_web_page_preview=True)
+                    bot.send_message(chat_id, f"✅ Funds Withdrawn: [Solscan link](https://solscan.io/tx/{tx})",
+                                     disable_web_page_preview=True)
                 else:
                     print(user_to_process, "error with withdrawal please check!")
             else:
@@ -460,7 +454,7 @@ def game_polling_engine():
     while True:
         for user in current_players:  # means they have not stopped the game yet (this shold take under few milliseconds)
             if current_players[user][6] != "no":  # they lost already
-                master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+                master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
                 max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                 max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                 intial_balance = float(game_users.check_user_balance(user))
@@ -493,7 +487,7 @@ def game_polling_engine():
                 current_players[user].append(current_box_string)
         removed_players = []
         for user in current_players:
-            master_wallet_balance = 50  # solanahandler.return_solana_balance(master_wallet)
+            master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             if current_players[user][4] > current_players[user][3] or current_players[user][6] == "no":

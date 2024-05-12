@@ -604,3 +604,25 @@
 2024-04-28 16:53:13,459:INFO:root:user : @Germantor_000 requested a withdrawal of : 41185000000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
 2024-04-28 23:02:45,533:INFO:root:user : @Germantor_000 requested a withdrawal of : 42150000000 to wallet J5y1kgAZ117A8ASsU9KbG5bvUex1xh4v5aDWHv1MzMtg
 2024-04-29 01:16:14,659:INFO:root:user : @laaazim requested a withdrawal of : 116721512501 to wallet 9UHj6NTHhJaPWdcHDTHv3zxBJsUKPYuMHoLobM1ZN6vc
+2024-05-11 02:07:34,062:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-11 02:37:04,944:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-11 03:36:35,687:INFO:root:user : @Ochoacrypto22 registered
+2024-05-11 04:51:54,322:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 87442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-11 06:42:23,052:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 89442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-11 07:28:11,613:INFO:root:user : @Jenbenias requested a withdrawal of : 2000001861 to wallet GTk6r1Mht7cn9uhD7qXXEL3Eypy8FtiTxfZJXGXebsS4
+2024-05-11 12:06:43,910:INFO:root:user : @mark_736 registered
+2024-05-11 13:28:20,419:INFO:root:user : @Machevo registered
+2024-05-11 13:29:53,305:INFO:root:user : @Machevo requested a withdrawal of : 20000000 to wallet Bm1V5GWzSfPi8bkU5yKFumM5DYqPrTjPX5H6XwWwrQho
+2024-05-11 13:37:17,028:INFO:root:user : @Machevo requested a withdrawal of : 120000000 to wallet Bm1V5GWzSfPi8bkU5yKFumM5DYqPrTjPX5H6XwWwrQho
+2024-05-11 13:52:47,665:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 93442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-11 14:42:27,777:INFO:root:user : @Yacine_d1 requested a withdrawal of : 34214209608 to wallet 6Yj5fCmu1BmeULftTFHVcbPaHsPCsc8CWtY4jLfQRkso
+2024-05-11 19:24:25,702:INFO:root:user : @Danktastic_21 requested a withdrawal of : 1646500725 to wallet 2xBtZGchsmw3uwnNfQ8uY1LBpcVFCZXGeVtCGNdAXqWq
+2024-05-11 21:44:08,808:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 93442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-12 12:05:29,414:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-12 12:05:29,754:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-05-12 12:05:29,792:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-05-12 12:05:29,808:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-05-12 12:05:29,864:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-05-12 12:05:29,928:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-05-12 12:05:30,010:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-05-12 12:05:30,087:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user

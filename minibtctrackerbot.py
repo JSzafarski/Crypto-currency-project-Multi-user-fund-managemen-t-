@@ -405,12 +405,9 @@ def poll():  # problem with slscan glitching out idk why
             if temp_best != current_top_user:
                 previous_best = current_top_user
                 current_top_user = temp_best
-                current_top_user = current_top_user.replace("_", "\\_")
-                previous_best = previous_best.replace("_", "\\_")
                 if previous_best != "":
                     bot.send_message("-1002130978267",
-                                     f"🥇 {current_top_user} has replaced {previous_best} as a top shiller\\!",
-                                     parse_mode='MarkdownV2')
+                                     f"🥇 {current_top_user} has replaced {previous_best} as a top shiller!")
         token_address = "mBTCb8YxTdnp9GfUhz7v5qnNix7iFQCMDWKsUDNp3uJ"
         try:
             spl_transfers = request('GET',
