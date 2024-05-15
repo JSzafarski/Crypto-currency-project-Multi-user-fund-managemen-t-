@@ -59,7 +59,7 @@ def determine_win_or_loss(position_size, pool_size):
 def test():
     bet_size = 0
     initial_capital = 0
-    exit = 5  #wanna exit at 2x
+    exit = 4  #wanna exit at 2x
     for x in range(0, 100):
         if x == 0:
             initial_capital = 25
@@ -83,5 +83,4 @@ def test():
                 initial_capital = (initial_capital - bet_size) + (bet_size * mult)
                 print("users funds atm", initial_capital, "mult: ", mult)
 
-
-test()
+#test()

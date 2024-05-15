@@ -626,3 +626,23 @@
 2024-05-12 12:05:29,928:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
 2024-05-12 12:05:30,010:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
 2024-05-12 12:05:30,087:ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user
+2024-05-12 12:05:35,791:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-12 12:05:54,289:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 96442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-12 12:06:34,675:INFO:root:user : @Machevo requested a withdrawal of : 3845210000 to wallet Bm1V5GWzSfPi8bkU5yKFumM5DYqPrTjPX5H6XwWwrQho
+2024-05-12 14:53:54,329:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 100442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-12 23:07:22,547:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-13 02:22:39,230:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 102442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-13 09:42:28,469:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-13 09:57:09,222:INFO:root:user : @Access_deny registered
+2024-05-13 10:01:02,631:INFO:root:user : @roijman registered
+2024-05-13 10:41:48,144:INFO:root:user : @roijman requested a withdrawal of : 2250000000 to wallet 7WotuswJJ2ifJRg5CLrY1gFuQG83Crhtesnv6j9JAa3E
+2024-05-13 10:47:05,671:INFO:root:user : @roijman requested a withdrawal of : 2250000000 to wallet 7WotuswJJ2ifJRg5CLrY1gFuQG83Crhtesnv6j9JAa3E
+2024-05-13 11:48:51,195:INFO:root:user : @roijman requested a withdrawal of : 3470000000 to wallet 7WotuswJJ2ifJRg5CLrY1gFuQG83Crhtesnv6j9JAa3E
+2024-05-13 11:52:57,414:INFO:root:user : @roijman requested a withdrawal of : 3470000000 to wallet 7WotuswJJ2ifJRg5CLrY1gFuQG83Crhtesnv6j9JAa3E
+2024-05-13 11:54:54,410:INFO:root:user : @roijman requested a withdrawal of : 3470000000 to wallet 7WotuswJJ2ifJRg5CLrY1gFuQG83Crhtesnv6j9JAa3E
+2024-05-13 20:55:01,534:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-14 04:44:02,625:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-14 12:30:47,764:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-14 14:52:10,178:INFO:root:user : @SemutKekejangan requested a withdrawal of : 135583025147 to wallet 2k44sieeUaEMRV6eCHpTznm1qfHAs6QZD39zffLZi8U1
+2024-05-14 16:04:18,879:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-05-14 16:04:18,879:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000022E21BD6960> files=None request_timeout=300
