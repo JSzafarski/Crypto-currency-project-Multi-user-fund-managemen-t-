@@ -3,7 +3,7 @@ from solana.rpc.api import Client, Keypair
 import base58
 
 client = Client("https://api.mainnet-beta.solana.com")
-balances_api = BalancesAPI("f61ec600-eb2e-492c-b5ca-5c6393d1b7e1")
+balances_api = BalancesAPI("edb81864-738f-4d62-8f20-f4d71545eb79")
 
 
 def return_solana_balance(wallet_address):  # up to 25 addresses return a string
