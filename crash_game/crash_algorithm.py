@@ -49,7 +49,7 @@ def determine_win_or_loss(position_size, pool_size):
         max_multiplier = int(twenty_percent_of_pool // position_size)
         if game_multiplier > max_multiplier:
             game_multiplier = max_multiplier  #upperbound
-        if game_multiplier < 1.25:
+        if game_multiplier < 1.25 or int(game_multiplier) % 5 == 0:
             game_multiplier = 0
         return game_multiplier
     else:

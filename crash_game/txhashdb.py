@@ -13,7 +13,7 @@ class TxHash:
                 )""")
             self.connection.commit()
         except sqlite3.Error:
-            print("imghash database is Already created")
+            print("txhash database is Already created")
 
     def check_hash_exist(self, img_hash):
         sql = "SELECT * FROM txhash WHERE imghashdigest =?"
