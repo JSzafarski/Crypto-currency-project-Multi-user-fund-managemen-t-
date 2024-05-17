@@ -65,7 +65,6 @@ def crash_game(
         if fresh_address != "" and fresh_private_key != "":
             game_users.add_user(user_name, fresh_address, fresh_private_key, str(chat_id))
             logging.info(f"User: {user_name} has been added to the database with a new priv/pub key")
-            #transfer small amount of sol fro master to help then the transaction process
             transferfunds.withdraw(fresh_address, intial_transfer)
             logging.info(f"User: {user_name} has been credited a small amount of sol to cover transfer fees")
 
@@ -155,7 +154,7 @@ def withdrawal_handler(message):
                 bot.send_message(chat_id, f"Please wait for your withdrawal request to be processed")
 
             markup = types.InlineKeyboardMarkup()
-            Place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
+            place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
             start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
             change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
             bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
@@ -163,7 +162,7 @@ def withdrawal_handler(message):
             configure_funds = types.InlineKeyboardButton("💰 Wallet",
                                                          callback_data=f"funds {user_name}")  # pass the
             # username so we know hows checking
-            markup.row(Place_bet, configure_funds, change_game)
+            markup.row(place_bet, configure_funds, change_game)
             markup.row(bet, share_win, start)
             master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
@@ -212,7 +211,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
     response_value = str(callback_query.data)
     chat_id = int(callback_query.from_user.id)
     message_id = callback_query.message.message_id
-    pool_size = 50  # solanahandler.return_solana_balance(master_wallet)
+    pool_size = 50 #solanahandler.return_solana_balance(master_wallet)
     user_name = "@" + str(callback_query.from_user.username)
     pos_size = float(game_users.check_user_betsize(user_name))
     if response_value.split()[0] == "cashout":
@@ -587,6 +586,7 @@ def render_boxes():
                     chat_id = active_games[active_user][3]
                     msg_id = active_games[active_user][4]
                     start_time = active_games[active_user][0]
+                    seconds_step = seconds_step * 1.01 ** (time.time() - start_time)
                     current_multiplier = round(1 + round((time.time() - start_time) * seconds_step, 3), 3)
                     current_box_string = string_builder(current_multiplier)
                     # here quickly update it on their telegram
@@ -620,6 +620,7 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             time_stamp = time.time()
             data_list = active_games[active_user]
             time_interval = int(time_stamp - data_list[0])
+            multiplier_step_per_second = multiplier_step_per_second * 1.01 ** time_interval
             max_interval = int(data_list[1] / multiplier_step_per_second) - 8
             if time_interval >= max_interval:
                 crashed.append(active_user)
