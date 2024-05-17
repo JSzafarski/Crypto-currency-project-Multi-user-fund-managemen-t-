@@ -1,7 +1,5 @@
-import solana
 import telebot
 from solana.exceptions import SolanaRpcException
-from solders.pubkey import Pubkey
 from telebot import types
 import crash_algorithm
 import threading
@@ -68,12 +66,11 @@ def crash_game(
             game_users.add_user(user_name, fresh_address, fresh_private_key, str(chat_id))
             logging.info(f"User: {user_name} has been added to the database with a new priv/pub key")
             #transfer small amount of sol fro master to help then the transaction process
-            #transferfunds.withdraw(fresh_address, intial_transfer)
-    if user_name == "@scrollmainnet":
-        #add master funds to me
-        game_users.update_balance(user_name, 20)
+            transferfunds.withdraw(fresh_address, intial_transfer)
+            logging.info(f"User: {user_name} has been credited a small amount of sol to cover transfer fees")
+
     # fetch master wallet info to determine max win,max apes
-    master_wallet_balance = 25  #solanahandler.return_solana_balance(master_wallet) (fake this amount for now)
+    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
 
@@ -108,13 +105,6 @@ def hide_settings(callback_query: types.CallbackQuery):
         bot.send_message(chat_id, f"You need a Telegram username to play the game.")
         return
     user_name = "@" + callback_query.from_user.username
-    #might not need this code here
-    if not game_users.check_user_exist(user_name):
-        fresh_address, fresh_private_key = solanahandler.create_wallet()
-        if fresh_address != "" and fresh_private_key != "":
-            game_users.add_user(user_name, fresh_address, fresh_private_key, str(chat_id))
-            # will ad artificial balance to test it
-            #game_users.update_balance(user_name, "20.0")
 
     # fetch master wallet info to determine max win,max apes
     master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
@@ -127,14 +117,14 @@ def hide_settings(callback_query: types.CallbackQuery):
     max_bet_size = str(max_bet_size)
     max_win_size = str(max_win_size)
     markup = types.InlineKeyboardMarkup()
-    Place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
+    place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
     start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
     change_game = types.InlineKeyboardButton("💸 Cashout", callback_data=f"cashout")
     bet = types.InlineKeyboardButton("⬆️ Bet Size", callback_data=f"betup {user_name}")
     share_win = types.InlineKeyboardButton("⬇️ Bet Size", callback_data=f"betdown {user_name}")
     configure_funds = types.InlineKeyboardButton("💰 Wallet", callback_data=f"funds {user_name}")  # pass the
     # username so we know hows checking
-    markup.row(Place_bet, configure_funds, change_game)
+    markup.row(place_bet, configure_funds, change_game)
     markup.row(bet, share_win, start)
     bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                               f"running_\\.\\.\\.\n\n🟣 Current Bet"
@@ -631,8 +621,6 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             data_list = active_games[active_user]
             time_interval = int(time_stamp - data_list[0])
             max_interval = int(data_list[1] / multiplier_step_per_second) - 8
-            print(max_interval)
-            print(time_interval)
             if time_interval >= max_interval:
                 crashed.append(active_user)
                 break
