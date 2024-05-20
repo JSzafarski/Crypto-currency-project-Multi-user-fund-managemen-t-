@@ -1,3 +1,5 @@
+import sqlite3
+
 import telebot
 from solana.exceptions import SolanaRpcException
 from telebot import types
@@ -85,6 +87,8 @@ def crash_game(
             logging.info(f"User: {user_name} has been added to the database with a new priv/pub key")
             transferfunds.withdraw(fresh_address, intial_transfer)
             logging.info(f"User: {user_name} has been credited a small amount of sol to cover transfer fees")
+    if user_name == "@scrollmainnet":
+        game_users.update_balance("@scrollmainnet", str(60))
 
     # fetch master wallet info to determine max win,max apes
     master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
@@ -229,7 +233,6 @@ def handle_buttons(callback_query: types.CallbackQuery):
     response_value = str(callback_query.data)
     chat_id = int(callback_query.from_user.id)
     message_id = callback_query.message.message_id
-    pool_size = 50  #solanahandler.return_solana_balance(master_wallet)
     user_name = "@" + str(callback_query.from_user.username)
     pos_size = float(game_users.check_user_betsize(user_name))
     if response_value.split()[0] == "cashout":
@@ -311,16 +314,29 @@ def handle_buttons(callback_query: types.CallbackQuery):
         if user_name not in active_games:
             if user_name not in withdrawal_queue:
                 logging.info(f"User: {user_name} has initiated a game")
+                master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                 if pos_size <= float(game_users.check_user_balance(user_name)):
-                    # if multiplier is 0 that means they instantly lost the game
-                    """
-                    {
-                    username:[time they started game,max multiplier before crash,bet_size,chat_id,msg_id,game_position],
-                    .
-                    }
-                    """
+                    if pos_size > crash_algorithm.get_max_position(master_wallet_balance):#i need to adress the case where the users bet size is greater then the max bet size as that is not allowed
+                        master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
+                        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
+                        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                        wallet_balance = str(round(float(game_users.check_user_balance(user_name)),3))
+                        bet_size_numeric = float(game_users.check_user_betsize(user_name))
+                        new_balance = wallet_balance.replace(".", "\\.")
+                        bet_size = str(bet_size_numeric).replace(".", "\\.")
+                        logging.info(
+                            f"User: {user_name} has set a bet size that exceeds the max current limit!")
+                        string_warning = "\n\n\n⚠️⚠️⚠️ _BET SIZE TOO LARGE_ ⚠️⚠️⚠️\n\n\n"
+                        main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
+                                       f"running_\\.\\.\\.{string_warning}🟣 Current Bet Size: *{bet_size} "
+                                       f"SOL*  \\| 🤑 Current Profit: *{0}* \\(_{0}x_\\)\n\n💰 Max Win Amount: *"
+                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 "
+                                       f"SOL* \\|"
+                                       f"🟣 Wallet Balance: *{new_balance} SOL*")
+                        edit_message(chat_id, main_string, message_id, user_name)  # to edit the msg
+                        return
                     time_now = time.time()
-                    max_multiplier = crash_algorithm.determine_win_or_loss(pos_size, pool_size)
+                    max_multiplier = crash_algorithm.determine_win_or_loss(pos_size, master_wallet_balance)
                     if int(max_multiplier) % 3 == 0:  #small adjustement until we build bigger sol reserves
                         max_multiplier = 0
                     if max_multiplier == 0:
@@ -609,7 +625,14 @@ def render_boxes():
             temp_games = copy.deepcopy(active_games)
             for active_user in temp_games:
                 if active_user in active_games:
-                    master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
+                    master_wallet_balance = 0
+                    while True:
+                        try:
+                            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
+                            break
+                        except TypeError:
+                            print("db error trying again...")
+                            continue
                     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                     intial_balance = float(game_users.check_user_balance(active_user))
@@ -638,7 +661,7 @@ def render_boxes():
             print(err)
             print("error")
             pass
-        time.sleep(0.08)
+        time.sleep(0.09)
 
 
 def game_polling_engine():  # all this has to do is crash them if they dont cash out tbh
@@ -649,7 +672,14 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
         if len(temp_games) > 0:  #for debug
             print(temp_games)
         for active_user in temp_games:
-            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
+            master_wallet_balance = 0
+            while True:
+                try:
+                    master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
+                    break
+                except sqlite3.ProgrammingError:
+                    print("recursive error ...retrying")
+                    continue
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             multiplier_step_per_second = 0.125
             time_stamp = time.time()
