@@ -31,19 +31,19 @@ def get_multiplier_result():
 
 
 def get_max_position(pool_size):
-    twenty_percent_of_pool = int(0.2 * pool_size)  # in sol
-    max_position_size = int(0.2 * twenty_percent_of_pool)
+    twenty_percent_of_pool = float(0.2 * pool_size)  # in sol
+    max_position_size = float(0.2 * twenty_percent_of_pool)
     return max_position_size
 
 
 def get_max_win(pool_size):
-    twenty_percent_of_pool = int(0.1 * pool_size)  # in sol (10% of pool size)
+    twenty_percent_of_pool = float(0.1 * pool_size)  # in sol (10% of pool size)
     return twenty_percent_of_pool
 
 
 def determine_win_or_loss(position_size, pool_size):
-    twenty_percent_of_pool = int(0.2 * pool_size)  # in sol
-    max_position_size = int(0.2 * twenty_percent_of_pool)
+    twenty_percent_of_pool = float(0.2 * pool_size)  # in sol
+    max_position_size = float(0.2 * twenty_percent_of_pool)
     if position_size <= max_position_size:
         game_multiplier = get_multiplier_result()
         max_multiplier = int(twenty_percent_of_pool // position_size)

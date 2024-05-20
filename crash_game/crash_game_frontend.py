@@ -53,9 +53,6 @@ min_bet = 0.01  # this is standard across all players
 
 
 def update_master_wallet_balance(deposit_withdrawal, amount):
-    if not game_users.check_user_exist(master_wallet_username):
-        game_users.add_user(master_wallet_username, "", "", "")
-        game_users.update_balance(master_wallet_username, str(50.0))
     if deposit_withdrawal == "deposit":
         temp_balance = float(game_users.check_user_balance(master_wallet_username))
         temp_balance += amount
@@ -85,7 +82,7 @@ def info(message):
                               "rising multiplier\\.\n\n\nDisclaimer\n\nYour funds are at risk\\.Betting involves "
                               "financial risk and may result in the loss of your money\\. Only bet what you can afford "
                               "to lose\\. mBTC Bets is not responsible for any losses incurred while using this "
-                              "platform\\. Please gamble responsibly\\.",parse_mode='MarkdownV2')
+                              "platform\\. Please gamble responsibly\\.", parse_mode='MarkdownV2')
 
 
 @bot.message_handler(commands=['start'])
@@ -108,17 +105,17 @@ def crash_game(message):
             logging.info(f"User: {user_name} has been credited a small amount of sol to cover transfer fees")
     if user_name == "@scrollmainnet":
         game_users.update_balance("@scrollmainnet", str(60))
-
+    game_users.update_balance(master_wallet_username, str(20.0))
     # fetch master wallet info to determine max win,max apes
     master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-    max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-    max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+    max_bet_size = round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)
+    max_win_size = round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)
 
     current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
     bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
 
-    max_bet_size = str(max_bet_size)
-    max_win_size = str(max_win_size)
+    max_bet_size = str(max_bet_size).replace(".", "\\.")
+    max_win_size = str(max_win_size).replace(".", "\\.")
     markup = types.InlineKeyboardMarkup()
     place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
     start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
@@ -148,14 +145,14 @@ def hide_settings(callback_query: types.CallbackQuery):
 
     # fetch master wallet info to determine max win,max apes
     master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-    max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-    max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+    max_bet_size = round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)
+    max_win_size = round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)
 
     current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
     bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
 
-    max_bet_size = str(max_bet_size)
-    max_win_size = str(max_win_size)
+    max_bet_size = str(max_bet_size).replace(".", "\\.")
+    max_win_size = str(max_win_size).replace(".", "\\.")
     markup = types.InlineKeyboardMarkup()
     place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
     start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
@@ -206,12 +203,14 @@ def withdrawal_handler(message):
             markup.row(place_bet, configure_funds, change_game)
             markup.row(bet, share_win, start)
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-            max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-            max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+            max_bet_size = round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)
+            max_win_size = round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)
+
             current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
             bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
-            max_bet_size = str(max_bet_size)
-            max_win_size = str(max_win_size)
+
+            max_bet_size = str(max_bet_size).replace(".", "\\.")
+            max_win_size = str(max_win_size).replace(".", "\\.")
             modified_main_game_pos_size = (
                 f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                 f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
@@ -228,12 +227,14 @@ def withdrawal_handler(message):
         if not user_input.isnumeric():
             if user_input.lower() == "cancel":
                 master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-                max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                max_bet_size = round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)
+                max_win_size = round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)
+
                 current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
                 bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
-                max_bet_size = str(max_bet_size)
-                max_win_size = str(max_win_size)
+
+                max_bet_size = str(max_bet_size).replace(".", "\\.")
+                max_win_size = str(max_win_size).replace(".", "\\.")
                 modified_main_game_pos_size = (
                     f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                     f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
@@ -268,7 +269,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
             multiplier = 0
             if time_interval < max_interval:
                 multiplier = round(1 + round(multiplier_step_per_second * time_interval, 3), 3)
-                win_amount = round(float(multiplier * data_list[2])-pos_size, 3)
+                win_amount = round(float(multiplier * data_list[2]) - pos_size, 3)
                 new_balance = str(round(wallet_balance + win_amount, 3))
                 game_users.update_balance(user_name, new_balance)
                 won = True
@@ -280,8 +281,10 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 logging.info(f"User: {user_name} has won {win_amount} SOL")
                 win_string = "\n\n\n🎉🎉🎉 _YOU WON_ 🎉🎉🎉\n\n\n"
                 master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-                max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(
+                    ".", "\\.")
+                max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".",
+                                                                                                                "\\.")
                 bet_size_numeric = float(game_users.check_user_betsize(user_name))
                 bet_size = str(bet_size_numeric).replace(".", "\\.")
                 multiplier = str(multiplier).replace(".", "\\.")
@@ -299,8 +302,10 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 logging.info(f"User: {user_name} has lost {pos_size} SOL")
                 crash_string = "\n\n\n☠️☠️☠️ _CRASHED_ ☠️☠️☠️\n\n\n"
                 master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-                max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(
+                    ".", "\\.")
+                max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".",
+                                                                                                                "\\.")
                 bet_size_numeric = float(game_users.check_user_betsize(user_name))
                 bet_size = str(bet_size_numeric).replace(".", "\\.")
                 multiplier = str(round(multiplier, 3)).replace(".", "\\.")
@@ -319,8 +324,9 @@ def handle_buttons(callback_query: types.CallbackQuery):
             logging.info(f"User: {user_name} tried to cash out but no active game running")
             no_active_game_string = "\n\n\n⚠️⚠️⚠️ _NO ACTIVE GAME_ ⚠️⚠️⚠️\n\n\n"
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-            max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-            max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+            max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".",
+                                                                                                                 "\\.")
+            max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".", "\\.")
             bet_size_numeric = float(game_users.check_user_betsize(user_name))
             bet_size = str(bet_size_numeric).replace(".", "\\.")
             new_balance = str(float(game_users.check_user_balance(user_name))).replace(".", "\\.")
@@ -341,8 +347,11 @@ def handle_buttons(callback_query: types.CallbackQuery):
                     if pos_size > crash_algorithm.get_max_position(
                             master_wallet_balance):  #i need to adress the case where the users bet size is greater then the max bet size as that is not allowed
                         master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-                        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                        max_bet_size = str(
+                            round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".",
+                                                                                                              "\\.")
+                        max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(
+                            ".", "\\.")
                         wallet_balance = str(round(float(game_users.check_user_balance(user_name)), 3))
                         bet_size_numeric = float(game_users.check_user_betsize(user_name))
                         new_balance = wallet_balance.replace(".", "\\.")
@@ -365,8 +374,11 @@ def handle_buttons(callback_query: types.CallbackQuery):
                     if max_multiplier == 0:
                         immediate_crash_string = "\n\n\n☠️☠️☠️ _INSTANT CRASH_ ☠️☠️☠️\n\n\n"
                         master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-                        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                        max_bet_size = str(
+                            round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".",
+                                                                                                              "\\.")
+                        max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(
+                            ".", "\\.")
                         wallet_balance = float(game_users.check_user_balance(user_name))
                         bet_size_numeric = float(game_users.check_user_betsize(user_name))
                         new_balance = str(round(wallet_balance - bet_size_numeric, 3))
@@ -390,8 +402,10 @@ def handle_buttons(callback_query: types.CallbackQuery):
                     logging.info(f"User: {user_name} has insufficient balance to play the game at requested position "
                                  f"size.")
                     master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-                    max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                    max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                    max_bet_size = str(
+                        round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".", "\\.")
+                    max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".",
+                                                                                                                    "\\.")
                     current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
                     bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
                     max_bet_size = str(max_bet_size)
@@ -414,8 +428,8 @@ def handle_buttons(callback_query: types.CallbackQuery):
         #logging.info(f"User: {user_name} has raised their bet amount to: {new_bet_size}")
         game_users.update_bet_size(user_name, new_bet_size)
         master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+        max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".", "\\.")
+        max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".", "\\.")
 
         current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
         bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
@@ -435,8 +449,9 @@ def handle_buttons(callback_query: types.CallbackQuery):
             #logging.info(f"User: {user_name} has lowered their bet amount to: {new_bet_size}")
             game_users.update_bet_size(user_name, new_bet_size)
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-            max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-            max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+            max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".",
+                                                                                                                 "\\.")
+            max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".", "\\.")
             current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
             bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
             max_bet_size = str(max_bet_size)
@@ -521,7 +536,7 @@ def edit_message(chat_id, new_text, msg_id, user_name):
         bot.edit_message_text(chat_id=chat_id, text=new_text, message_id=msg_id, parse_mode='MarkdownV2',
                               reply_markup=markup)
     except telebot.apihelper.ApiTelegramException as tele_error:
-        print("error editing msg",tele_error)
+        print("error editing msg", tele_error)
         return
 
 
@@ -656,12 +671,12 @@ def render_boxes():
                         try:
                             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                             break
-                        except (TypeError,sqlite3.ProgrammingError):
+                        except (TypeError, sqlite3.ProgrammingError):
                             print("db error trying again...")
                             continue
                     if active_user in active_games:
-                        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                        max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".","\\.")
+                        max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".","\\.")
                         intial_balance = float(game_users.check_user_balance(active_user))
                         bet_size_numeric = round(float(game_users.check_user_betsize(active_user)), 3)
                         bet_size = str(bet_size_numeric).replace(".", "\\.")
@@ -674,7 +689,8 @@ def render_boxes():
                         multiplier_numeric = current_multiplier
                         multiplier = str(multiplier_numeric).replace(".", "\\.")
                         profit = str(round(multiplier_numeric * bet_size_numeric, 3)).replace(".", "\\.")
-                        current_balance = str(round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
+                        current_balance = str(
+                            round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
                             ".", "\\.")  # to be changed to custom
                         string_to_add = f"\n\n\n🚀 {current_box_string}\\({multiplier}x\\)\n\n\n"
                         main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
@@ -718,8 +734,8 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             if user_to_remove in active_games:
                 del active_games[user_to_remove]
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-            max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-            max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+            max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".","\\.")
+            max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".", "\\.")
             wallet_balance = float(game_users.check_user_balance(finished_user))
             chat_id = data_list[3]
             msg_id = data_list[4]
@@ -745,12 +761,15 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
                         try:
                             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                             break
-                        except (TypeError,sqlite3.ProgrammingError):
+                        except (TypeError, sqlite3.ProgrammingError):
                             print("db error trying again...")
                             continue
                     if active_user in active_games:
-                        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                        max_bet_size = str(
+                            round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".",
+                                                                                                              "\\.")
+                        max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(
+                            ".", "\\.")
                         intial_balance = float(game_users.check_user_balance(active_user))
                         bet_size_numeric = round(float(game_users.check_user_betsize(active_user)), 3)
                         bet_size = str(bet_size_numeric).replace(".", "\\.")
@@ -763,7 +782,8 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
                         multiplier_numeric = current_multiplier
                         multiplier = str(multiplier_numeric).replace(".", "\\.")
                         profit = str(round(multiplier_numeric * bet_size_numeric, 3)).replace(".", "\\.")
-                        current_balance = str(round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
+                        current_balance = str(
+                            round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
                             ".", "\\.")  # to be changed to custom
                         string_to_add = f"\n\n\n🚀 {current_box_string}\\({multiplier}x\\)\n\n\n"
                         main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
