@@ -68,9 +68,28 @@ def update_master_wallet_balance(deposit_withdrawal, amount):
         game_users.update_balance(master_wallet_username, new_balance)
 
 
+@bot.message_handler(commands=['info'])
+def info(message):
+    chat_id = message.chat.id
+    bot.send_message(chat_id, "mBTC Bets: The Ultimate SOL Crash Game Bot\n\nmBTC Bets is an exhilarating crash game "
+                              "bot where users bet with SOL coins for a chance to multiply their money\\. Featuring a "
+                              "sleek interface, seamless wallet integration, and fair play algorithms, "
+                              "mBTC Bets delivers a thrilling betting experience\\.\n\nHow It Works\n\n1\\. **Place "
+                              "Bets**: Place your bets in SOL\\.\n2\\. **Watch the "
+                              "Multiplier**: The multiplier starts at 1x and increases rapidly\\. Cash out before it "
+                              "crashes to win\\.\n3\\. **Cash Out**: Time your cash\\-out to maximize winnings before "
+                              "the"
+                              "crash\\.\n\nFeatures\n\n**Instant Transactions**: Fast and efficient transactions on the "
+                              "Solana blockchain\\.\n**User\\-Friendly Interface**: Easy navigation for both beginners "
+                              "and experienced players\\.\n**Real\\-Time Multiplier**: Smooth, real\\-time display of the "
+                              "rising multiplier\\.\n\n\nDisclaimer\n\nYour funds are at risk\\.Betting involves "
+                              "financial risk and may result in the loss of your money\\. Only bet what you can afford "
+                              "to lose\\. mBTC Bets is not responsible for any losses incurred while using this "
+                              "platform\\. Please gamble responsibly\\.",parse_mode='MarkdownV2')
+
+
 @bot.message_handler(commands=['start'])
-def crash_game(
-        message):  # every user that makes accoutn will have small amout of sol credited so it account for the intial
+def crash_game(message):
     # transfer
     intial_transfer = 0.001
     chat_id = message.chat.id
@@ -316,11 +335,12 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 logging.info(f"User: {user_name} has initiated a game")
                 master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                 if pos_size <= float(game_users.check_user_balance(user_name)):
-                    if pos_size > crash_algorithm.get_max_position(master_wallet_balance):#i need to adress the case where the users bet size is greater then the max bet size as that is not allowed
+                    if pos_size > crash_algorithm.get_max_position(
+                            master_wallet_balance):  #i need to adress the case where the users bet size is greater then the max bet size as that is not allowed
                         master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                         max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                         max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
-                        wallet_balance = str(round(float(game_users.check_user_balance(user_name)),3))
+                        wallet_balance = str(round(float(game_users.check_user_balance(user_name)), 3))
                         bet_size_numeric = float(game_users.check_user_betsize(user_name))
                         new_balance = wallet_balance.replace(".", "\\.")
                         bet_size = str(bet_size_numeric).replace(".", "\\.")
@@ -517,41 +537,44 @@ solscan_header = {
 
 def check_for_deposits():  # will update user balance if they deposited money (needs cooldown)
     while True:
-        all_user_accounts = game_users.return_all_users()
-        for user in all_user_accounts:
-            if user not in deposit_queue:
-                if str(user[0]) != "@MASTERWALLET":
-                    user_wallet = str(user[2])
-                    try:
-                        recent_tx = solana_client.get_signatures_for_address(
-                            Pubkey.from_string(user_wallet),
-                            limit=1
-                        )
-                        transaction = json.loads(str(recent_tx.to_json()))["result"]
-                        tx_hash = str(transaction[0]["signature"])
-                        if not txhash_database.check_hash_exist(tx_hash):
-                            try:
-                                sol_transfer = request('GET',
-                                                       "https://pro-api.solscan.io/v1.0/transaction/" + str(
-                                                           tx_hash),
-                                                       headers=solscan_header).json()
-                                sol_transfer_amount = float(sol_transfer["solTransfers"][0]["amount"]) / 10 ** 9
-                                destination_address = str(sol_transfer["solTransfers"][0]["destination"])
-                                incoming_transfer = float(sol_transfer_amount)
-                                if incoming_transfer >= 0.015 and destination_address == user_wallet:  # this means money has been deposited.
-                                    logging.info(f"User: {user} has deposited {incoming_transfer} SOL and is "
-                                                 f"pending to be credited")
-                                    print(f"processing {user[0]} deposit of {incoming_transfer}")
-                                    if str(user[
-                                               0]) not in deposit_queue:  # we will ignore if they have some pending deposit
-                                        deposit_queue[str(user[0])] = [incoming_transfer, time.time()]
-                                else:
-                                    logging.warning(f"User: {user} has deposited insufficient amount of SOL!")
-                            except KeyError:
-                                pass
-                            txhash_database.add_hash(tx_hash)
-                    except (IndexError, SolanaRpcException):
-                        pass
+        try:
+            all_user_accounts = game_users.return_all_users()
+            for user in all_user_accounts:
+                if user not in deposit_queue:
+                    if str(user[0]) != "@MASTERWALLET":
+                        user_wallet = str(user[2])
+                        try:
+                            recent_tx = solana_client.get_signatures_for_address(
+                                Pubkey.from_string(user_wallet),
+                                limit=1
+                            )
+                            transaction = json.loads(str(recent_tx.to_json()))["result"]
+                            tx_hash = str(transaction[0]["signature"])
+                            if not txhash_database.check_hash_exist(tx_hash):
+                                try:
+                                    sol_transfer = request('GET',
+                                                           "https://pro-api.solscan.io/v1.0/transaction/" + str(
+                                                               tx_hash),
+                                                           headers=solscan_header).json()
+                                    sol_transfer_amount = float(sol_transfer["solTransfers"][0]["amount"]) / 10 ** 9
+                                    destination_address = str(sol_transfer["solTransfers"][0]["destination"])
+                                    incoming_transfer = float(sol_transfer_amount)
+                                    if incoming_transfer >= 0.015 and destination_address == user_wallet:  # this means money has been deposited.
+                                        logging.info(f"User: {user} has deposited {incoming_transfer} SOL and is "
+                                                     f"pending to be credited")
+                                        print(f"processing {user[0]} deposit of {incoming_transfer}")
+                                        if str(user[
+                                                   0]) not in deposit_queue:  # we will ignore if they have some pending deposit
+                                            deposit_queue[str(user[0])] = [incoming_transfer, time.time()]
+                                    else:
+                                        logging.warning(f"User: {user} has deposited insufficient amount of SOL!")
+                                except KeyError:
+                                    pass
+                                txhash_database.add_hash(tx_hash)
+                        except (IndexError, SolanaRpcException):
+                            pass
+        except sqlite3.ProgrammingError:
+            continue
         time.sleep(5)
 
 
@@ -669,8 +692,8 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
     while True:
         crashed = []
         temp_games = copy.deepcopy(active_games)
-        if len(temp_games) > 0:  #for debug
-            print(temp_games)
+        #if len(temp_games) > 0:  #for debug
+        #    print(temp_games)
         for active_user in temp_games:
             master_wallet_balance = 0
             while True:
@@ -685,9 +708,7 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             time_stamp = time.time()
             data_list = active_games[active_user]
             time_interval = int(time_stamp - data_list[0])
-            print(multiplier_step_per_second)
             max_interval = int(data_list[1] / multiplier_step_per_second) - 8
-            print(max_interval)
             if time_interval >= max_interval or data_list[2] * (
                     1 + (
                     time_interval * multiplier_step_per_second)) >= max_win_size:  #they cannot profit more than max win too
