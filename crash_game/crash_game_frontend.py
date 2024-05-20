@@ -13,6 +13,7 @@ from solana.rpc.api import Client, Pubkey
 import json
 from helius import TransactionsAPI
 import logging
+import copy
 
 logging.basicConfig(
     level=logging.INFO,
@@ -236,7 +237,9 @@ def handle_buttons(callback_query: types.CallbackQuery):
         time_stamp = time.time()
         won = False
         if user_name in active_games:
-            data_list = active_games[user_name]
+            data_list = copy.deepcopy(active_games[user_name])
+            del active_games[user_name]
+            time.sleep(0.1)
             time_interval = int(time_stamp - data_list[0])
             wallet_balance = float(game_users.check_user_balance(user_name))
             max_interval = int(data_list[1] / multiplier_step_per_second) - 8
@@ -288,8 +291,6 @@ def handle_buttons(callback_query: types.CallbackQuery):
                                f"🟣 Wallet Balance: *{new_balance}*")
                 edit_message(chat_id, main_string, data_list[4], user_name)
                 return
-            if user_name in active_games:
-                del active_games[user_name]
         else:
             no_active_game_string = "\n\n\n⚠️⚠️⚠️ _NO ACTIVE GAME_ ⚠️⚠️⚠️\n\n\n"
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
@@ -605,7 +606,7 @@ def render_boxes():
     seconds_step = 0.125
     while True:
         try:
-            temp_games = active_games
+            temp_games = copy.deepcopy(active_games)
             for active_user in temp_games:
                 if active_user in active_games:
                     master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
@@ -633,18 +634,19 @@ def render_boxes():
                                        f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| "
                                        f"🟣 Wallet Balance: *{current_balance} SOL*")
                         edit_message(chat_id, main_string, msg_id, active_user)  # to edit the msg
-        except (RuntimeError, KeyError):
+        except (RuntimeError, KeyError) as err:
+            print(err)
             print("error")
             pass
-        time.sleep(0.05)
+        time.sleep(0.08)
 
 
 def game_polling_engine():  # all this has to do is crash them if they dont cash out tbh
     crash_string = "\n\n\n☠️☠️☠️ _CRASHED_ ☠️☠️☠️\n\n\n"
     while True:
         crashed = []
-        temp_games = active_games
-        if len(temp_games)>0:#for debug
+        temp_games = copy.deepcopy(active_games)
+        if len(temp_games) > 0:  #for debug
             print(temp_games)
         for active_user in temp_games:
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
@@ -665,6 +667,8 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             data_list = active_games[finished_user]
             print("user crashed: ", finished_user)
             user_to_remove = crashed.pop()
+            if user_to_remove in active_games:
+                del active_games[user_to_remove]
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
@@ -682,8 +686,6 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
                            f"*0\\.1 SOL* \\|"
                            f"🟣 Wallet Balance: *{new_balance} SOL*")
             edit_message(chat_id, main_string, msg_id, finished_user)  # to edit the msg
-            if user_to_remove in active_games:
-                del active_games[user_to_remove]
         time.sleep(0.1)
 
 
