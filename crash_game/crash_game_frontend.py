@@ -44,15 +44,15 @@ username:[time they started game,max multiplier before crash,bet_size],
 }
 """
 
+master_wallet_username = "@MASTERWALLET"
 master_wallet = "HH1ewQT9tbjAe9qb2y833FqAYreSYVHyzxsgxkhEp34L"
 min_bet = 0.01  # this is standard across all players
 
 
 def update_master_wallet_balance(deposit_withdrawal, amount):
-    master_wallet_username = "@MASTERWALLET"
     if not game_users.check_user_exist(master_wallet_username):
         game_users.add_user(master_wallet_username, "", "", "")
-        game_users.update_balance(master_wallet_username, str(0.0))
+        game_users.update_balance(master_wallet_username, str(50.0))
     if deposit_withdrawal == "deposit":
         temp_balance = float(game_users.check_user_balance(master_wallet_username))
         temp_balance += amount
@@ -86,7 +86,7 @@ def crash_game(
             logging.info(f"User: {user_name} has been credited a small amount of sol to cover transfer fees")
 
     # fetch master wallet info to determine max win,max apes
-    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+    master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
 
@@ -123,7 +123,7 @@ def hide_settings(callback_query: types.CallbackQuery):
     user_name = "@" + callback_query.from_user.username
 
     # fetch master wallet info to determine max win,max apes
-    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+    master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
 
@@ -181,7 +181,7 @@ def withdrawal_handler(message):
             # username so we know hows checking
             markup.row(place_bet, configure_funds, change_game)
             markup.row(bet, share_win, start)
-            master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
@@ -203,7 +203,7 @@ def withdrawal_handler(message):
     if failed_test:
         if not user_input.isnumeric():
             if user_input.lower() == "cancel":
-                master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+                master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                 max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                 max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                 current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
@@ -253,7 +253,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 game_users.update_balance(user_name, new_balance)
             if won:
                 win_string = "\n\n\n🎉🎉🎉 _YOU WON_ 🎉🎉🎉\n\n\n"
-                master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+                master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                 max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                 max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                 bet_size_numeric = float(game_users.check_user_betsize(user_name))
@@ -271,7 +271,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 edit_message(chat_id, main_string, data_list[4], user_name)
             else:
                 crash_string = "\n\n\n☠️☠️☠️ _CRASHED_ ☠️☠️☠️\n\n\n"
-                master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+                master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                 max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                 max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                 bet_size_numeric = float(game_users.check_user_betsize(user_name))
@@ -292,7 +292,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 del active_games[user_name]
         else:
             no_active_game_string = "\n\n\n⚠️⚠️⚠️ _NO ACTIVE GAME_ ⚠️⚠️⚠️\n\n\n"
-            master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             bet_size_numeric = float(game_users.check_user_betsize(user_name))
@@ -324,7 +324,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                         max_multiplier = 0
                     if max_multiplier == 0:
                         immediate_crash_string = "\n\n\n☠️☠️☠️ _INSTANT CRASH_ ☠️☠️☠️\n\n\n"
-                        master_wallet_balance = 50  #solanahandler.return_solana_balance(master_wallet)
+                        master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                         max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                         max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                         wallet_balance = float(game_users.check_user_balance(user_name))
@@ -349,7 +349,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 else:
                     logging.info(f"User: {user_name} has insufficient balance to play the game at requested position "
                                  f"size.")
-                    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+                    master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                     current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
@@ -373,7 +373,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
         new_bet_size = str(round(current_bet_size + 0.01, 3))
         logging.info(f"User: {user_name} has raised their bet amount to: {new_bet_size}")
         game_users.update_bet_size(user_name, new_bet_size)
-        master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+        master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
         max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
         max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
 
@@ -394,7 +394,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
             new_bet_size = str(round(current_bet_size - 0.01, 3))
             logging.info(f"User: {user_name} has lowered their bet amount to: {new_bet_size}")
             game_users.update_bet_size(user_name, new_bet_size)
-            master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             current_balance = str(round(float(game_users.check_user_balance(user_name)), 3)).replace(".", "\\.")
@@ -448,7 +448,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
 
 
 def string_builder(multiplier):  # based on the multiplier it will build a string
-    number_of_squares = int(int(multiplier) + int(1.5 ** int(multiplier)))
+    number_of_squares = int(multiplier)  #play around with this
     if number_of_squares == 0:
         number_of_squares = 1
     string = ""
@@ -503,37 +503,38 @@ def check_for_deposits():  # will update user balance if they deposited money (n
         all_user_accounts = game_users.return_all_users()
         for user in all_user_accounts:
             if user not in deposit_queue:
-                user_wallet = str(user[2])
-                try:
-                    recent_tx = solana_client.get_signatures_for_address(
-                        Pubkey.from_string(user_wallet),
-                        limit=1
-                    )
-                    transaction = json.loads(str(recent_tx.to_json()))["result"]
-                    tx_hash = str(transaction[0]["signature"])
-                    if not txhash_database.check_hash_exist(tx_hash):
-                        try:
-                            sol_transfer = request('GET',
-                                                   "https://pro-api.solscan.io/v1.0/transaction/" + str(
-                                                       tx_hash),
-                                                   headers=solscan_header).json()
-                            sol_transfer_amount = float(sol_transfer["solTransfers"][0]["amount"]) / 10 ** 9
-                            destination_address = str(sol_transfer["solTransfers"][0]["destination"])
-                            incoming_transfer = float(sol_transfer_amount)
-                            if incoming_transfer >= 0.015 and destination_address == user_wallet:  # this means money has been deposited.
-                                logging.info(f"User: {user} has deposited {incoming_transfer} SOL and is "
-                                             f"pending to be credited")
-                                print(f"processing {user[0]} deposit of {incoming_transfer}")
-                                if str(user[
-                                           0]) not in deposit_queue:  # we will ignore if they have some pending deposit
-                                    deposit_queue[str(user[0])] = [incoming_transfer, time.time()]
-                            else:
-                                logging.warning(f"User: {user} has deposited insufficient amount of SOL!")
-                        except KeyError:
-                            pass
-                        txhash_database.add_hash(tx_hash)
-                except (IndexError, SolanaRpcException):
-                    pass
+                if str(user[0]) != "@MASTERWALLET":
+                    user_wallet = str(user[2])
+                    try:
+                        recent_tx = solana_client.get_signatures_for_address(
+                            Pubkey.from_string(user_wallet),
+                            limit=1
+                        )
+                        transaction = json.loads(str(recent_tx.to_json()))["result"]
+                        tx_hash = str(transaction[0]["signature"])
+                        if not txhash_database.check_hash_exist(tx_hash):
+                            try:
+                                sol_transfer = request('GET',
+                                                       "https://pro-api.solscan.io/v1.0/transaction/" + str(
+                                                           tx_hash),
+                                                       headers=solscan_header).json()
+                                sol_transfer_amount = float(sol_transfer["solTransfers"][0]["amount"]) / 10 ** 9
+                                destination_address = str(sol_transfer["solTransfers"][0]["destination"])
+                                incoming_transfer = float(sol_transfer_amount)
+                                if incoming_transfer >= 0.015 and destination_address == user_wallet:  # this means money has been deposited.
+                                    logging.info(f"User: {user} has deposited {incoming_transfer} SOL and is "
+                                                 f"pending to be credited")
+                                    print(f"processing {user[0]} deposit of {incoming_transfer}")
+                                    if str(user[
+                                               0]) not in deposit_queue:  # we will ignore if they have some pending deposit
+                                        deposit_queue[str(user[0])] = [incoming_transfer, time.time()]
+                                else:
+                                    logging.warning(f"User: {user} has deposited insufficient amount of SOL!")
+                            except KeyError:
+                                pass
+                            txhash_database.add_hash(tx_hash)
+                    except (IndexError, SolanaRpcException):
+                        pass
         time.sleep(5)
 
 
@@ -554,6 +555,7 @@ def process_deposit():
                         game_users.update_balance(user_to_credit, str(post_credit_balance))
                         processed_deposits.append(user_to_credit)
                         chat_id = game_users.get_chat_id(user_to_credit)
+                        update_master_wallet_balance("deposit", post_credit_balance)
                         bot.send_message(chat_id,
                                          f"Deposit of {account_to_credit} SOL has been processed and it's ready to "
                                          f"be used")
@@ -580,11 +582,11 @@ def process_withdrawal_request():
                 if confirmation:  #processed
                     game_users.update_balance(user_to_process, str(0.0))
                     processed_withdrawals.append(user_to_process)
-                    #send a conformation mdg here:
                     logging.info(
                         f"User: {user_to_process} has withdrawn funds {amount} link: https://solscan.io/tx/{tx}")
                     bot.send_message(chat_id, f"✅ Funds Withdrawn: [Solscan link](https://solscan.io/tx/{tx})",
                                      disable_web_page_preview=True)
+                    update_master_wallet_balance("withdrawal", str(amount))
                 else:
                     logging.critical(f"User: {user_to_process} was unable to withdraw funds")
                     print(user_to_process, "error with withdrawal please check!")
@@ -594,26 +596,19 @@ def process_withdrawal_request():
                     f"queue")
                 bot.send_message(chat_id, f"Seems like there are still funds being deposited.please wait",
                                  disable_web_page_preview=True)
-        for prcessed_withdrawal in processed_withdrawals:
-            del withdrawal_queue[prcessed_withdrawal]
+        for processed_withdrawal in processed_withdrawals:
+            del withdrawal_queue[processed_withdrawal]
         time.sleep(1)
 
 
-def render_boxes():  # so the problem now is that sometimes when the user cashes out it still leaves the multipler boxes because it manages to still render between the clicks i think
-    #each second is 0.125X increase but i will tweak it so its just right for now
-    """
-    {                0                            1                2        3        4
-    username:[time they started game,max multiplier before crash,bet_size,chat_id,msg_id],
-    }
-    """
-    'break the polling until user preses cash out or looses(doesnt cash out before the crash )'
-    seconds_step = 0.125  # the amount the multiplier is incremented per second
+def render_boxes():
+    seconds_step = 0.125
     while True:
         try:
             temp_games = active_games
             for active_user in temp_games:
                 if active_user in active_games:
-                    master_wallet_balance = solanahandler.return_solana_balance(master_wallet)
+                    master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                     max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
                     max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
                     intial_balance = float(game_users.check_user_balance(active_user))
@@ -649,9 +644,10 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
     while True:
         crashed = []
         temp_games = active_games
-        print(temp_games)
+        if len(temp_games)>0:#for debug
+            print(temp_games)
         for active_user in temp_games:
-            master_wallet_balance = 10  #solanahandler.return_solana_balance(master_wallet) instead of this lets also treat the master wallet as a "user and ad it to the db "this way there isnt a issue"
+            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             multiplier_step_per_second = 0.125
             time_stamp = time.time()
@@ -669,7 +665,7 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             data_list = active_games[finished_user]
             print("user crashed: ", finished_user)
             user_to_remove = crashed.pop()
-            master_wallet_balance = 10  #solanahandler.return_solana_balance(master_wallet)
+            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             wallet_balance = float(game_users.check_user_balance(finished_user))
@@ -697,6 +693,7 @@ if __name__ == "__main__":
     t3 = threading.Thread(target=process_deposit)
     t4 = threading.Thread(target=process_withdrawal_request)
     t5 = threading.Thread(target=render_boxes)
+    update_master_wallet_balance("", 0)  #just for testing
 
     t5.start()
     t4.start()

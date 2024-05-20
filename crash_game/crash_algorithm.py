@@ -37,7 +37,7 @@ def get_max_position(pool_size):
 
 
 def get_max_win(pool_size):
-    twenty_percent_of_pool = int(0.1 * pool_size)  # in sol
+    twenty_percent_of_pool = int(0.1 * pool_size)  # in sol (10% of pool size)
     return twenty_percent_of_pool
 
 
