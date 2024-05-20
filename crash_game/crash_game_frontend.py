@@ -268,7 +268,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
             multiplier = 0
             if time_interval < max_interval:
                 multiplier = round(1 + round(multiplier_step_per_second * time_interval, 3), 3)
-                win_amount = round(float(multiplier * data_list[2]), 3)
+                win_amount = round(float(multiplier * data_list[2])-pos_size, 3)
                 new_balance = str(round(wallet_balance + win_amount, 3))
                 game_users.update_balance(user_name, new_balance)
                 won = True
@@ -277,6 +277,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 new_balance = str(round(wallet_balance + win_amount, 3))
                 game_users.update_balance(user_name, new_balance)
             if won:
+                logging.info(f"User: {user_name} has won {win_amount} SOL")
                 win_string = "\n\n\n🎉🎉🎉 _YOU WON_ 🎉🎉🎉\n\n\n"
                 master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                 max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
@@ -295,6 +296,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                                f"🟣 Wallet Balance: *{new_balance}*")
                 edit_message(chat_id, main_string, data_list[4], user_name)
             else:
+                logging.info(f"User: {user_name} has lost {pos_size} SOL")
                 crash_string = "\n\n\n☠️☠️☠️ _CRASHED_ ☠️☠️☠️\n\n\n"
                 master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                 max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
@@ -314,6 +316,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 edit_message(chat_id, main_string, data_list[4], user_name)
                 return
         else:
+            logging.info(f"User: {user_name} tried to cash out but no active game running")
             no_active_game_string = "\n\n\n⚠️⚠️⚠️ _NO ACTIVE GAME_ ⚠️⚠️⚠️\n\n\n"
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
@@ -408,7 +411,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
     elif response_value.split()[0] == "betup":
         current_bet_size = float(game_users.check_user_betsize(user_name))
         new_bet_size = str(round(current_bet_size + 0.01, 3))
-        logging.info(f"User: {user_name} has raised their bet amount to: {new_bet_size}")
+        #logging.info(f"User: {user_name} has raised their bet amount to: {new_bet_size}")
         game_users.update_bet_size(user_name, new_bet_size)
         master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
         max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
@@ -429,7 +432,7 @@ def handle_buttons(callback_query: types.CallbackQuery):
         current_bet_size = float(game_users.check_user_betsize(user_name))
         if current_bet_size > 0.01:
             new_bet_size = str(round(current_bet_size - 0.01, 3))
-            logging.info(f"User: {user_name} has lowered their bet amount to: {new_bet_size}")
+            #logging.info(f"User: {user_name} has lowered their bet amount to: {new_bet_size}")
             game_users.update_bet_size(user_name, new_bet_size)
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
@@ -517,8 +520,8 @@ def edit_message(chat_id, new_text, msg_id, user_name):
     try:
         bot.edit_message_text(chat_id=chat_id, text=new_text, message_id=msg_id, parse_mode='MarkdownV2',
                               reply_markup=markup)
-    except telebot.apihelper.ApiTelegramException:
-        print("error editing msg")
+    except telebot.apihelper.ApiTelegramException as tele_error:
+        print("error editing msg",tele_error)
         return
 
 
@@ -653,26 +656,26 @@ def render_boxes():
                         try:
                             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
                             break
-                        except TypeError:
+                        except (TypeError,sqlite3.ProgrammingError):
                             print("db error trying again...")
                             continue
-                    max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
-                    max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
-                    intial_balance = float(game_users.check_user_balance(active_user))
-                    bet_size_numeric = round(float(game_users.check_user_betsize(active_user)), 3)
-                    bet_size = str(bet_size_numeric).replace(".", "\\.")
-                    chat_id = active_games[active_user][3]
-                    msg_id = active_games[active_user][4]
-                    start_time = active_games[active_user][0]
-                    current_multiplier = round(1 + round((time.time() - start_time) * seconds_step, 3), 3)
-                    current_box_string = string_builder(current_multiplier)
-                    # here quickly update it on their telegram
-                    multiplier_numeric = current_multiplier
-                    multiplier = str(multiplier_numeric).replace(".", "\\.")
-                    profit = str(round(multiplier_numeric * bet_size_numeric, 3)).replace(".", "\\.")
-                    current_balance = str(round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
-                        ".", "\\.")  # to be changed to custom
                     if active_user in active_games:
+                        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
+                        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                        intial_balance = float(game_users.check_user_balance(active_user))
+                        bet_size_numeric = round(float(game_users.check_user_betsize(active_user)), 3)
+                        bet_size = str(bet_size_numeric).replace(".", "\\.")
+                        chat_id = active_games[active_user][3]
+                        msg_id = active_games[active_user][4]
+                        start_time = active_games[active_user][0]
+                        current_multiplier = round(1 + round((time.time() - start_time) * seconds_step, 3), 3)
+                        current_box_string = string_builder(current_multiplier)
+                        # here quickly update it on their telegram
+                        multiplier_numeric = current_multiplier
+                        multiplier = str(multiplier_numeric).replace(".", "\\.")
+                        profit = str(round(multiplier_numeric * bet_size_numeric, 3)).replace(".", "\\.")
+                        current_balance = str(round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
+                            ".", "\\.")  # to be changed to custom
                         string_to_add = f"\n\n\n🚀 {current_box_string}\\({multiplier}x\\)\n\n\n"
                         main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
                                        f"running_\\.\\.\\.{string_to_add}🟣 Current Bet Size: *{bet_size} "
@@ -689,20 +692,14 @@ def render_boxes():
 
 def game_polling_engine():  # all this has to do is crash them if they dont cash out tbh
     crash_string = "\n\n\n☠️☠️☠️ _CRASHED_ ☠️☠️☠️\n\n\n"
+    seconds_step = 0.125
     while True:
         crashed = []
         temp_games = copy.deepcopy(active_games)
         #if len(temp_games) > 0:  #for debug
         #    print(temp_games)
         for active_user in temp_games:
-            master_wallet_balance = 0
-            while True:
-                try:
-                    master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-                    break
-                except sqlite3.ProgrammingError:
-                    print("recursive error ...retrying")
-                    continue
+            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
             max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
             multiplier_step_per_second = 0.125
             time_stamp = time.time()
@@ -726,6 +723,7 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             wallet_balance = float(game_users.check_user_balance(finished_user))
             chat_id = data_list[3]
             msg_id = data_list[4]
+            logging.info(f"User: {finished_user} has lost {data_list[2]} SOL,they crashed before a cashout event")
             new_balance = str(round(wallet_balance - data_list[2], 3))
             game_users.update_balance(finished_user, new_balance)
             new_balance = new_balance.replace(".", "\\.")
@@ -737,6 +735,47 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
                            f"*0\\.1 SOL* \\|"
                            f"🟣 Wallet Balance: *{new_balance} SOL*")
             edit_message(chat_id, main_string, msg_id, finished_user)  # to edit the msg
+
+        try:
+            temp_games = copy.deepcopy(active_games)
+            for active_user in temp_games:
+                if active_user in active_games:
+                    master_wallet_balance = 0
+                    while True:
+                        try:
+                            master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
+                            break
+                        except (TypeError,sqlite3.ProgrammingError):
+                            print("db error trying again...")
+                            continue
+                    if active_user in active_games:
+                        max_bet_size = int(crash_algorithm.get_max_position(master_wallet_balance))
+                        max_win_size = int(crash_algorithm.get_max_win(master_wallet_balance))
+                        intial_balance = float(game_users.check_user_balance(active_user))
+                        bet_size_numeric = round(float(game_users.check_user_betsize(active_user)), 3)
+                        bet_size = str(bet_size_numeric).replace(".", "\\.")
+                        chat_id = active_games[active_user][3]
+                        msg_id = active_games[active_user][4]
+                        start_time = active_games[active_user][0]
+                        current_multiplier = round(1 + round((time.time() - start_time) * seconds_step, 3), 3)
+                        current_box_string = string_builder(current_multiplier)
+                        # here quickly update it on their telegram
+                        multiplier_numeric = current_multiplier
+                        multiplier = str(multiplier_numeric).replace(".", "\\.")
+                        profit = str(round(multiplier_numeric * bet_size_numeric, 3)).replace(".", "\\.")
+                        current_balance = str(round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
+                            ".", "\\.")  # to be changed to custom
+                        string_to_add = f"\n\n\n🚀 {current_box_string}\\({multiplier}x\\)\n\n\n"
+                        main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
+                                       f"running_\\.\\.\\.{string_to_add}🟣 Current Bet Size: *{bet_size} "
+                                       f"SOL*  \\| 🤑 Current Profit: *{profit}* \\(_{multiplier}x_\\)\n\n💰 Max Win Amount: *"
+                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| "
+                                       f"🟣 Wallet Balance: *{current_balance} SOL*")
+                        edit_message(chat_id, main_string, msg_id, active_user)  # to edit the msg
+        except (RuntimeError, KeyError) as err:
+            print(err)
+            print("error")
+            pass
         time.sleep(0.1)
 
 
@@ -748,7 +787,7 @@ if __name__ == "__main__":
     t5 = threading.Thread(target=render_boxes)
     update_master_wallet_balance("", 0)  #just for testing
 
-    t5.start()
+    #t5.start()
     t4.start()
     t3.start()
     t2.start()

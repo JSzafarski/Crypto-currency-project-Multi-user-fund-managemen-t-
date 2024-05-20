@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 
 class VirtualBalance:
@@ -41,9 +42,19 @@ class VirtualBalance:
         self.connection.commit()
 
     def check_user_balance(self, telegram_username):
-        sql = "SELECT * FROM virtualbalancetable WHERE username =?"
-        self.cursor.execute(sql, [telegram_username])
-        user_settings = self.cursor.fetchone()
+        while True:
+            try:
+                sql = "SELECT * FROM virtualbalancetable WHERE username =?"
+                self.cursor.execute(sql, [telegram_username])
+                user_settings = self.cursor.fetchone()
+                break
+            except sqlite3.ProgrammingError as error:
+                print("recursive error ...retrying", error)
+                time.sleep(0.05)
+                continue
+        #sql = "SELECT * FROM virtualbalancetable WHERE username =?"
+        #self.cursor.execute(sql, [telegram_username])
+        #user_settings = self.cursor.fetchone()
         return user_settings[1]
 
     def check_user_betsize(self, telegram_username):
