@@ -2,8 +2,8 @@ from solathon.core.instructions import transfer
 from solathon import Client, Transaction, PublicKey, Keypair
 
 client = Client("https://api.mainnet-beta.solana.com")
-master_wallet = "DbDnA5p2BsuGwCB7QJ7txZNxd5Exh4u3WJ6zDtyardcX"
-master_priv_key = "5Q7L6PD7oLPt4Z5ms7AcJoLtDRTTa6V7eo7TTeEXqRyt58CKGzKau5V6AA2hj1THzhn5U5ZdfYP9mxLAzrBAkP6K"
+master_wallet = "4vRvpS3zpygYZWdwE4JGq7RVfHsh6GzSDMVFxTCYpDeT"
+master_priv_key = "3gKY76n8vdPBZgwU9e1mF2AfFNFCU1hQKh5kv32MpeZnvTH2D9ZWozfgqZp5QR2uekV8FohYempgQRDPyJUAdgef"
 
 
 def transfer_to_master(user_priv_key, amount):  # identical to withdraw function but it will have one withdrawal adress

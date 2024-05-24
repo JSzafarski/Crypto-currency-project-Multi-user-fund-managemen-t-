@@ -652,3 +652,22 @@
 2024-05-16 15:22:11,364:INFO:root:user : @Browner1991 requested a withdrawal of : 2081042896 to wallet 3VSb6e5PcYJ1sCYpKjhEVmp2zgcZFmKDtm565u6n49W4
 2024-05-16 17:37:06,635:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
 2024-05-16 17:37:12,590:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-20 23:52:14,525:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-21 07:47:49,406:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-21 10:02:57,586:INFO:root:user : @luke_1237 requested a withdrawal of : 18647083162 to wallet 7ggzj51gBXCmBrfB2Ue9aNWG6WB2g4neNmCV8eUKpEHt
+2024-05-21 10:06:15,820:INFO:root:user : @Gelydb1337 registered
+2024-05-21 10:09:23,569:ERROR:TeleBot:Aiohttp ClientError: ServerDisconnectedError
+2024-05-21 10:09:23,569:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x0000020024177BF0> files=None request_timeout=300
+2024-05-21 15:50:12,297:DEBUG:asyncio:Using proactor: IocpProactor
+2024-05-21 15:51:10,125:INFO:root:user : @Yacine_d1 requested a withdrawal of : 51908409608 to wallet 6Yj5fCmu1BmeULftTFHVcbPaHsPCsc8CWtY4jLfQRkso
+2024-05-21 15:57:40,334:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-21 17:43:46,891:INFO:root:user : @Jenbenias requested a withdrawal of : 3000001861 to wallet GTk6r1Mht7cn9uhD7qXXEL3Eypy8FtiTxfZJXGXebsS4
+2024-05-21 19:10:49,591:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-21 21:41:17,218:INFO:root:user : @Ch1p01 requested a withdrawal of : 14361298643 to wallet CUecCgsJhDzD7A4w3i4PaZdCP5qQed7ZXfoVLYAeGfWe
+2024-05-22 00:06:33,553:INFO:root:user : @Ifeasor registered
+2024-05-22 00:56:59,635:INFO:root:user : @Kucingpanjatikan registered
+2024-05-22 04:31:13,447:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-22 14:29:44,314:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-22 19:46:40,319:INFO:root:user : @CrypThomasWolf requested a withdrawal of : 104442151692 to wallet A5JpCgJViB7CtCxpYBfTwBaupPsWwyRnQ91CQCygt9AW
+2024-05-22 22:26:53,042:ERROR:TeleBot:Aiohttp ClientError: ClientOSError
+2024-05-22 22:26:53,042:ERROR:TeleBot:Unhandled exception (full traceback for debug level): Request timeout. Request: method=get url=getUpdates params=<aiohttp.formdata.FormData object at 0x00000177A7A8AF30> files=None request_timeout=300

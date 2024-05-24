@@ -39,7 +39,7 @@ allowable_submissions = {
     "cntoken.io": 150000,
     "coinvote": 30000,
     "x": 25000000,
-    "cmc-comment": 2000000000,
+    "cmc-comment": 20000000000,
     "cmc-watchlist": 250000000,
     "x-follow": 125000000,
     "x-saylor": 250000000,

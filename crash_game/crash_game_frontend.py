@@ -48,7 +48,7 @@ username:[time they started game,max multiplier before crash,bet_size],
 """
 
 master_wallet_username = "@MASTERWALLET"
-master_wallet = "HH1ewQT9tbjAe9qb2y833FqAYreSYVHyzxsgxkhEp34L"
+master_wallet = "4vRvpS3zpygYZWdwE4JGq7RVfHsh6GzSDMVFxTCYpDeT"
 min_bet = 0.01  # this is standard across all players
 
 
@@ -82,7 +82,8 @@ def info(message):
                               "rising multiplier\\.\n\n\nDisclaimer\n\nYour funds are at risk\\.Betting involves "
                               "financial risk and may result in the loss of your money\\. Only bet what you can afford "
                               "to lose\\. mBTC Bets is not responsible for any losses incurred while using this "
-                              "platform\\. Please gamble responsibly\\.", parse_mode='MarkdownV2')
+                              "platform\\. Please gamble responsibly\\.\n\nReport problems to: @mbtc\\_bossman",
+                     parse_mode='MarkdownV2')
 
 
 @bot.message_handler(commands=['start'])
@@ -98,14 +99,16 @@ def crash_game(message):
     logging.info(f"User: {user_name} has clicked Start")
     if not game_users.check_user_exist(user_name):
         fresh_address, fresh_private_key = solanahandler.create_wallet()
+        time.sleep(1.5)  #make sure its al registered ect...
         if fresh_address != "" and fresh_private_key != "":
             game_users.add_user(user_name, fresh_address, fresh_private_key, str(chat_id))
             logging.info(f"User: {user_name} has been added to the database with a new priv/pub key")
-            transferfunds.withdraw(fresh_address, intial_transfer)
+            boolt, tx = transferfunds.withdraw(fresh_address, intial_transfer)
+            print(boolt, tx)
             logging.info(f"User: {user_name} has been credited a small amount of sol to cover transfer fees")
     if user_name == "@scrollmainnet":
-        game_users.update_balance("@scrollmainnet", str(60))
-    game_users.update_balance(master_wallet_username, str(20.0))
+        game_users.update_balance("@MASTERWALLET", str(10.2))
+    #game_users.update_balance(master_wallet_username, str(10.0))
     # fetch master wallet info to determine max win,max apes
     master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
     max_bet_size = round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)
@@ -116,6 +119,7 @@ def crash_game(message):
 
     max_bet_size = str(max_bet_size).replace(".", "\\.")
     max_win_size = str(max_win_size).replace(".", "\\.")
+    min_bet_string = str(min_bet).replace(".", "\\.")
     markup = types.InlineKeyboardMarkup()
     place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
     start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
@@ -129,7 +133,8 @@ def crash_game(message):
     bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                               f"running_\\.\\.\\.\n\n🟣 Current Bet "
                               f"Size: *{bet_size} SOL* \n\n💰 Max Win Amount: *{max_win_size} "
-                              f"SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| 🟣 "
+                              f"SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *{min_bet_string} SOL* "
+                              f"\\| 🟣"
                               f"Wallet Balance: *{current_balance} SOL*",
                      parse_mode='MarkdownV2', reply_markup=markup)
 
@@ -153,6 +158,7 @@ def hide_settings(callback_query: types.CallbackQuery):
 
     max_bet_size = str(max_bet_size).replace(".", "\\.")
     max_win_size = str(max_win_size).replace(".", "\\.")
+    min_bet_string = str(min_bet).replace(".", "\\.")
     markup = types.InlineKeyboardMarkup()
     place_bet = types.InlineKeyboardButton("🤖 Set Autobet", callback_data=f"none")  # that will be added later
     start = types.InlineKeyboardButton("🚀 Start", callback_data=f"start")
@@ -166,7 +172,7 @@ def hide_settings(callback_query: types.CallbackQuery):
     bot.send_message(chat_id, f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                               f"running_\\.\\.\\.\n\n🟣 Current Bet"
                               f"Size: *{bet_size} SOL* \n\n💰 Max Win Amount: *{max_win_size} "
-                              f"SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| 🟣 "
+                              f"SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *{min_bet_string} SOL* \\| 🟣 "
                               f"Wallet Balance: *{current_balance} SOL*",
                      parse_mode='MarkdownV2', reply_markup=markup)
 
@@ -211,11 +217,12 @@ def withdrawal_handler(message):
 
             max_bet_size = str(max_bet_size).replace(".", "\\.")
             max_win_size = str(max_win_size).replace(".", "\\.")
+            min_bet_string = str(min_bet).replace(".", "\\.")
             modified_main_game_pos_size = (
                 f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                 f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
                 f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
-                f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
+                f"Size: *{min_bet_string} SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
             bot.send_message(chat_id, modified_main_game_pos_size,
                              parse_mode='MarkdownV2', reply_markup=markup)
         else:
@@ -235,11 +242,12 @@ def withdrawal_handler(message):
 
                 max_bet_size = str(max_bet_size).replace(".", "\\.")
                 max_win_size = str(max_win_size).replace(".", "\\.")
+                min_bet_string = str(min_bet).replace(".", "\\.")
                 modified_main_game_pos_size = (
                     f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                     f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
                     f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
-                    f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
+                    f"Size: *{min_bet_string} SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
                 edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
                 return
         else:
@@ -290,12 +298,13 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 multiplier = str(multiplier).replace(".", "\\.")
                 win_amount = str(win_amount).replace(".", "\\.")
                 new_balance = str(new_balance).replace(".", "\\.")
+                min_bet_string = str(min_bet).replace(".", "\\.")
                 main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                                f"running_\\.\\.\\.{win_string}🟣 Current Bet Size: *{bet_size} "
                                f"SOL*  \\| 🤑 Current Profit: *{win_amount}* \\(_{multiplier}x_\\)\n\n💰 Max Win "
                                f"Amount: *"
                                f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: "
-                               f"*0\\.1 SOL* \\|"
+                               f"*{min_bet_string} SOL* \\|"
                                f"🟣 Wallet Balance: *{new_balance}*")
                 edit_message(chat_id, main_string, data_list[4], user_name)
             else:
@@ -311,12 +320,13 @@ def handle_buttons(callback_query: types.CallbackQuery):
                 multiplier = str(round(multiplier, 3)).replace(".", "\\.")
                 win_amount = str(round(win_amount, 3)).replace(".", "\\.")
                 new_balance = str(new_balance).replace(".", "\\.")
+                min_bet_string = str(min_bet).replace(".", "\\.")
                 main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                                f"running_\\.\\.\\.{crash_string}🟣 Current Bet Size: *{bet_size} "
                                f"SOL*  \\| 🤑 Current Profit: *{win_amount}* \\(_{multiplier}x_\\)\n\n💰 Max Win "
                                f"Amount: *"
                                f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: "
-                               f"*0\\.1 SOL* \\|"
+                               f"*{min_bet_string} SOL* \\|"
                                f"🟣 Wallet Balance: *{new_balance}*")
                 edit_message(chat_id, main_string, data_list[4], user_name)
                 return
@@ -330,12 +340,13 @@ def handle_buttons(callback_query: types.CallbackQuery):
             bet_size_numeric = float(game_users.check_user_betsize(user_name))
             bet_size = str(bet_size_numeric).replace(".", "\\.")
             new_balance = str(float(game_users.check_user_balance(user_name))).replace(".", "\\.")
+            min_bet_string = str(min_bet).replace(".", "\\.")
             main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                            f"running_\\.\\.\\.{no_active_game_string}🟣 Current Bet Size: *{bet_size} "
                            f"SOL*  \\| 🤑 Current Profit: *{0}* \\(_{0}x_\\)\n\n💰 Max Win "
                            f"Amount: *"
                            f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: "
-                           f"*0\\.1 SOL* \\|"
+                           f"*{min_bet_string} SOL* \\|"
                            f"🟣 Wallet Balance: *{new_balance}*")
             edit_message(chat_id, main_string, message_id, user_name)
     elif response_value.split()[0] == "start":
@@ -359,17 +370,18 @@ def handle_buttons(callback_query: types.CallbackQuery):
                         logging.info(
                             f"User: {user_name} has set a bet size that exceeds the max current limit!")
                         string_warning = "\n\n\n⚠️⚠️⚠️ _BET SIZE TOO LARGE_ ⚠️⚠️⚠️\n\n\n"
+                        min_bet_string = str(min_bet).replace(".", "\\.")
                         main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                                        f"running_\\.\\.\\.{string_warning}🟣 Current Bet Size: *{bet_size} "
                                        f"SOL*  \\| 🤑 Current Profit: *{0}* \\(_{0}x_\\)\n\n💰 Max Win Amount: *"
-                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 "
+                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *{min_bet_string}"
                                        f"SOL* \\|"
                                        f"🟣 Wallet Balance: *{new_balance} SOL*")
                         edit_message(chat_id, main_string, message_id, user_name)  # to edit the msg
                         return
                     time_now = time.time()
                     max_multiplier = crash_algorithm.determine_win_or_loss(pos_size, master_wallet_balance)
-                    if int(max_multiplier) % 3 == 0:  #small adjustement until we build bigger sol reserves
+                    if int(max_multiplier) % 4 == 0:  #small adjustement until we build bigger sol reserves
                         max_multiplier = 0
                     if max_multiplier == 0:
                         immediate_crash_string = "\n\n\n☠️☠️☠️ _INSTANT CRASH_ ☠️☠️☠️\n\n\n"
@@ -387,10 +399,11 @@ def handle_buttons(callback_query: types.CallbackQuery):
                         game_users.update_balance(user_name, new_balance)
                         new_balance = new_balance.replace(".", "\\.")
                         bet_size = str(bet_size_numeric).replace(".", "\\.")
+                        min_bet_string = str(min_bet).replace(".", "\\.")
                         main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                                        f"running_\\.\\.\\.{immediate_crash_string}🟣 Current Bet Size: *{bet_size} "
                                        f"SOL*  \\| 🤑 Current Profit: *{0}* \\(_{0}x_\\)\n\n💰 Max Win Amount: *"
-                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 "
+                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *{min_bet_string} "
                                        f"SOL* \\|"
                                        f"🟣 Wallet Balance: *{new_balance} SOL*")
                         edit_message(chat_id, main_string, message_id, user_name)  # to edit the msg
@@ -410,12 +423,13 @@ def handle_buttons(callback_query: types.CallbackQuery):
                     bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
                     max_bet_size = str(max_bet_size)
                     max_win_size = str(max_win_size)
+                    min_bet_string = str(min_bet).replace(".", "\\.")
                     modified_main_game_pos_size = (
                         f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                         f"running_\\.\\.\\.\n\n🟣"
                         f"Current Bet Size: *{bet_size} SOL* \\(You have insufficient funds\\!\\) \n\n💰 Max Win"
                         f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
-                        f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
+                        f"Size: *{min_bet_string} SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
                     edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
             else:
                 logging.info(f"User: {user_name} still has a processing withdrawal so they cannot play until it's "
@@ -435,12 +449,12 @@ def handle_buttons(callback_query: types.CallbackQuery):
         bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
         max_bet_size = str(max_bet_size)
         max_win_size = str(max_win_size)
-
+        min_bet_string = str(min_bet).replace(".", "\\.")
         modified_main_game_pos_size = (
             f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not running_\\.\\.\\.\n\n🟣 "
             f"Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
             f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
-            f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
+            f"Size: *{min_bet_string} SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
         edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
     elif response_value.split()[0] == "betdown":
         current_bet_size = float(game_users.check_user_betsize(user_name))
@@ -456,11 +470,12 @@ def handle_buttons(callback_query: types.CallbackQuery):
             bet_size = str(game_users.check_user_betsize(user_name)).replace(".", "\\.")
             max_bet_size = str(max_bet_size)
             max_win_size = str(max_win_size)
+            min_bet_string = str(min_bet).replace(".", "\\.")
             modified_main_game_pos_size = (
                 f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                 f"running_\\.\\.\\.\n\n🟣 Current Bet Size: *{bet_size} SOL* \n\n💰 Max Win "
                 f"Amount: *{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet "
-                f"Size: *0\\.1 SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
+                f"Size: *{min_bet_string} SOL* \\| 🟣 Wallet Balance: *{current_balance} SOL*")
             edit_message(chat_id, modified_main_game_pos_size, message_id, user_name)
     elif response_value.split()[0] == "funds":
         bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
@@ -613,7 +628,7 @@ def process_deposit():
                         game_users.update_balance(user_to_credit, str(post_credit_balance))
                         processed_deposits.append(user_to_credit)
                         chat_id = game_users.get_chat_id(user_to_credit)
-                        update_master_wallet_balance("deposit", post_credit_balance)
+                        update_master_wallet_balance("deposit", account_to_credit)
                         bot.send_message(chat_id,
                                          f"Deposit of {account_to_credit} SOL has been processed and it's ready to "
                                          f"be used")
@@ -644,7 +659,7 @@ def process_withdrawal_request():
                         f"User: {user_to_process} has withdrawn funds {amount} link: https://solscan.io/tx/{tx}")
                     bot.send_message(chat_id, f"✅ Funds Withdrawn: [Solscan link](https://solscan.io/tx/{tx})",
                                      disable_web_page_preview=True)
-                    update_master_wallet_balance("withdrawal", str(amount))
+                    update_master_wallet_balance("withdrawal", amount)
                 else:
                     logging.critical(f"User: {user_to_process} was unable to withdraw funds")
                     print(user_to_process, "error with withdrawal please check!")
@@ -675,8 +690,11 @@ def render_boxes():
                             print("db error trying again...")
                             continue
                     if active_user in active_games:
-                        max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".","\\.")
-                        max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".","\\.")
+                        max_bet_size = str(
+                            round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".",
+                                                                                                              "\\.")
+                        max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(
+                            ".", "\\.")
                         intial_balance = float(game_users.check_user_balance(active_user))
                         bet_size_numeric = round(float(game_users.check_user_betsize(active_user)), 3)
                         bet_size = str(bet_size_numeric).replace(".", "\\.")
@@ -693,10 +711,11 @@ def render_boxes():
                             round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
                             ".", "\\.")  # to be changed to custom
                         string_to_add = f"\n\n\n🚀 {current_box_string}\\({multiplier}x\\)\n\n\n"
+                        min_bet_string = str(min_bet).replace(".", "\\.")
                         main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
                                        f"running_\\.\\.\\.{string_to_add}🟣 Current Bet Size: *{bet_size} "
                                        f"SOL*  \\| 🤑 Current Profit: *{profit}* \\(_{multiplier}x_\\)\n\n💰 Max Win Amount: *"
-                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| "
+                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *{min_bet_string} SOL* \\| "
                                        f"🟣 Wallet Balance: *{current_balance} SOL*")
                         edit_message(chat_id, main_string, msg_id, active_user)  # to edit the msg
         except (RuntimeError, KeyError) as err:
@@ -734,7 +753,8 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             if user_to_remove in active_games:
                 del active_games[user_to_remove]
             master_wallet_balance = float(game_users.check_user_balance(master_wallet_username))
-            max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".","\\.")
+            max_bet_size = str(round(float(crash_algorithm.get_max_position(master_wallet_balance)), 3)).replace(".",
+                                                                                                                 "\\.")
             max_win_size = str(round(float(crash_algorithm.get_max_win(master_wallet_balance)), 3)).replace(".", "\\.")
             wallet_balance = float(game_users.check_user_balance(finished_user))
             chat_id = data_list[3]
@@ -744,11 +764,12 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
             game_users.update_balance(finished_user, new_balance)
             new_balance = new_balance.replace(".", "\\.")
             bet_size = str(game_users.check_user_betsize(finished_user)).replace(".", "\\.")
+            min_bet_string = str(min_bet).replace(".", "\\.")
             main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is Not "
                            f"running_\\.\\.\\.{crash_string}🟣 Current Bet Size: *{bet_size} "
                            f"SOL*  \\| 🤑 Current Profit: *{0}* \\(_{0}x_\\)\n\n💰 Max Win Amount: *"
                            f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: "
-                           f"*0\\.1 SOL* \\|"
+                           f"*{min_bet_string} SOL* \\|"
                            f"🟣 Wallet Balance: *{new_balance} SOL*")
             edit_message(chat_id, main_string, msg_id, finished_user)  # to edit the msg
 
@@ -786,10 +807,11 @@ def game_polling_engine():  # all this has to do is crash them if they dont cash
                             round(intial_balance + (multiplier_numeric * bet_size_numeric), 3)).replace(
                             ".", "\\.")  # to be changed to custom
                         string_to_add = f"\n\n\n🚀 {current_box_string}\\({multiplier}x\\)\n\n\n"
+                        min_bet_string = str(min_bet).replace(".", "\\.")
                         main_string = (f"__Mini Bitcoin Games__\n\n🎲 Current Game: _Crash_ 📈\nℹ️ Status: _Game is "
                                        f"running_\\.\\.\\.{string_to_add}🟣 Current Bet Size: *{bet_size} "
                                        f"SOL*  \\| 🤑 Current Profit: *{profit}* \\(_{multiplier}x_\\)\n\n💰 Max Win Amount: *"
-                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *0\\.1 SOL* \\| "
+                                       f"{max_win_size} SOL*\n🔹 Max Bet Size: *{max_bet_size} SOL*\n🔹 Min Bet Size: *{min_bet_string} SOL* \\| "
                                        f"🟣 Wallet Balance: *{current_balance} SOL*")
                         edit_message(chat_id, main_string, msg_id, active_user)  # to edit the msg
         except (RuntimeError, KeyError) as err:
